@@ -3,90 +3,392 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wrok — Subscribe</title>
+  <title>Wrok — Choose Your Plan</title>
   <meta name="theme-color" content="#0D7C66">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --primary: #0D7C66;
       --primary-light: #14A085;
+      --primary-dark: #095E4E;
       --charcoal: #3C3C3C;
       --bg: #F4F7F9;
       --white: #FFFFFF;
-      --radius: 16px;
-      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --gradient: linear-gradient(135deg, #2C3C3C 0%, #1A7A5A 30%, #0A8A8A 60%, #1976D2 100%);
     }
+
     body {
       font-family: 'Roboto', sans-serif;
-      background: var(--bg);
-      color: var(--charcoal);
+      background: var(--gradient);
+      color: var(--white);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      padding: 32px 16px;
     }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .logo { height: 36px; margin-bottom: 20px; }
+    h1 { font-size: 2rem; font-weight: 900; margin-bottom: 8px; }
+    .subtitle { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 8px; }
+    .free-badge {
+      display: inline-block;
+      padding: 8px 24px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
     .card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      background: rgba(255,255,255,0.14);
+    }
+    .card.popular {
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.04);
+    }
+    .card.popular:hover {
+      transform: scale(1.04) translateY(-6px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+    .card.selected {
+      border: 2px solid var(--white);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+    }
+
+    .popular-badge {
       background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 48px 40px;
-      max-width: 440px;
-      width: 100%;
+      color: var(--primary-dark);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+      padding: 5px 0;
+    }
+
+    .card-header {
+      padding: 24px 20px 16px;
       text-align: center;
     }
-    .logo { height: 40px; margin-bottom: 24px; }
-    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
-    .tier-name { color: var(--primary); font-weight: 700; }
-    .subtitle { color: #777; font-size: 0.95rem; margin-bottom: 32px; }
+    .tier-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 12px;
+    }
+    .price {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .price-currency {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      margin-top: 5px;
+    }
+    .price-amount {
+      font-size: 2.8rem;
+      font-weight: 900;
+    }
+    .price-cents {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      margin-top: 5px;
+    }
+    .price-period {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      align-self: flex-end;
+      margin-bottom: 2px;
+    }
+    .worker-count {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.15);
+      padding: 4px 14px;
+      border-radius: 100px;
+    }
+
+    .card-body {
+      padding: 16px 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+    .features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+    }
+    .features svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .cta {
+      display: block;
+      text-align: center;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.25);
+      text-decoration: none;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+    .cta:hover { background: rgba(255,255,255,0.25); }
+    .card.popular .cta {
+      background: var(--white);
+      color: var(--primary-dark);
+      border-color: var(--white);
+      font-weight: 800;
+    }
+    .card.popular .cta:hover {
+      background: rgba(255,255,255,0.9);
+    }
+
+    .free-label {
+      display: block;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+    .note strong { color: rgba(255,255,255,0.7); }
+
+    /* Loading overlay */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .loading-overlay.visible { display: flex; }
     .spinner {
       width: 40px; height: 40px;
-      border: 4px solid #e0e0e0;
-      border-top-color: var(--primary);
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: var(--white);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .status { font-size: 0.95rem; color: #555; }
-    .error { color: #D32F2F; font-weight: 500; margin-top: 16px; }
-    .btn {
-      display: inline-block;
-      background: var(--primary);
-      color: var(--white);
-      border: none;
-      border-radius: 100px;
-      padding: 14px 32px;
-      font-size: 1rem;
+    .loading-text { font-size: 0.95rem; color: rgba(255,255,255,0.8); }
+
+    .error-toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #D32F2F;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 0.9rem;
       font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 16px;
+      z-index: 200;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
-    .btn:hover { background: var(--primary-light); }
-    .hidden { display: none; }
+    .error-toast.visible { display: block; }
+
+    .checkmark { fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .card.popular { transform: scale(1); }
+    }
+    @media (max-width: 540px) {
+      .grid { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; }
+      h1 { font-size: 1.5rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <img src="wrok_logo.png" alt="Wrok" class="logo">
-    <h1>Subscribe to <span class="tier-name" id="tierDisplay">—</span></h1>
-    <p class="subtitle" id="priceDisplay"></p>
-
-    <div id="loadingState">
-      <div class="spinner"></div>
-      <p class="status">Redirecting to checkout...</p>
+  <div class="container">
+    <div class="header">
+      <img src="wrok_logo.png" alt="Wrok" class="logo">
+      <h1>Choose Your Plan</h1>
+      <p class="subtitle">All features included in every plan. Pick the one that fits your team.</p>
+      <div class="free-badge">First month free — no credit card required</div>
     </div>
 
-    <div id="errorState" class="hidden">
-      <p class="error" id="errorMessage"></p>
-      <button class="btn" onclick="retryCheckout()">Try Again</button>
+    <div class="grid" id="tierGrid">
+      <!-- Starter -->
+      <div class="card" data-tier="STARTER" onclick="selectTier('STARTER')">
+        <div class="card-header">
+          <div class="tier-name">Starter</div>
+          <div class="price">
+            <span class="price-currency">&euro;</span>
+            <span class="price-amount">12</span>
+            <span class="price-cents">.99</span>
+            <span class="price-period">/mo</span>
+          </div>
+          <span class="worker-count">Up to 10 workers</span>
+        </div>
+        <div class="card-body">
+          <ul class="features">
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>All features included</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Auto-scheduling</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Team messaging</li>
+          </ul>
+          <button class="cta">Get Started</button>
+          <span class="free-label">Free for 30 days</span>
+        </div>
+      </div>
+
+      <!-- Growth (Popular) -->
+      <div class="card popular" data-tier="GROWTH" onclick="selectTier('GROWTH')">
+        <div class="popular-badge">Most Popular</div>
+        <div class="card-header">
+          <div class="tier-name">Growth</div>
+          <div class="price">
+            <span class="price-currency">&euro;</span>
+            <span class="price-amount">29</span>
+            <span class="price-cents">.99</span>
+            <span class="price-period">/mo</span>
+          </div>
+          <span class="worker-count">Up to 20 workers</span>
+        </div>
+        <div class="card-body">
+          <ul class="features">
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>All features included</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Auto-scheduling</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Analytics &amp; reports</li>
+          </ul>
+          <button class="cta">Get Started</button>
+          <span class="free-label">Free for 30 days</span>
+        </div>
+      </div>
+
+      <!-- Business -->
+      <div class="card" data-tier="BUSINESS" onclick="selectTier('BUSINESS')">
+        <div class="card-header">
+          <div class="tier-name">Business</div>
+          <div class="price">
+            <span class="price-currency">&euro;</span>
+            <span class="price-amount">79</span>
+            <span class="price-cents">.99</span>
+            <span class="price-period">/mo</span>
+          </div>
+          <span class="worker-count">Up to 50 workers</span>
+        </div>
+        <div class="card-body">
+          <ul class="features">
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>All features included</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Auto-scheduling</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>PDF &amp; Excel export</li>
+          </ul>
+          <button class="cta">Get Started</button>
+          <span class="free-label">Free for 30 days</span>
+        </div>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="card" data-tier="ENTERPRISE" onclick="selectTier('ENTERPRISE')">
+        <div class="card-header">
+          <div class="tier-name">Enterprise</div>
+          <div class="price">
+            <span class="price-currency">&euro;</span>
+            <span class="price-amount">139</span>
+            <span class="price-cents">.99</span>
+            <span class="price-period">/mo</span>
+          </div>
+          <span class="worker-count">Up to 100 workers</span>
+        </div>
+        <div class="card-body">
+          <ul class="features">
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>All features included</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Auto-scheduling</li>
+            <li><svg viewBox="0 0 24 24" class="checkmark"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+          </ul>
+          <button class="cta">Get Started</button>
+        </div>
+      </div>
     </div>
+
+    <p class="note">All plans include every feature. The only difference is the number of workers per workplace.<br><strong>Pricing is per workplace.</strong></p>
   </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <span class="loading-text">Redirecting to checkout...</span>
+  </div>
+
+  <div class="error-toast" id="errorToast"></div>
 
   <script src="payment.js"></script>
 </body>
