@@ -164,7 +164,7 @@ button { font-family: inherit; }
 }
 
 .nav-brand { display: flex; align-items: center; gap: 10px; z-index: 1001; }
-.nav-logo { height: 68px; width: auto; object-fit: contain; }
+.nav-logo { height: 136px; width: auto; object-fit: contain; }
 
 .nav-links { display: flex; align-items: center; gap: 8px; }
 
@@ -1316,7 +1316,7 @@ button { font-family: inherit; }
 }
 
 .footer-brand { display: flex; align-items: center; gap: 10px; }
-.footer-logo { height: 64px; width: auto; object-fit: contain; }
+.footer-logo { height: 128px; width: auto; object-fit: contain; }
 .footer-tagline { font-size: 0.85rem; line-height: 1.6; margin-top: 14px; color: rgba(255,255,255,0.5); max-width: 300px; }
 .footer-links-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.9); margin-bottom: 16px; }
 .footer-links-col ul { display: flex; flex-direction: column; gap: 10px; }
