@@ -31,9 +31,31 @@
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     </div>
-    <h1>Payment Successful!</h1>
-    <p>Your subscription is now active. You can close this page and return to the app.</p>
-    <a href="https://alphacell1.github.io/website/" class="btn">Back to Wrok</a>
+    <h1 id="title">Payment Successful!</h1>
+    <p id="message">Your subscription is now active. Returning to app...</p>
+    <button id="returnBtn" class="btn" onclick="attemptReturnToApp()" style="display: none;">Return to App</button>
+    <button class="btn" onclick="window.close()" style="margin-top: 12px; background: #6c757d;">Close Window</button>
   </div>
+  <script>
+    // Extract session ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+
+    function attemptReturnToApp() {
+      // Try to open the app via deep link
+      window.location.href = 'wrok://payment-success?session_id=' + (sessionId || '');
+    }
+
+    // Auto-attempt to return to app on page load
+    setTimeout(() => {
+      attemptReturnToApp();
+
+      // After 2 seconds, show manual button if still on page
+      setTimeout(() => {
+        document.getElementById('message').textContent = 'Please close this page and return to the app. Your subscription has been activated.';
+        document.getElementById('returnBtn').style.display = 'inline-block';
+      }, 2000);
+    }, 500);
+  </script>
 </body>
 </html>
