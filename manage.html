@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://schedulerapi-production.up.railway.app; img-src 'self';">
   <title>Wrok — Manage Subscription</title>
   <meta name="theme-color" content="#0D7C66">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
@@ -355,7 +356,7 @@
 
       <!-- Cancel -->
       <div class="cancel-section" id="cancelSection" style="display:none">
-        <button class="cancel-btn" onclick="showCancelDialog()">Cancel Subscription</button>
+        <button class="cancel-btn" id="cancelBtn">Cancel Subscription</button>
       </div>
 
       <p class="return-notice">Changes take effect immediately. Return to the app to continue.</p>
@@ -368,7 +369,7 @@
       <h3 id="dialogTitle"></h3>
       <p id="dialogMessage"></p>
       <div class="dialog-actions">
-        <button class="btn-secondary" onclick="closeDialog()">Go Back</button>
+        <button class="btn-secondary" id="dialogGoBack">Go Back</button>
         <button id="dialogAction" class="btn-danger"></button>
       </div>
     </div>
@@ -384,7 +385,11 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    'use strict';
+
     const API_BASE = 'https://schedulerapi-production.up.railway.app/api';
+    const VALID_TIERS = ['STARTER', 'GROWTH', 'BUSINESS', 'ENTERPRISE'];
+    const VALID_ACTIONS = ['cancel', 'change'];
 
     const TIERS = [
       { id: 'STARTER', name: 'Starter', price: '12', cents: '.99', maxWorkers: 10 },
@@ -393,31 +398,50 @@
       { id: 'ENTERPRISE', name: 'Enterprise', price: '139', cents: '.99', maxWorkers: 100 },
     ];
 
-    let params;
+    let params = null;
     let subscription = null;
+    let isProcessing = false;
+
+    // ─── Input Validation & Param Parsing ─────────────────────
 
     function getParams() {
-      const p = new URLSearchParams(window.location.search);
+      // Read non-sensitive params from query string
+      const query = new URLSearchParams(window.location.search);
+      const workplaceId = query.get('workplaceId');
+      const action = query.get('action');
+      const tier = (query.get('tier') || '').toUpperCase();
+
+      // Read JWT token from URL fragment (not sent in HTTP requests/referrer)
+      let token = null;
+      if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        token = hashParams.get('token');
+      }
+
       return {
-        workplaceId: p.get('workplaceId'),
-        token: p.get('token'),
-        action: p.get('action'),
-        tier: (p.get('tier') || '').toUpperCase(),
+        workplaceId: workplaceId && /^\d+$/.test(workplaceId) ? workplaceId : null,
+        token: token && token.length > 10 && token.length < 4096 ? token : null,
+        action: VALID_ACTIONS.includes(action) ? action : null,
+        tier: VALID_TIERS.includes(tier) ? tier : null,
       };
     }
 
     function authHeaders() {
       return {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${params.token}`,
+        'Authorization': 'Bearer ' + params.token,
       };
     }
 
-    function showToast(msg, type = 'error') {
+    // ─── UI Helpers ───────────────────────────────────────────
+
+    function showToast(msg, type) {
+      type = type || 'error';
       const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.className = `toast visible ${type}`;
-      setTimeout(() => el.classList.remove('visible'), 5000);
+      // Use textContent to prevent XSS
+      el.textContent = typeof msg === 'string' ? msg.slice(0, 200) : 'An error occurred.';
+      el.className = 'toast visible ' + type;
+      setTimeout(function() { el.classList.remove('visible'); }, 5000);
     }
 
     function showLoading(visible, text) {
@@ -428,10 +452,10 @@
     function showDialog(title, message, actionLabel, actionClass, onAction) {
       document.getElementById('dialogTitle').textContent = title;
       document.getElementById('dialogMessage').textContent = message;
-      const btn = document.getElementById('dialogAction');
+      var btn = document.getElementById('dialogAction');
       btn.textContent = actionLabel;
       btn.className = actionClass;
-      btn.onclick = () => { closeDialog(); onAction(); };
+      btn.onclick = function() { closeDialog(); onAction(); };
       document.getElementById('confirmDialog').classList.add('visible');
     }
 
@@ -439,55 +463,72 @@
       document.getElementById('confirmDialog').classList.remove('visible');
     }
 
+    // ─── Safe DOM Builders ────────────────────────────────────
+
+    function createEl(tag, className, textContent) {
+      var el = document.createElement(tag);
+      if (className) el.className = className;
+      if (textContent) el.textContent = textContent;
+      return el;
+    }
+
     function renderCurrentPlan() {
-      const sub = subscription;
+      var sub = subscription;
       if (!sub) return;
 
-      let statusClass = 'status-active';
-      let statusLabel = sub.status;
+      var statusClass = 'status-active';
+      var statusLabel = '';
       if (sub.isTrial) { statusClass = 'status-trial'; statusLabel = 'Free Trial'; }
       else if (sub.status === 'ACTIVE') { statusClass = 'status-active'; statusLabel = 'Active'; }
       else if (sub.status === 'EXPIRED') { statusClass = 'status-expired'; statusLabel = 'Expired'; }
       else if (sub.status === 'CANCELLED') { statusClass = 'status-cancelled'; statusLabel = 'Cancelled'; }
+      else { statusLabel = String(sub.status || '').slice(0, 30); }
 
-      const tier = TIERS.find(t => t.id === sub.tier) || { name: sub.tier };
-      const periodEnd = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : '—';
+      var tierInfo = TIERS.find(function(t) { return t.id === sub.tier; });
+      var tierName = tierInfo ? tierInfo.name : String(sub.tier || '').slice(0, 30);
+      var periodEnd = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : '\u2014';
 
-      let rows = `
-        <div class="plan-row">
-          <span class="plan-label">Plan</span>
-          <span class="plan-value">${tier.name}</span>
-        </div>
-        <div class="plan-row">
-          <span class="plan-label">Status</span>
-          <span class="status-badge ${statusClass}">${statusLabel}</span>
-        </div>
-        <div class="plan-row">
-          <span class="plan-label">Workers</span>
-          <span class="plan-value">${sub.maxWorkers} max</span>
-        </div>
-      `;
+      var card = document.getElementById('currentPlanCard');
+      // Clear safely
+      card.textContent = '';
 
+      var heading = createEl('h2', null, 'Current Plan');
+      card.appendChild(heading);
+
+      // Plan row
+      var row1 = createEl('div', 'plan-row');
+      row1.appendChild(createEl('span', 'plan-label', 'Plan'));
+      row1.appendChild(createEl('span', 'plan-value', tierName));
+      card.appendChild(row1);
+
+      // Status row
+      var row2 = createEl('div', 'plan-row');
+      row2.appendChild(createEl('span', 'plan-label', 'Status'));
+      row2.appendChild(createEl('span', 'status-badge ' + statusClass, statusLabel));
+      card.appendChild(row2);
+
+      // Workers row
+      var row3 = createEl('div', 'plan-row');
+      row3.appendChild(createEl('span', 'plan-label', 'Workers'));
+      row3.appendChild(createEl('span', 'plan-value', sub.maxWorkers + ' max'));
+      card.appendChild(row3);
+
+      // Trial remaining
       if (sub.isTrial && sub.trialRemainingMs) {
-        const days = Math.ceil(sub.trialRemainingMs / (1000 * 60 * 60 * 24));
-        rows += `
-          <div class="plan-row">
-            <span class="plan-label">Trial Remaining</span>
-            <span class="plan-value">${days} days</span>
-          </div>
-        `;
+        var days = Math.ceil(sub.trialRemainingMs / (1000 * 60 * 60 * 24));
+        var row4 = createEl('div', 'plan-row');
+        row4.appendChild(createEl('span', 'plan-label', 'Trial Remaining'));
+        row4.appendChild(createEl('span', 'plan-value', days + ' days'));
+        card.appendChild(row4);
       }
 
+      // Renewal date
       if (sub.currentPeriodEnd && sub.status === 'ACTIVE' && !sub.isTrial) {
-        rows += `
-          <div class="plan-row">
-            <span class="plan-label">Renews on</span>
-            <span class="plan-value">${periodEnd}</span>
-          </div>
-        `;
+        var row5 = createEl('div', 'plan-row');
+        row5.appendChild(createEl('span', 'plan-label', 'Renews on'));
+        row5.appendChild(createEl('span', 'plan-value', periodEnd));
+        card.appendChild(row5);
       }
-
-      document.getElementById('currentPlanCard').innerHTML = `<h2>Current Plan</h2>${rows}`;
 
       // Show cancel button only for active paid subscriptions
       if (sub.status === 'ACTIVE' && !sub.isTrial && sub.stripeSubscriptionId) {
@@ -496,123 +537,167 @@
     }
 
     function renderTierCards() {
-      const grid = document.getElementById('tierGrid');
-      grid.innerHTML = '';
+      var grid = document.getElementById('tierGrid');
+      grid.textContent = '';
 
-      TIERS.forEach(tier => {
-        const isCurrent = subscription && subscription.tier === tier.id && subscription.isActive;
-        const card = document.createElement('div');
-        card.className = `card${isCurrent ? ' current' : ''}`;
+      TIERS.forEach(function(tier) {
+        var isCurrent = subscription && subscription.tier === tier.id && subscription.isActive;
+        var card = createEl('div', 'card' + (isCurrent ? ' current' : ''));
         card.dataset.tier = tier.id;
 
-        let badges = '';
-        if (isCurrent) badges += '<span class="current-badge">Current Plan</span> ';
-        else if (tier.popular) badges += '<span class="popular-badge">Most Popular</span> ';
+        // Badges
+        if (isCurrent) {
+          card.appendChild(createEl('span', 'current-badge', 'Current Plan'));
+          card.appendChild(document.createTextNode(' '));
+        } else if (tier.popular) {
+          card.appendChild(createEl('span', 'popular-badge', 'Most Popular'));
+          card.appendChild(document.createTextNode(' '));
+        }
 
-        card.innerHTML = `
-          ${badges}
-          <div class="tier-name">${tier.name}</div>
-          <div class="price">
-            <span class="price-currency">&euro;</span>
-            <span class="price-amount">${tier.price}</span>
-            <span class="price-cents">${tier.cents}</span>
-            <span class="price-period">/mo</span>
-          </div>
-          <span class="worker-count">Up to ${tier.maxWorkers} workers</span>
-          <button class="cta${isCurrent ? ' current-btn' : ''}" ${isCurrent ? 'disabled' : ''}>
-            ${isCurrent ? 'Current Plan' : 'Switch to ' + tier.name}
-          </button>
-        `;
+        // Tier name
+        card.appendChild(createEl('div', 'tier-name', tier.name));
+
+        // Price row
+        var priceDiv = createEl('div', 'price');
+        var currSpan = createEl('span', 'price-currency');
+        currSpan.innerHTML = '&euro;';
+        priceDiv.appendChild(currSpan);
+        priceDiv.appendChild(createEl('span', 'price-amount', tier.price));
+        priceDiv.appendChild(createEl('span', 'price-cents', tier.cents));
+        priceDiv.appendChild(createEl('span', 'price-period', '/mo'));
+        card.appendChild(priceDiv);
+
+        // Worker count
+        card.appendChild(createEl('span', 'worker-count', 'Up to ' + tier.maxWorkers + ' workers'));
+
+        // CTA button
+        var btn = createEl('button', 'cta' + (isCurrent ? ' current-btn' : ''));
+        btn.textContent = isCurrent ? 'Current Plan' : 'Switch to ' + tier.name;
+        if (isCurrent) btn.disabled = true;
+        card.appendChild(btn);
 
         if (!isCurrent) {
-          card.onclick = () => confirmTierChange(tier);
+          card.addEventListener('click', function() { confirmTierChange(tier); });
         }
 
         grid.appendChild(card);
       });
     }
 
+    // ─── Actions ──────────────────────────────────────────────
+
     function confirmTierChange(tier) {
-      const isUpgrade = subscription && TIERS.findIndex(t => t.id === tier.id) >
-                         TIERS.findIndex(t => t.id === subscription.tier);
-      const action = isUpgrade ? 'upgrade' : 'switch';
+      if (isProcessing) return;
+      var isUpgrade = subscription && TIERS.findIndex(function(t) { return t.id === tier.id; }) >
+                       TIERS.findIndex(function(t) { return t.id === subscription.tier; });
+      var action = isUpgrade ? 'Upgrade' : 'Switch';
 
       showDialog(
-        `${isUpgrade ? 'Upgrade' : 'Switch'} to ${tier.name}?`,
-        `Your plan will change immediately. The price difference will be prorated \u2014 you'll only pay the remaining portion at the new rate of \u20AC${tier.price}${tier.cents}/mo.`,
-        `${isUpgrade ? 'Upgrade' : 'Switch'} to ${tier.name}`,
+        action + ' to ' + tier.name + '?',
+        'Your plan will change immediately. The price difference will be prorated \u2014 you\u2019ll only pay the remaining portion at the new rate of \u20AC' + tier.price + tier.cents + '/mo.',
+        action + ' to ' + tier.name,
         'btn-primary',
-        () => changeTier(tier.id)
+        function() { changeTier(tier.id); }
       );
     }
 
     async function changeTier(tierId) {
+      if (isProcessing) return;
+      if (!VALID_TIERS.includes(tierId)) return;
+      isProcessing = true;
       showLoading(true, 'Changing plan...');
+
       try {
-        const res = await fetch(`${API_BASE}/subscriptions/change-tier`, {
+        var res = await fetch(API_BASE + '/subscriptions/change-tier', {
           method: 'POST',
           headers: authHeaders(),
           body: JSON.stringify({
-            workplaceId: parseInt(params.workplaceId),
+            workplaceId: parseInt(params.workplaceId, 10),
             tier: tierId,
           }),
         });
 
+        var data;
+        try {
+          data = await res.json();
+        } catch (_) {
+          throw new Error('Invalid server response.');
+        }
+
         if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || data.message || 'Failed to change plan');
+          showLoading(false);
+          isProcessing = false;
+          showToast(typeof data.error === 'string' ? data.error.slice(0, 200) : (typeof data.message === 'string' ? data.message.slice(0, 200) : 'Failed to change plan'));
+          return;
         }
 
         showLoading(false);
+        isProcessing = false;
         showToast('Plan changed successfully!', 'success');
 
         // Reload subscription
         await loadSubscription();
       } catch (err) {
         showLoading(false);
-        showToast(err.message || 'Failed to change plan. Please try again.');
+        isProcessing = false;
+        showToast('Connection error. Please check your internet and try again.');
       }
     }
 
     function showCancelDialog() {
+      if (isProcessing) return;
       showDialog(
         'Cancel Subscription?',
-        'Your subscription will remain active until the end of the current billing period. After that, you won\'t have access to premium features.',
+        'Your subscription will remain active until the end of the current billing period. After that, you won\u2019t have access to premium features.',
         'Cancel Subscription',
         'btn-danger',
-        () => cancelSubscription()
+        function() { cancelSubscription(); }
       );
     }
 
     async function cancelSubscription() {
+      if (isProcessing) return;
+      isProcessing = true;
       showLoading(true, 'Cancelling subscription...');
+
       try {
-        const res = await fetch(`${API_BASE}/subscriptions/cancel`, {
+        var res = await fetch(API_BASE + '/subscriptions/cancel', {
           method: 'POST',
           headers: authHeaders(),
           body: JSON.stringify({
-            workplaceId: parseInt(params.workplaceId),
+            workplaceId: parseInt(params.workplaceId, 10),
           }),
         });
 
+        var data;
+        try {
+          data = await res.json();
+        } catch (_) {
+          throw new Error('Invalid server response.');
+        }
+
         if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || data.message || 'Cancellation failed');
+          showLoading(false);
+          isProcessing = false;
+          showToast(typeof data.error === 'string' ? data.error.slice(0, 200) : (typeof data.message === 'string' ? data.message.slice(0, 200) : 'Cancellation failed'));
+          return;
         }
 
         showLoading(false);
+        isProcessing = false;
         showToast('Subscription cancelled. Access continues until end of billing period.', 'success');
 
         await loadSubscription();
       } catch (err) {
         showLoading(false);
-        showToast(err.message || 'Cancellation failed. Please try again.');
+        isProcessing = false;
+        showToast('Connection error. Please check your internet and try again.');
       }
     }
 
     async function loadSubscription() {
       try {
-        const res = await fetch(`${API_BASE}/subscriptions/workplace/${params.workplaceId}`, {
+        var res = await fetch(API_BASE + '/subscriptions/workplace/' + encodeURIComponent(params.workplaceId), {
           headers: authHeaders(),
         });
         if (!res.ok) throw new Error('Failed to load subscription');
@@ -628,20 +713,32 @@
       }
     }
 
-    // Init
+    // ─── Event Listeners (no inline onclick) ──────────────────
+
+    document.getElementById('cancelBtn').addEventListener('click', showCancelDialog);
+    document.getElementById('dialogGoBack').addEventListener('click', closeDialog);
+
+    // ─── Init ─────────────────────────────────────────────────
+
     params = getParams();
+
+    // Clean URL: remove query params and fragment to prevent token leakage
+    if (window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     if (!params.workplaceId || !params.token) {
       document.getElementById('initLoading').style.display = 'none';
       document.getElementById('errorState').style.display = '';
       document.querySelector('#errorState p').textContent =
         'Missing authentication. Please open this page from the Wrok app.';
     } else {
-      loadSubscription().then(() => {
+      loadSubscription().then(function() {
         // Auto-trigger action if specified in URL
         if (params.action === 'cancel' && subscription && subscription.isActive) {
           showCancelDialog();
         } else if (params.action === 'change' && params.tier) {
-          const tier = TIERS.find(t => t.id === params.tier);
+          var tier = TIERS.find(function(t) { return t.id === params.tier; });
           if (tier) confirmTierChange(tier);
         }
       });
