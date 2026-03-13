@@ -6,7 +6,8 @@ const VALID_TIERS = ['STARTER', 'GROWTH', 'BUSINESS', 'ENTERPRISE'];
 
 let isProcessing = false;
 
-function getParams() {
+// Parse params once at init — URL is cleaned immediately after
+const pageParams = (function() {
   const params = new URLSearchParams(window.location.search);
   const workplaceId = params.get('workplaceId');
   const email = params.get('email');
@@ -25,6 +26,11 @@ function getParams() {
     preselectedTier: VALID_TIERS.includes(tier) ? tier : null,
     token: token && token.length > 10 && token.length < 4096 ? token : null,
   };
+})();
+
+// Clean sensitive params from URL immediately after reading
+if (window.history.replaceState) {
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
 function showError(msg) {
@@ -54,9 +60,7 @@ function selectTier(tier) {
 }
 
 async function startCheckout(tier) {
-  const { workplaceId, email, token } = getParams();
-
-  if (!workplaceId) {
+  if (!pageParams.workplaceId) {
     showError('Missing workplace ID. Please try again from the app.');
     return;
   }
@@ -71,14 +75,14 @@ async function startCheckout(tier) {
 
   try {
     const body = {
-      workplaceId: parseInt(workplaceId, 10),
+      workplaceId: parseInt(pageParams.workplaceId, 10),
       tier: tier,
     };
-    if (email) body.email = email;
+    if (pageParams.email) body.email = pageParams.email;
 
     const headers = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = 'Bearer ' + token;
+    if (pageParams.token) {
+      headers['Authorization'] = 'Bearer ' + pageParams.token;
     }
 
     const res = await fetch(`${API_BASE}/subscriptions/create-checkout-session`, {
@@ -127,14 +131,8 @@ async function startCheckout(tier) {
 }
 
 // Pre-select tier from URL params if provided (safely)
-const { preselectedTier } = getParams();
-if (preselectedTier) {
+if (pageParams.preselectedTier) {
   // Safe: preselectedTier is already validated against VALID_TIERS whitelist
-  const card = document.querySelector(`.card[data-tier="${preselectedTier}"]`);
+  const card = document.querySelector(`.card[data-tier="${pageParams.preselectedTier}"]`);
   if (card) card.classList.add('selected');
-}
-
-// Clean sensitive params from URL after reading (removes query params and fragment)
-if (window.history.replaceState) {
-  window.history.replaceState({}, document.title, window.location.pathname);
 }
