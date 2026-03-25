@@ -66,6 +66,10 @@
         <div class="hero-note">Available on Android &middot; iOS coming soon</div>
       </div>
       <div class="hero-visual">
+        <div id="phone3d-container" class="phone3d-container">
+          <canvas id="phone3d-webgl"></canvas>
+          <div id="phone3d-css"></div>
+        </div>
         <div class="phone-float">
           <div class="phone-mockup hero-phone">
             <div class="phone-frame">
@@ -1002,6 +1006,8 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

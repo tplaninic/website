@@ -309,6 +309,34 @@ button { font-family: inherit; }
 .phone-float.dragging { animation: none; cursor: grabbing; }
 @keyframes phone-bob { 0%, 100% { transform: translateY(0) rotateY(-8deg); } 50% { transform: translateY(-12px) rotateY(-8deg); } }
 
+/* ===== 3D PHONE (Three.js) ===== */
+.phone3d-container {
+  position: absolute;
+  top: 0; right: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+}
+.phone3d-container canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+#phone3d-css {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+/* When 3D is active, hide the original CSS phone in normal flow */
+.hero-visual.has-3d > .phone-float { visibility: hidden; }
+/* On mobile, no 3D */
+@media (max-width: 768px) {
+  .phone3d-container { display: none; }
+  .hero-visual.has-3d > .phone-float { visibility: visible; }
+}
+
 .phone-mockup { width: 280px; position: relative; }
 
 .phone-frame {

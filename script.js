@@ -579,3 +579,194 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+// ============================================================
+// THREE.JS 3D PHONE — WebGL body + CSS3D screen
+// ============================================================
+(function() {
+  if (window.innerWidth <= 768) return;
+  if (typeof THREE === 'undefined' || typeof THREE.CSS3DRenderer === 'undefined') return;
+
+  var container = document.getElementById('phone3d-container');
+  var webglCanvas = document.getElementById('phone3d-webgl');
+  var cssContainer = document.getElementById('phone3d-css');
+  var heroVisual = document.querySelector('.hero-visual');
+  var phoneMockup = document.querySelector('.phone-mockup.hero-phone');
+  if (!container || !webglCanvas || !cssContainer || !heroVisual || !phoneMockup) return;
+
+  var W = heroVisual.offsetWidth;
+  var H = heroVisual.offsetHeight;
+
+  // Shared camera
+  var camera = new THREE.PerspectiveCamera(40, W / H, 1, 10000);
+  camera.position.z = 900;
+
+  // Scene for WebGL (phone body)
+  var glScene = new THREE.Scene();
+
+  // Scene for CSS3D (phone screen)
+  var cssScene = new THREE.Scene();
+
+  // WebGL Renderer (transparent, for phone body)
+  var glRenderer = new THREE.WebGLRenderer({ canvas: webglCanvas, alpha: true, antialias: true });
+  glRenderer.setSize(W, H);
+  glRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // CSS3D Renderer (for HTML phone screen)
+  var cssRenderer = new THREE.CSS3DRenderer();
+  cssRenderer.setSize(W, H);
+  cssRenderer.domElement.style.position = 'absolute';
+  cssRenderer.domElement.style.top = '0';
+  cssRenderer.domElement.style.left = '0';
+  cssRenderer.domElement.style.pointerEvents = 'none';
+  cssContainer.appendChild(cssRenderer.domElement);
+
+  // ===== Phone Body (WebGL) =====
+  var PW = 300, PH = 580, PD = 20;
+
+  function makeRoundedRect(w, h, r) {
+    var s = new THREE.Shape();
+    s.moveTo(-w/2+r, -h/2);
+    s.lineTo(w/2-r, -h/2);
+    s.quadraticCurveTo(w/2, -h/2, w/2, -h/2+r);
+    s.lineTo(w/2, h/2-r);
+    s.quadraticCurveTo(w/2, h/2, w/2-r, h/2);
+    s.lineTo(-w/2+r, h/2);
+    s.quadraticCurveTo(-w/2, h/2, -w/2, h/2-r);
+    s.lineTo(-w/2, -h/2+r);
+    s.quadraticCurveTo(-w/2, -h/2, -w/2+r, -h/2);
+    return s;
+  }
+
+  var bodyGeo = new THREE.ExtrudeGeometry(makeRoundedRect(PW, PH, 40), {
+    depth: PD, bevelEnabled: true, bevelThickness: 3,
+    bevelSize: 3, bevelSegments: 4
+  });
+  bodyGeo.center();
+
+  var bodyMat = new THREE.MeshPhysicalMaterial({
+    color: 0x1a1a2e, metalness: 0.8, roughness: 0.25,
+    clearcoat: 0.5, clearcoatRoughness: 0.2
+  });
+  var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
+  glScene.add(phoneMesh);
+
+  // Back face detail
+  var backGeo = new THREE.PlaneGeometry(PW - 20, PH - 20);
+  var backMat = new THREE.MeshPhysicalMaterial({ color: 0x15152a, metalness: 0.6, roughness: 0.4 });
+  var backMesh = new THREE.Mesh(backGeo, backMat);
+  backMesh.position.z = -PD / 2 - 1;
+  backMesh.rotation.y = Math.PI;
+  phoneMesh.add(backMesh);
+
+  // Camera lens on back
+  var lensGeo = new THREE.RingGeometry(8, 15, 32);
+  var lensMat = new THREE.MeshBasicMaterial({ color: 0x333355, side: THREE.DoubleSide });
+  var lensMesh = new THREE.Mesh(lensGeo, lensMat);
+  lensMesh.position.set(0, PH/2 - 60, -PD/2 - 2);
+  lensMesh.rotation.y = Math.PI;
+  phoneMesh.add(lensMesh);
+
+  // Lighting
+  glScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  var mainLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  mainLight.position.set(400, 400, 600);
+  glScene.add(mainLight);
+  var rimLight = new THREE.DirectionalLight(0x0D7C66, 0.4);
+  rimLight.position.set(-300, 100, -300);
+  glScene.add(rimLight);
+
+  // ===== CSS Phone Screen (CSS3D) =====
+  var cssObject = new THREE.CSS3DObject(phoneMockup);
+  cssObject.position.copy(phoneMesh.position);
+  cssObject.position.z += PD / 2 + 1;
+  cssScene.add(cssObject);
+
+  // Create a group to rotate WebGL phone body
+  var phoneGroup = new THREE.Group();
+  glScene.remove(phoneMesh);
+  phoneGroup.add(phoneMesh);
+  glScene.add(phoneGroup);
+
+  // Position the phone group roughly where hero phone sits
+  phoneGroup.position.set(W/2 - 200, 0, 0);
+  phoneMesh.position.set(0, 0, 0);
+
+  // Mark 3D as active
+  heroVisual.classList.add('has-3d');
+
+  // Enable pointer events on the container for dragging
+  container.style.pointerEvents = 'auto';
+  container.style.cursor = 'grab';
+
+  // ===== Drag to Rotate =====
+  var isDragging = false, prevMX = 0, prevMY = 0;
+  var targetRotY = -0.15, targetRotX = 0.04;
+  var autoTime = 0;
+
+  container.addEventListener('mousedown', function(e) {
+    isDragging = true; prevMX = e.clientX; prevMY = e.clientY;
+    container.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    targetRotY += (e.clientX - prevMX) * 0.005;
+    targetRotX = Math.max(-0.5, Math.min(0.5, targetRotX + (e.clientY - prevMY) * 0.003));
+    prevMX = e.clientX; prevMY = e.clientY;
+  });
+  window.addEventListener('mouseup', function() {
+    isDragging = false;
+    container.style.cursor = 'grab';
+  });
+
+  // Touch
+  container.addEventListener('touchstart', function(e) {
+    isDragging = true; prevMX = e.touches[0].clientX; prevMY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    targetRotY += (e.touches[0].clientX - prevMX) * 0.005;
+    targetRotX = Math.max(-0.5, Math.min(0.5, targetRotX + (e.touches[0].clientY - prevMY) * 0.003));
+    prevMX = e.touches[0].clientX; prevMY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', function() { isDragging = false; });
+
+  // ===== Resize =====
+  window.addEventListener('resize', function() {
+    W = heroVisual.offsetWidth;
+    H = heroVisual.offsetHeight;
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+    glRenderer.setSize(W, H);
+    cssRenderer.setSize(W, H);
+  });
+
+  // ===== Render Loop =====
+  function animate() {
+    requestAnimationFrame(animate);
+    autoTime += 0.008;
+
+    if (!isDragging) {
+      targetRotY += Math.sin(autoTime) * 0.001;
+    }
+
+    // Smooth lerp rotation
+    phoneGroup.rotation.y += (targetRotY - phoneGroup.rotation.y) * 0.06;
+    phoneGroup.rotation.x += (targetRotX - phoneGroup.rotation.x) * 0.06;
+
+    // Bob animation
+    phoneGroup.position.y = Math.sin(autoTime * 0.7) * 12;
+
+    // Sync CSS3D object to match the phone group's world transform
+    cssObject.position.copy(phoneMesh.getWorldPosition(new THREE.Vector3()));
+    cssObject.position.z += PD / 2 + 1;
+    cssObject.rotation.copy(phoneGroup.rotation);
+    cssObject.position.y = phoneGroup.position.y;
+
+    // Render both
+    glRenderer.render(glScene, camera);
+    cssRenderer.render(cssScene, camera);
+  }
+  animate();
+})();
