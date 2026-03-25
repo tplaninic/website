@@ -608,11 +608,8 @@ document.addEventListener('DOMContentLoaded', () => {
   cssContainer.appendChild(cssRenderer.domElement);
 
   // ===== Phone Body (WebGL) =====
-  // Measure the screen (not the full mockup) to size the 3D body
-  var scrW = phoneScreen.offsetWidth || 260;
-  var scrH = phoneScreen.offsetHeight || 500;
-  // Body is larger than the screen (bezel frame around it)
-  var PW = scrW + 30, PH = scrH + 30, PD = 20;
+  // Fixed phone body dimensions (don't rely on CSS measurements which include padding)
+  var PW = 270, PH = 540, PD = 18;
 
   function makeRoundedRect(w, h, r) {
     var s = new THREE.Shape();
@@ -709,10 +706,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== CSS Phone Screen (CSS3D) =====
   // CSS3DObject wraps only the phone-screen (the white app content), not the dark frame
   var cssObject = new THREE.CSS3DObject(phoneScreen);
-  // The screen should fit inside the 3D body's bezel
-  var screenW = phoneScreen.offsetWidth || 260;
-  var screenH = phoneScreen.offsetHeight || 510;
-  cssObject.scale.set(1, 1, 1);
+  // Scale screen to fit inside the 3D body bezel (body is 270 wide, screen ~260px)
+  var rawW = phoneScreen.offsetWidth || 260;
+  var fitScale = (PW - 20) / rawW; // 20px total bezel (10 each side)
+  cssObject.scale.set(fitScale, fitScale, 1);
   cssObject.position.set(0, 0, PD / 2 + 1);
   cssScene.add(cssObject);
 
@@ -725,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Position the phone at the right side of the hero
   // FOV=40 at z=900: visible half-width ≈ 900*tan(20°) ≈ 328 units
   // Place phone at ~60% to the right
-  phoneGroup.position.set(200, 0, 0);
+  phoneGroup.position.set(100, 0, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active

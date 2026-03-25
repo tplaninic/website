@@ -290,7 +290,7 @@ button { font-family: inherit; }
 .hero-note { font-size: 0.85rem; opacity: 0.6; }
 .hero-visual { flex: 0 0 auto; position: relative; }
 
-.hero-wave { position: absolute; bottom: -1px; left: 0; right: 0; z-index: 2; }
+.hero-wave { position: absolute; bottom: -1px; left: 0; right: 0; z-index: 1; }
 .hero-wave svg { display: block; width: 100%; height: 80px; }
 
 .section-wave { position: absolute; bottom: -1px; left: 0; right: 0; z-index: 2; }
@@ -331,8 +331,8 @@ button { font-family: inherit; }
   overflow: visible;
   pointer-events: none;
 }
-/* When 3D is active, hide the original CSS phone in normal flow */
-.hero-visual.has-3d > .phone-float { visibility: hidden; }
+/* When 3D is active, hide the ENTIRE original CSS phone including frame/notch */
+.hero-visual.has-3d > .phone-float { display: none; }
 /* On mobile, no 3D */
 @media (max-width: 768px) {
   .phone3d-container { display: none; }
