@@ -66,11 +66,12 @@
         <div class="hero-note">Available on Android &middot; iOS coming soon</div>
       </div>
       <div class="hero-visual">
-        <div class="phone-float">
-          <div class="phone-mockup hero-phone">
-            <div class="phone-frame">
+        <div class="phone-float" id="phoneFloat">
+          <div class="phone-3d-body">
+            <!-- FRONT FACE -->
+            <div class="phone-face phone-front">
               <div class="phone-notch"></div>
-              <div class="phone-screen">
+              <div class="phone-screen" id="heroPhoneScreen">
                 <div class="mock-status-bar">
                   <span>9:41</span>
                   <div class="mock-status-icons">
@@ -104,8 +105,83 @@
                   <div class="mock-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Chat</span></div>
                   <div class="mock-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33"/></svg><span>Settings</span></div>
                 </div>
+                <!-- Overlay screens for scroll-follow feature changes -->
+                <div class="phone-screen-overlays" id="phoneScreenOverlays">
+                  <!-- Screen 1: Calendar week view -->
+                  <div class="phone-overlay" data-screen="1">
+                    <div class="po-header">Week View</div>
+                    <div class="po-calendar">
+                      <div class="po-cal-row"><span class="po-cal-day">Mon</span><div class="po-cal-block morning" style="height:32px;margin-top:4px"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Tue</span><div class="po-cal-block morning" style="height:32px;margin-top:4px"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Wed</span><div class="po-cal-block afternoon" style="height:32px;margin-top:36px"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Thu</span><div class="po-cal-block night" style="height:32px;margin-top:68px"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Fri</span><div class="po-cal-block afternoon" style="height:32px;margin-top:36px"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Sat</span><div class="po-cal-block off" style="height:100%;"></div></div>
+                      <div class="po-cal-row"><span class="po-cal-day">Sun</span><div class="po-cal-block off" style="height:100%;"></div></div>
+                    </div>
+                  </div>
+                  <!-- Screen 2: Shift Swaps -->
+                  <div class="phone-overlay" data-screen="2">
+                    <div class="po-header">Shift Swaps</div>
+                    <div class="po-swaps">
+                      <div class="po-swap-card">
+                        <div class="po-swap-icon">&#8644;</div>
+                        <div class="po-swap-info"><strong>Alice &rarr; Bob</strong><span>Mon Morning &harr; Tue Afternoon</span></div>
+                        <div class="po-swap-badge pending">Pending</div>
+                      </div>
+                      <div class="po-swap-card">
+                        <div class="po-swap-icon">&#8644;</div>
+                        <div class="po-swap-info"><strong>Carol &rarr; Dan</strong><span>Wed Night &harr; Thu Morning</span></div>
+                        <div class="po-swap-badge approved">Approved</div>
+                      </div>
+                      <div class="po-swap-card">
+                        <div class="po-swap-icon">&#8644;</div>
+                        <div class="po-swap-info"><strong>Eve &rarr; Frank</strong><span>Fri Afternoon &harr; Sat Off</span></div>
+                        <div class="po-swap-badge pending">Pending</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Screen 3: Chat -->
+                  <div class="phone-overlay" data-screen="3">
+                    <div class="po-header">Team Chat</div>
+                    <div class="po-chat">
+                      <div class="po-msg received"><div class="po-msg-bubble">Hey, can you cover my shift on Friday?</div><span class="po-msg-time">9:32 AM</span></div>
+                      <div class="po-msg sent"><div class="po-msg-bubble">Sure! I'll take the afternoon slot.</div><span class="po-msg-time">9:33 AM</span></div>
+                      <div class="po-msg received"><div class="po-msg-bubble">Thanks! I've sent a swap request.</div><span class="po-msg-time">9:34 AM</span></div>
+                      <div class="po-msg sent"><div class="po-msg-bubble">Got it, just approved it!</div><span class="po-msg-time">9:35 AM</span></div>
+                    </div>
+                  </div>
+                  <!-- Screen 4: Reports -->
+                  <div class="phone-overlay" data-screen="4">
+                    <div class="po-header">Reports</div>
+                    <div class="po-reports">
+                      <div class="po-stat-row"><span>Total Hours</span><strong>168h</strong></div>
+                      <div class="po-stat-row"><span>Overtime</span><strong>12h</strong></div>
+                      <div class="po-stat-row"><span>Days Off Used</span><strong>4/20</strong></div>
+                      <div class="po-chart">
+                        <div class="po-bar" style="height:60%" data-label="Mon"></div>
+                        <div class="po-bar" style="height:80%" data-label="Tue"></div>
+                        <div class="po-bar" style="height:45%" data-label="Wed"></div>
+                        <div class="po-bar" style="height:90%" data-label="Thu"></div>
+                        <div class="po-bar" style="height:70%" data-label="Fri"></div>
+                        <div class="po-bar" style="height:20%" data-label="Sat"></div>
+                        <div class="po-bar" style="height:15%" data-label="Sun"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            <!-- BACK FACE -->
+            <div class="phone-face phone-back">
+              <div class="phone-back-camera"></div>
+              <div class="phone-back-logo">W</div>
+            </div>
+            <!-- EDGE FACES -->
+            <div class="phone-face phone-left"></div>
+            <div class="phone-face phone-right"></div>
+            <div class="phone-face phone-top"></div>
+            <div class="phone-face phone-bottom"></div>
           </div>
         </div>
       </div>
@@ -1002,6 +1078,8 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

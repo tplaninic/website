@@ -281,14 +281,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== 3D Phone Interaction =====
-  const phoneFloat = document.querySelector('.phone-float');
+  const phoneFloat = document.getElementById('phoneFloat');
+  let phoneIsFixed = false; // true when scroll-follow is active
+
   if (phoneFloat) {
     let isDragging = false;
     let startX = 0, startY = 0;
     let rotateX = 0, rotateY = 0;
     let currentRotateX = 0, currentRotateY = 0;
+    // Default resting rotation for the 3D effect
+    const restRotateY = -8;
+    const restRotateX = 2;
 
     phoneFloat.addEventListener('mousedown', (e) => {
+      if (phoneIsFixed) return;
       isDragging = true;
       startX = e.clientX;
       startY = e.clientY;
@@ -313,9 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
       phoneFloat.classList.remove('dragging');
       currentRotateX = rotateX;
       currentRotateY = rotateY;
-      // Spring back to neutral after 2 seconds
       setTimeout(() => {
-        if (!isDragging) {
+        if (!isDragging && !phoneIsFixed) {
           phoneFloat.style.transform = '';
           currentRotateX = 0;
           currentRotateY = 0;
@@ -327,6 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Touch support
     phoneFloat.addEventListener('touchstart', (e) => {
+      if (phoneIsFixed) return;
       isDragging = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
@@ -351,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentRotateX = rotateX;
       currentRotateY = rotateY;
       setTimeout(() => {
-        if (!isDragging) {
+        if (!isDragging && !phoneIsFixed) {
           phoneFloat.style.transform = '';
           currentRotateX = 0;
           currentRotateY = 0;
@@ -360,6 +366,131 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 2000);
     });
+  }
+
+  // ===== GSAP Scroll-Follow Phone (desktop only) =====
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && window.innerWidth > 1024) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const heroSection = document.getElementById('hero');
+    const featuresSection = document.getElementById('features');
+    const heroVisual = document.querySelector('.hero-visual');
+    const overlays = document.querySelectorAll('.phone-overlay');
+
+    // Map feature pill data-slide values to overlay data-screen values
+    // slideOrder: [0, 9, 10, 1, 2, 3, 4, 8, 5, 6, 7]
+    // Pill index → screen mapping:
+    // 0=AI Scheduling (no overlay), 1=Analytics (screen 4/reports), 2=Export (no overlay),
+    // 3=Calendar (screen 1), 4=Shift Swaps (screen 2), 5=Time Off (no overlay),
+    // 6=Chat (screen 3), 7=Custom Shifts (no overlay), 8=Tracking (no overlay),
+    // 9=Attendance (no overlay), 10=Roles (no overlay)
+    const slideToScreen = {
+      0: null,   // AI Scheduling - default hero screen
+      9: 4,      // Analytics → Reports overlay
+      10: null,  // Export
+      1: 1,      // Calendar → Calendar overlay
+      2: 2,      // Shift Swaps → Swaps overlay
+      3: null,   // Time Off
+      4: 3,      // Chat → Chat overlay
+      8: null,   // Custom Shifts
+      5: null,   // Tracking
+      6: null,   // Attendance
+      7: null,   // Roles
+    };
+
+    // Function to update phone overlay based on current carousel slide
+    function updatePhoneOverlay(slideIndex) {
+      const screenId = slideToScreen[slideIndex];
+      overlays.forEach(o => o.classList.remove('active'));
+      if (screenId !== null && screenId !== undefined) {
+        const target = document.querySelector('.phone-overlay[data-screen="' + screenId + '"]');
+        if (target) target.classList.add('active');
+      }
+    }
+
+    // Create fixed phone wrapper (clone the phone into it)
+    const fixedWrap = document.createElement('div');
+    fixedWrap.className = 'phone-fixed-wrap';
+    fixedWrap.innerHTML = ''; // will hold a reference, not a clone
+    document.body.appendChild(fixedWrap);
+
+    let originalParent = null;
+    let originalNextSibling = null;
+
+    function movePhoneToFixed() {
+      if (phoneIsFixed || !phoneFloat) return;
+      phoneIsFixed = true;
+      // Remember where the phone was
+      originalParent = phoneFloat.parentElement;
+      originalNextSibling = phoneFloat.nextSibling;
+      // Stop bob animation and dragging
+      phoneFloat.classList.add('dragging');
+      phoneFloat.style.transform = 'rotateY(-8deg) rotateX(2deg)';
+      phoneFloat.style.animation = 'none';
+      // Mark hero visual as empty to preserve layout
+      if (heroVisual) heroVisual.classList.add('phone-away');
+      // Move to fixed wrapper
+      fixedWrap.appendChild(phoneFloat);
+      fixedWrap.classList.add('visible');
+      // Update overlay based on current carousel slide
+      updatePhoneOverlay(currentSlide);
+    }
+
+    function movePhoneToHero() {
+      if (!phoneIsFixed || !phoneFloat || !originalParent) return;
+      phoneIsFixed = false;
+      // Move back
+      fixedWrap.classList.remove('visible');
+      if (heroVisual) heroVisual.classList.remove('phone-away');
+      if (originalNextSibling) {
+        originalParent.insertBefore(phoneFloat, originalNextSibling);
+      } else {
+        originalParent.appendChild(phoneFloat);
+      }
+      // Restore animation
+      phoneFloat.classList.remove('dragging');
+      phoneFloat.style.transform = '';
+      phoneFloat.style.animation = '';
+      // Clear overlays
+      overlays.forEach(o => o.classList.remove('active'));
+    }
+
+    // Observe carousel changes: watch for active pill changes to sync phone overlay
+    // We poll the current slide state via a MutationObserver on the pills
+    let lastSyncedSlide = -1;
+    const pillContainer = document.getElementById('featureNav');
+    if (pillContainer) {
+      const pillObserver = new MutationObserver(() => {
+        if (phoneIsFixed && currentSlide !== lastSyncedSlide) {
+          lastSyncedSlide = currentSlide;
+          updatePhoneOverlay(currentSlide);
+        }
+      });
+      pillContainer.querySelectorAll('.feature-pill').forEach(p => {
+        pillObserver.observe(p, { attributes: true, attributeFilter: ['class'] });
+      });
+    }
+    // Periodic sync fallback (catches auto-advance edge cases)
+    setInterval(() => {
+      if (phoneIsFixed && currentSlide !== lastSyncedSlide) {
+        lastSyncedSlide = currentSlide;
+        updatePhoneOverlay(currentSlide);
+      }
+    }, 500);
+
+    // ScrollTrigger: pin the phone through the features section
+    if (heroSection && featuresSection) {
+      ScrollTrigger.create({
+        trigger: heroSection,
+        start: 'bottom top+=200',
+        endTrigger: featuresSection,
+        end: 'bottom center',
+        onEnter: movePhoneToFixed,
+        onLeaveBack: movePhoneToHero,
+        onLeave: movePhoneToHero,
+        onEnterBack: movePhoneToFixed,
+      });
+    }
   }
 
   // ===== FAQ Accordion =====
