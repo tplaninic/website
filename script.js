@@ -655,52 +655,112 @@ document.addEventListener('DOMContentLoaded', () => {
   var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
   glScene.add(phoneMesh);
 
-  // Back face — slightly different shade
-  var backGeo = new THREE.PlaneGeometry(PW - 16, PH - 16);
-  var backMat = new THREE.MeshPhysicalMaterial({ color: 0x2a2a40, metalness: 0.5, roughness: 0.5 });
-  var backMesh = new THREE.Mesh(backGeo, backMat);
-  backMesh.position.z = -PD / 2 - 1;
-  backMesh.rotation.y = Math.PI;
-  phoneMesh.add(backMesh);
+  // No separate back plane — the extruded body already has a back face
 
   // Camera module on back — raised square island (top-left of back)
   var camIslandGeo = new THREE.PlaneGeometry(75, 75);
-  var camIslandMat = new THREE.MeshPhysicalMaterial({ color: 0x1e1e34, metalness: 0.6, roughness: 0.4 });
-  var camIslandMesh = new THREE.Mesh(camIslandGeo, camIslandMat);
-  camIslandMesh.position.set(-PW/2 + 55, PH/2 - 55, -PD/2 - 1.5);
-  camIslandMesh.rotation.y = Math.PI;
-  phoneMesh.add(camIslandMesh);
+  var camIslandMat = new THREE.MeshBasicMaterial({ color: 0x1e1e34, side: THREE.DoubleSide });
+  // 3D Camera module on back
+  var camMat = new THREE.MeshPhysicalMaterial({ color: 0x1a1a30, metalness: 0.8, roughness: 0.2 });
+  var glassMat = new THREE.MeshPhysicalMaterial({ color: 0x15152a, metalness: 0.8, roughness: 0.1, clearcoat: 0.8 });
+  var ringMat = new THREE.MeshPhysicalMaterial({ color: 0x444466, metalness: 0.7, roughness: 0.3 });
 
-  var lensRingMat = new THREE.MeshBasicMaterial({ color: 0x555577, side: THREE.DoubleSide });
-  var lensGlassMat = new THREE.MeshPhysicalMaterial({ color: 0x080818, metalness: 0.95, roughness: 0.05, clearcoat: 1.0 });
+  // Camera island — beveled extruded shape
+  var islandShape = new THREE.Shape();
+  var iw = 80, ih = 80, ir = 12;
+  islandShape.moveTo(-iw/2+ir, -ih/2);
+  islandShape.lineTo(iw/2-ir, -ih/2);
+  islandShape.quadraticCurveTo(iw/2, -ih/2, iw/2, -ih/2+ir);
+  islandShape.lineTo(iw/2, ih/2-ir);
+  islandShape.quadraticCurveTo(iw/2, ih/2, iw/2-ir, ih/2);
+  islandShape.lineTo(-iw/2+ir, ih/2);
+  islandShape.quadraticCurveTo(-iw/2, ih/2, -iw/2, ih/2-ir);
+  islandShape.lineTo(-iw/2, -ih/2+ir);
+  islandShape.quadraticCurveTo(-iw/2, -ih/2, -iw/2+ir, -ih/2);
+  var islandGeo = new THREE.ExtrudeGeometry(islandShape, { depth: 4, bevelEnabled: true, bevelThickness: 1.5, bevelSize: 1.5, bevelSegments: 3 });
+  islandGeo.center();
+  var islandMesh = new THREE.Mesh(islandGeo, camMat);
+  islandMesh.position.set(-PW/2 + 60, PH/2 - 60, -PD/2 - 4);
+  phoneMesh.add(islandMesh);
 
-  // Main lens (large, top-left)
-  phoneMesh.add(makeCircle(new THREE.RingGeometry(12, 18, 32), lensRingMat, -PW/2 + 42, PH/2 - 42, -PD/2 - 2));
-  phoneMesh.add(makeCircle(new THREE.CircleGeometry(10, 32), lensGlassMat, -PW/2 + 42, PH/2 - 42, -PD/2 - 2.5));
+  // Main lens (large)
+  var lens1Geo = new THREE.CylinderGeometry(15, 15, 5, 32);
+  lens1Geo.rotateX(Math.PI / 2);
+  var lens1 = new THREE.Mesh(lens1Geo, ringMat);
+  lens1.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 6);
+  phoneMesh.add(lens1);
+  var glass1 = new THREE.Mesh(new THREE.CircleGeometry(11, 32), glassMat);
+  glass1.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.6);
+  phoneMesh.add(glass1);
 
-  // Second lens (top-right of module)
-  phoneMesh.add(makeCircle(new THREE.RingGeometry(8, 13, 32), lensRingMat, -PW/2 + 68, PH/2 - 42, -PD/2 - 2));
-  phoneMesh.add(makeCircle(new THREE.CircleGeometry(7, 32), lensGlassMat, -PW/2 + 68, PH/2 - 42, -PD/2 - 2.5));
+  // Second lens (top-right) — outer ring + inner dark cylinder (no separate glass plane)
+  var lens2OuterGeo = new THREE.CylinderGeometry(12, 12, 3, 32);
+  lens2OuterGeo.rotateX(Math.PI / 2);
+  var lens2Outer = new THREE.Mesh(lens2OuterGeo, ringMat);
+  lens2Outer.position.set(-PW/2 + 80, PH/2 - 40, -PD/2 - 5);
+  phoneMesh.add(lens2Outer);
+  var lens2InnerGeo = new THREE.CylinderGeometry(8, 8, 4, 32);
+  lens2InnerGeo.rotateX(Math.PI / 2);
+  var lens2Inner = new THREE.Mesh(lens2InnerGeo, glassMat);
+  lens2Inner.position.set(-PW/2 + 80, PH/2 - 40, -PD/2 - 5.5);
+  phoneMesh.add(lens2Inner);
 
-  // Third lens (bottom-left of module)
-  phoneMesh.add(makeCircle(new THREE.RingGeometry(8, 13, 32), lensRingMat, -PW/2 + 42, PH/2 - 68, -PD/2 - 2));
-  phoneMesh.add(makeCircle(new THREE.CircleGeometry(7, 32), lensGlassMat, -PW/2 + 42, PH/2 - 68, -PD/2 - 2.5));
+  // Third lens (bottom-left)
+  var lens3OuterGeo = new THREE.CylinderGeometry(12, 12, 3, 32);
+  lens3OuterGeo.rotateX(Math.PI / 2);
+  var lens3Outer = new THREE.Mesh(lens3OuterGeo, ringMat);
+  lens3Outer.position.set(-PW/2 + 40, PH/2 - 80, -PD/2 - 5);
+  phoneMesh.add(lens3Outer);
+  var lens3InnerGeo = new THREE.CylinderGeometry(8, 8, 4, 32);
+  lens3InnerGeo.rotateX(Math.PI / 2);
+  var lens3Inner = new THREE.Mesh(lens3InnerGeo, glassMat);
+  lens3Inner.position.set(-PW/2 + 40, PH/2 - 80, -PD/2 - 5.5);
+  phoneMesh.add(lens3Inner);
 
-  // Flash LED (bottom-right of module)
-  phoneMesh.add(makeCircle(new THREE.CircleGeometry(5, 16), new THREE.MeshBasicMaterial({ color: 0xffffdd }), -PW/2 + 68, PH/2 - 68, -PD/2 - 2));
+  // Flash
+  var flashGeo = new THREE.CylinderGeometry(5, 5, 2, 16);
+  flashGeo.rotateX(Math.PI / 2);
+  var flashMesh = new THREE.Mesh(flashGeo, new THREE.MeshBasicMaterial({ color: 0xffffcc }));
+  flashMesh.position.set(-PW/2 + 80, PH/2 - 80, -PD/2 - 5);
+  phoneMesh.add(flashMesh);
 
-  // LiDAR/sensor dot (small, near flash)
-  phoneMesh.add(makeCircle(new THREE.CircleGeometry(2, 12), new THREE.MeshBasicMaterial({ color: 0x333355 }), -PW/2 + 55, PH/2 - 55, -PD/2 - 2));
-
-  function makeCircle(geo, mat, x, y, z) {
-    var m = new THREE.Mesh(geo, mat);
-    m.position.set(x, y, z);
-    m.rotation.y = Math.PI;
-    return m;
+  // Wrok logo on back — load PNG via Image, fallback to canvas text for local dev
+  function addLogoToPhone(tex, w, h) {
+    var geo = new THREE.PlaneGeometry(w, h);
+    var mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false, opacity: 0.4 });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(0, -60, -PD/2 - 10);
+    mesh.rotation.y = Math.PI;
+    phoneMesh.add(mesh);
   }
+  var logoImg = new Image();
+  logoImg.onload = function() {
+    var t = new THREE.Texture(logoImg);
+    t.needsUpdate = true;
+    addLogoToPhone(t, 100, 100 / (logoImg.width / logoImg.height));
+  };
+  logoImg.onerror = function() {
+    var c = document.createElement('canvas');
+    c.width = 512; c.height = 128;
+    var x = c.getContext('2d');
+    x.fillStyle = 'rgba(255,255,255,0.35)';
+    x.font = '900 80px Roboto,Arial,sans-serif';
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillText('Wrok', 256, 64);
+    addLogoToPhone(new THREE.CanvasTexture(c), 120, 30);
+  };
+  logoImg.src = 'wrok_logo.png';
 
-  // Wrok logo on back
-  // (Using a simple "W" rendered as a plane — in real life you'd use a texture)
+  // Add inner detail to main lens (reflective center dot)
+  var lensDot1 = new THREE.Mesh(new THREE.CircleGeometry(4, 16), new THREE.MeshBasicMaterial({ color: 0x1a1a3a, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+  lensDot1.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.7);
+  phoneMesh.add(lensDot1);
+  // Subtle highlight ring on main lens
+  var lensHighlight = new THREE.Mesh(new THREE.RingGeometry(6, 8, 32), new THREE.MeshBasicMaterial({ color: 0x3333aa, side: THREE.DoubleSide, transparent: true, opacity: 0.3, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+  lensHighlight.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.65);
+  phoneMesh.add(lensHighlight);
+
+  // No separate dots — the inner cylinders provide the dark glass look
 
   // Lighting — bright enough to see the phone body clearly
   glScene.add(new THREE.AmbientLight(0xffffff, 0.8));
