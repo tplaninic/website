@@ -622,7 +622,8 @@ document.addEventListener('DOMContentLoaded', () => {
   cssContainer.appendChild(cssRenderer.domElement);
 
   // ===== Phone Body (WebGL) =====
-  var PW = 300, PH = 580, PD = 20;
+  // Match the CSS phone-mockup size (280px wide, ~560px tall based on content)
+  var PW = 290, PH = 560, PD = 18;
 
   function makeRoundedRect(w, h, r) {
     var s = new THREE.Shape();
@@ -677,9 +678,13 @@ document.addEventListener('DOMContentLoaded', () => {
   glScene.add(rimLight);
 
   // ===== CSS Phone Screen (CSS3D) =====
+  // Scale the CSS phone to match the 3D body dimensions
   var cssObject = new THREE.CSS3DObject(phoneMockup);
-  cssObject.position.copy(phoneMesh.position);
-  cssObject.position.z += PD / 2 + 1;
+  // The phone-mockup is 280px wide, body is PW (290) units
+  // CSS3D: 1px = 1 unit, so scale slightly to fill the body
+  var screenScale = (PW - 20) / phoneMockup.offsetWidth; // inset 10px each side
+  cssObject.scale.set(screenScale, screenScale, 1);
+  cssObject.position.set(0, 0, PD / 2 + 1);
   cssScene.add(cssObject);
 
   // Create a group to rotate WebGL phone body
@@ -688,8 +693,8 @@ document.addEventListener('DOMContentLoaded', () => {
   phoneGroup.add(phoneMesh);
   glScene.add(phoneGroup);
 
-  // Position the phone group roughly where hero phone sits
-  phoneGroup.position.set(W/2 - 200, 0, 0);
+  // Position the phone group where the hero phone normally sits (right side)
+  phoneGroup.position.set(W * 0.22, 0, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
@@ -759,10 +764,16 @@ document.addEventListener('DOMContentLoaded', () => {
     phoneGroup.position.y = Math.sin(autoTime * 0.7) * 12;
 
     // Sync CSS3D object to match the phone group's world transform
-    cssObject.position.copy(phoneMesh.getWorldPosition(new THREE.Vector3()));
-    cssObject.position.z += PD / 2 + 1;
+    var worldPos = phoneMesh.getWorldPosition(new THREE.Vector3());
+    cssObject.position.set(worldPos.x, phoneGroup.position.y, worldPos.z + PD / 2 + 1);
     cssObject.rotation.copy(phoneGroup.rotation);
-    cssObject.position.y = phoneGroup.position.y;
+
+    // Hide screen when viewing the back (rotated past ~80 degrees)
+    var absRotY = Math.abs(phoneGroup.rotation.y % (Math.PI * 2));
+    if (absRotY > Math.PI) absRotY = Math.PI * 2 - absRotY;
+    var showScreen = absRotY < 1.4; // ~80 degrees
+    cssObject.visible = showScreen;
+    phoneMockup.style.opacity = showScreen ? '1' : '0';
 
     // Render both
     glRenderer.render(glScene, camera);
