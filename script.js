@@ -663,46 +663,41 @@ document.addEventListener('DOMContentLoaded', () => {
   backMesh.rotation.y = Math.PI;
   phoneMesh.add(backMesh);
 
-  // Camera module on back — square housing with rounded corners
-  var camModuleGeo = new THREE.PlaneGeometry(60, 60);
-  var camModuleMat = new THREE.MeshPhysicalMaterial({ color: 0x222238, metalness: 0.7, roughness: 0.3 });
-  var camModuleMesh = new THREE.Mesh(camModuleGeo, camModuleMat);
-  camModuleMesh.position.set(-PW/2 + 55, PH/2 - 55, -PD/2 - 1.5);
-  camModuleMesh.rotation.y = Math.PI;
-  phoneMesh.add(camModuleMesh);
+  // Camera module on back — raised square island (top-left of back)
+  var camIslandGeo = new THREE.PlaneGeometry(75, 75);
+  var camIslandMat = new THREE.MeshPhysicalMaterial({ color: 0x1e1e34, metalness: 0.6, roughness: 0.4 });
+  var camIslandMesh = new THREE.Mesh(camIslandGeo, camIslandMat);
+  camIslandMesh.position.set(-PW/2 + 55, PH/2 - 55, -PD/2 - 1.5);
+  camIslandMesh.rotation.y = Math.PI;
+  phoneMesh.add(camIslandMesh);
 
-  // Main camera lens (large)
-  var lens1Geo = new THREE.RingGeometry(10, 16, 32);
-  var lens1Mat = new THREE.MeshBasicMaterial({ color: 0x444466, side: THREE.DoubleSide });
-  var lens1Mesh = new THREE.Mesh(lens1Geo, lens1Mat);
-  lens1Mesh.position.set(-PW/2 + 45, PH/2 - 45, -PD/2 - 2);
-  lens1Mesh.rotation.y = Math.PI;
-  phoneMesh.add(lens1Mesh);
+  var lensRingMat = new THREE.MeshBasicMaterial({ color: 0x555577, side: THREE.DoubleSide });
+  var lensGlassMat = new THREE.MeshPhysicalMaterial({ color: 0x080818, metalness: 0.95, roughness: 0.05, clearcoat: 1.0 });
 
-  // Inner lens (glass effect)
-  var lensInnerGeo = new THREE.CircleGeometry(8, 32);
-  var lensInnerMat = new THREE.MeshPhysicalMaterial({
-    color: 0x0a0a1a, metalness: 0.9, roughness: 0.1, clearcoat: 1.0
-  });
-  var lensInnerMesh = new THREE.Mesh(lensInnerGeo, lensInnerMat);
-  lensInnerMesh.position.set(-PW/2 + 45, PH/2 - 45, -PD/2 - 2.5);
-  lensInnerMesh.rotation.y = Math.PI;
-  phoneMesh.add(lensInnerMesh);
+  // Main lens (large, top-left)
+  phoneMesh.add(makeCircle(new THREE.RingGeometry(12, 18, 32), lensRingMat, -PW/2 + 42, PH/2 - 42, -PD/2 - 2));
+  phoneMesh.add(makeCircle(new THREE.CircleGeometry(10, 32), lensGlassMat, -PW/2 + 42, PH/2 - 42, -PD/2 - 2.5));
 
-  // Second camera lens (smaller)
-  var lens2Geo = new THREE.RingGeometry(6, 10, 32);
-  var lens2Mesh = new THREE.Mesh(lens2Geo, lens1Mat);
-  lens2Mesh.position.set(-PW/2 + 65, PH/2 - 45, -PD/2 - 2);
-  lens2Mesh.rotation.y = Math.PI;
-  phoneMesh.add(lens2Mesh);
+  // Second lens (top-right of module)
+  phoneMesh.add(makeCircle(new THREE.RingGeometry(8, 13, 32), lensRingMat, -PW/2 + 68, PH/2 - 42, -PD/2 - 2));
+  phoneMesh.add(makeCircle(new THREE.CircleGeometry(7, 32), lensGlassMat, -PW/2 + 68, PH/2 - 42, -PD/2 - 2.5));
 
-  // Flash LED
-  var flashGeo = new THREE.CircleGeometry(4, 16);
-  var flashMat = new THREE.MeshBasicMaterial({ color: 0xffffcc });
-  var flashMesh = new THREE.Mesh(flashGeo, flashMat);
-  flashMesh.position.set(-PW/2 + 55, PH/2 - 65, -PD/2 - 2);
-  flashMesh.rotation.y = Math.PI;
-  phoneMesh.add(flashMesh);
+  // Third lens (bottom-left of module)
+  phoneMesh.add(makeCircle(new THREE.RingGeometry(8, 13, 32), lensRingMat, -PW/2 + 42, PH/2 - 68, -PD/2 - 2));
+  phoneMesh.add(makeCircle(new THREE.CircleGeometry(7, 32), lensGlassMat, -PW/2 + 42, PH/2 - 68, -PD/2 - 2.5));
+
+  // Flash LED (bottom-right of module)
+  phoneMesh.add(makeCircle(new THREE.CircleGeometry(5, 16), new THREE.MeshBasicMaterial({ color: 0xffffdd }), -PW/2 + 68, PH/2 - 68, -PD/2 - 2));
+
+  // LiDAR/sensor dot (small, near flash)
+  phoneMesh.add(makeCircle(new THREE.CircleGeometry(2, 12), new THREE.MeshBasicMaterial({ color: 0x333355 }), -PW/2 + 55, PH/2 - 55, -PD/2 - 2));
+
+  function makeCircle(geo, mat, x, y, z) {
+    var m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y, z);
+    m.rotation.y = Math.PI;
+    return m;
+  }
 
   // Wrok logo on back
   // (Using a simple "W" rendered as a plane — in real life you'd use a texture)
@@ -823,10 +818,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var featuresEnd = featuresTop + featuresH;
 
     if (scrollY < 20) {
-      // At top — original position
+      // At top — original position, allow phone interaction
       targetPhoneX = heroStartX;
       targetPhoneScale = 1;
       phoneVisible = true;
+      container.style.pointerEvents = 'auto';
     } else if (scrollY < featuresTop) {
       // Fly to sidebar — fast at first, then ease (power curve)
       var p = scrollY / featuresTop;
@@ -836,11 +832,13 @@ document.addEventListener('DOMContentLoaded', () => {
       targetPhoneX = heroStartX + (sidebarX - heroStartX) * eased;
       targetPhoneScale = 1 - 0.3 * eased;
       phoneVisible = true;
+      container.style.pointerEvents = 'none';
     } else if (scrollY < featuresEnd) {
-      // In features — pinned at sidebar
+      // In features — pinned at sidebar, disable phone interaction so buttons work
       targetPhoneX = sidebarX;
       targetPhoneScale = 0.7;
       phoneVisible = true;
+      container.style.pointerEvents = 'none';
     } else {
       // Past features — hide
       phoneVisible = false;
