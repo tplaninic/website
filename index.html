@@ -127,138 +127,429 @@
   </section>
 
 
-  <!-- ========== PHONE FEATURES ========== -->
-  <section class="phone-features" id="features">
+  <!-- ========== FEATURES CAROUSEL ========== -->
+  <section class="features" id="features">
+    <div class="section-bg-shapes">
+      <div class="shape sh-1"></div>
+      <div class="shape sh-2"></div>
+      <div class="shape sh-3"></div>
+      <div class="shape sh-4"></div>
+      <div class="shape sh-5"></div>
+      <div class="shape sh-6"></div>
+    </div>
     <div class="container">
       <div class="section-header light fade-in">
         <span class="section-label light">Features</span>
         <h2 class="section-title">Everything you need to run your team</h2>
+        <p class="section-subtitle">AI-driven tools designed for shift-based businesses. From intelligent schedule generation to team communication, Wrok handles it all.</p>
       </div>
-      <div class="pf-layout">
-        <div class="pf-text-track">
-          <!-- 5 feature panels that scroll -->
-          <div class="pf-panel" data-screen="0">
-            <div class="pf-panel-icon" style="background:rgba(13,124,102,0.15);color:#0D7C66"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+
+      <!-- Pill navigation -->
+      <div class="feature-nav-wrap fade-in">
+        <div class="feature-nav" id="featureNav">
+          <button class="feature-pill active" data-slide="0">Auto-Scheduling</button>
+          <button class="feature-pill" data-slide="9">Analytics</button>
+          <button class="feature-pill" data-slide="10">Export</button>
+          <button class="feature-pill" data-slide="1">Calendar</button>
+          <button class="feature-pill" data-slide="2">Shift Swaps</button>
+          <button class="feature-pill" data-slide="3">Time Off</button>
+          <button class="feature-pill" data-slide="4">Chat</button>
+          <button class="feature-pill" data-slide="8">Custom Shifts</button>
+          <button class="feature-pill" data-slide="5">Tracking</button>
+          <button class="feature-pill" data-slide="6">Attendance</button>
+          <button class="feature-pill" data-slide="7">Roles</button>
+        </div>
+      </div>
+
+      <!-- Showcase card -->
+      <div class="feature-showcase fade-in" id="featureShowcase">
+
+        <!-- Slide 0: AI Scheduling -->
+        <div class="feature-slide active" data-slide="0">
+          <div class="fs-text">
+            <span class="fs-tag">AI Core</span>
             <h3>AI-Powered Scheduling</h3>
-            <p>Our AI engine builds optimized, fair schedules in seconds. It respects rest hours, vacations, and preferences — so you never have to build a schedule manually again.</p>
-            <ul><li>One tap to generate a complete week</li><li>Respects rest hours and availability</li><li>Smart conflict resolution</li></ul>
+            <p>Our AI engine analyzes your team's constraints, availability, and shift history to generate optimized schedules in seconds. It intelligently balances workloads, respects rest periods, and adapts to your team &mdash; so you never have to build a schedule manually again.</p>
+            <ul class="fs-points">
+              <li>AI respects vacations, sick days, and rest hours</li>
+              <li>Intelligently distributes shifts for maximum fairness</li>
+              <li>One tap to generate a complete week</li>
+              <li>Smart recommendations when constraints conflict</li>
+            </ul>
           </div>
-          <div class="pf-panel" data-screen="1">
-            <div class="pf-panel-icon" style="background:rgba(33,150,243,0.15);color:#2196F3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></div>
-            <h3>Shift Swaps</h3>
-            <p>Workers can request shift swaps directly in the app. Managers approve with one tap. No more phone calls or sticky notes.</p>
-            <ul><li>Worker-initiated swap requests</li><li>Manager approval workflow</li><li>Automatic schedule updates</li></ul>
-          </div>
-          <div class="pf-panel" data-screen="2">
-            <div class="pf-panel-icon" style="background:rgba(156,39,176,0.15);color:#9C27B0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-            <h3>Team Messaging</h3>
-            <p>Built-in chat keeps your team connected. No need for separate messaging apps. Group chats, read receipts, and instant notifications.</p>
-            <ul><li>Direct and group messaging</li><li>Read receipts and delivery status</li><li>Push notifications</li></ul>
-          </div>
-          <div class="pf-panel" data-screen="3">
-            <div class="pf-panel-icon" style="background:rgba(255,152,0,0.15);color:#FF9800"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
-            <h3>Time Off Management</h3>
-            <p>Vacation requests, sick days, and time-off tracking — all in one place. Workers request, managers approve, schedules update automatically.</p>
-            <ul><li>Vacation and sick day tracking</li><li>Approval workflow</li><li>Automatic schedule exclusion</li></ul>
-          </div>
-          <div class="pf-panel" data-screen="4">
-            <div class="pf-panel-icon" style="background:rgba(0,150,136,0.15);color:#009688"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-            <h3>Reports & Analytics</h3>
-            <p>Track hours worked, shift distribution, and compensation. Export to PDF or Excel for payroll. See your team's performance at a glance.</p>
-            <ul><li>Hours and shift breakdown</li><li>PDF and Excel export</li><li>Compensation calculation</li></ul>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-gen-btn"><svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M4 2l8 6-8 6V2z"/></svg> Generate Schedule</div>
+              <div class="fv-mini-grid">
+                <div class="fv-grid-head"><span></span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
+                <div class="fv-grid-row"><span>Alice</span><span class="fv-c m"></span><span class="fv-c m"></span><span class="fv-c a"></span><span class="fv-c off"></span><span class="fv-c m"></span></div>
+                <div class="fv-grid-row"><span>Bob</span><span class="fv-c a"></span><span class="fv-c n"></span><span class="fv-c n"></span><span class="fv-c m"></span><span class="fv-c off"></span></div>
+                <div class="fv-grid-row"><span>Carol</span><span class="fv-c n"></span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c a"></span><span class="fv-c a"></span></div>
+                <div class="fv-grid-row"><span>Dan</span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c off"></span><span class="fv-c n"></span><span class="fv-c n"></span></div>
+              </div>
+              <div class="fv-badge">&#10003; All constraints satisfied</div>
+            </div>
           </div>
         </div>
-        <div class="pf-phone-col">
-          <div class="pf-phone-3d">
-            <div class="phone-mockup">
-              <div class="phone-frame">
-                <div class="phone-notch"></div>
-                <div class="phone-screen">
-                  <!-- Screen 0: Schedule -->
-                  <div class="pf-screen active" data-screen="0">
-                    <div class="ps-bar"><span>My Schedule</span></div>
-                    <div class="ps-week"><span>◀</span><span>Mar 24 – 30</span><span>▶</span></div>
-                    <div class="ps-grid">
-                      <div class="ps-row"><span class="ps-day">Mon</span><span class="ps-shift morning">Morning</span></div>
-                      <div class="ps-row"><span class="ps-day">Tue</span><span class="ps-shift morning">Morning</span></div>
-                      <div class="ps-row"><span class="ps-day">Wed</span><span class="ps-shift afternoon">Afternoon</span></div>
-                      <div class="ps-row"><span class="ps-day">Thu</span><span class="ps-shift night">Night</span></div>
-                      <div class="ps-row"><span class="ps-day">Fri</span><span class="ps-shift afternoon">Afternoon</span></div>
-                      <div class="ps-row"><span class="ps-day">Sat</span><span class="ps-shift off">Day Off</span></div>
-                      <div class="ps-row"><span class="ps-day">Sun</span><span class="ps-shift off">Day Off</span></div>
-                    </div>
-                    <div class="ps-btn">✨ Generate Schedule</div>
-                  </div>
-                  <!-- Screen 1: Swap -->
-                  <div class="pf-screen" data-screen="1">
-                    <div class="ps-bar"><span>Shift Swaps</span></div>
-                    <div class="ps-swap-card">
-                      <div class="ps-swap-header">Swap Request</div>
-                      <div class="ps-swap-workers"><span>Ana K.</span><span class="ps-swap-arrow">⇄</span><span>Marko H.</span></div>
-                      <div class="ps-swap-detail">Mon Morning ↔ Tue Afternoon</div>
-                      <div class="ps-swap-status">⏳ Pending approval</div>
-                      <div class="ps-swap-actions"><span class="ps-btn-approve">✓ Approve</span><span class="ps-btn-deny">✗ Deny</span></div>
-                    </div>
-                    <div class="ps-swap-card faded">
-                      <div class="ps-swap-header">Completed</div>
-                      <div class="ps-swap-workers"><span>Ivan P.</span><span class="ps-swap-arrow">⇄</span><span>Luka M.</span></div>
-                      <div class="ps-swap-detail">Wed Night ↔ Thu Morning</div>
-                      <div class="ps-swap-status approved">✓ Approved</div>
-                    </div>
-                  </div>
-                  <!-- Screen 2: Chat -->
-                  <div class="pf-screen" data-screen="2">
-                    <div class="ps-bar"><span>← Team Chat</span></div>
-                    <div class="ps-chat">
-                      <div class="ps-msg them"><div class="ps-bubble">Can you cover my shift tomorrow?</div><span class="ps-time">09:41</span></div>
-                      <div class="ps-msg me"><div class="ps-bubble">Sure, no problem!</div><span class="ps-time">09:42</span></div>
-                      <div class="ps-msg them"><div class="ps-bubble">Thanks! 🙏</div><span class="ps-time">09:42</span></div>
-                      <div class="ps-msg me"><div class="ps-bubble">I'll swap it in the app</div><span class="ps-time">09:43</span></div>
-                    </div>
-                    <div class="ps-chat-input"><span>Type a message...</span><span class="ps-send">➤</span></div>
-                  </div>
-                  <!-- Screen 3: Time Off -->
-                  <div class="pf-screen" data-screen="3">
-                    <div class="ps-bar"><span>Time Off</span></div>
-                    <div class="ps-timeoff-card">
-                      <div class="ps-to-badge approved">Approved</div>
-                      <div class="ps-to-title">Vacation</div>
-                      <div class="ps-to-dates">Mar 28 – Apr 2</div>
-                      <div class="ps-to-days">5 working days</div>
-                    </div>
-                    <div class="ps-timeoff-card pending">
-                      <div class="ps-to-badge pending-badge">Pending</div>
-                      <div class="ps-to-title">Vacation</div>
-                      <div class="ps-to-dates">May 12 – May 16</div>
-                      <div class="ps-to-days">5 working days</div>
-                    </div>
-                    <div class="ps-to-summary"><span>12</span> days used of <span>20</span></div>
-                  </div>
-                  <!-- Screen 4: Reports -->
-                  <div class="pf-screen" data-screen="4">
-                    <div class="ps-bar"><span>Analytics</span></div>
-                    <div class="ps-report-total"><span class="ps-report-num">164.5h</span><span class="ps-report-label">Total Hours</span></div>
-                    <div class="ps-chart">
-                      <div class="ps-chart-bar" style="height:60%"><span>W1</span></div>
-                      <div class="ps-chart-bar" style="height:80%"><span>W2</span></div>
-                      <div class="ps-chart-bar" style="height:70%"><span>W3</span></div>
-                      <div class="ps-chart-bar" style="height:90%"><span>W4</span></div>
-                    </div>
-                    <div class="ps-breakdown">
-                      <div class="ps-bk-row"><span class="ps-bk-dot" style="background:#FF9800"></span><span>Morning</span><span>45%</span></div>
-                      <div class="ps-bk-row"><span class="ps-bk-dot" style="background:#2196F3"></span><span>Afternoon</span><span>35%</span></div>
-                      <div class="ps-bk-row"><span class="ps-bk-dot" style="background:#673AB7"></span><span>Night</span><span>20%</span></div>
-                    </div>
-                  </div>
+
+        <!-- Slide 8: Custom Shifts -->
+        <div class="feature-slide" data-slide="8">
+          <div class="fs-text">
+            <span class="fs-tag">Customization</span>
+            <h3>Custom Shifts</h3>
+            <p>Define morning, afternoon, night, or any custom shift type. Set exact start and end times, choose distinct colors, and assign icons so your schedule is always clear at a glance.</p>
+            <ul class="fs-points">
+              <li>Create unlimited shift types with custom names</li>
+              <li>Set exact start and end times for each shift</li>
+              <li>Pick colors for instant visual recognition</li>
+              <li>Works with the auto-scheduler automatically</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-shift-stack">
+                <div class="fv-shift-type" style="--sc: #FF9800">
+                  <div class="fv-shift-color" style="background:#FF9800"></div>
+                  <div class="fv-shift-info"><strong>Morning</strong><span>06:00 &ndash; 14:00</span></div>
+                </div>
+                <div class="fv-shift-type" style="--sc: #1E88E5">
+                  <div class="fv-shift-color" style="background:#1E88E5"></div>
+                  <div class="fv-shift-info"><strong>Afternoon</strong><span>14:00 &ndash; 22:00</span></div>
+                </div>
+                <div class="fv-shift-type" style="--sc: #5C6BC0">
+                  <div class="fv-shift-color" style="background:#5C6BC0"></div>
+                  <div class="fv-shift-info"><strong>Night</strong><span>22:00 &ndash; 06:00</span></div>
+                </div>
+                <div class="fv-shift-type" style="--sc: #00897B">
+                  <div class="fv-shift-color" style="background:#00897B"></div>
+                  <div class="fv-shift-info"><strong>Rotating</strong><span>Custom hours</span></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Slide 7: Roles & Requirements -->
+        <div class="feature-slide" data-slide="7">
+          <div class="fs-text">
+            <span class="fs-tag">Team Management</span>
+            <h3>Roles &amp; Requirements</h3>
+            <p>Create roles like "Cashier," "Floor Manager," or "Kitchen" and set minimum staffing per shift. The AI ensures every shift has the right people in the right positions.</p>
+            <ul class="fs-points">
+              <li>Create any number of custom roles</li>
+              <li>Set minimum required staff per shift per role</li>
+              <li>Assign workers to one or more roles</li>
+              <li>AI scheduler respects all requirements</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-roles">
+                <div class="fv-role"><div class="fv-role-icon" style="background:rgba(13,124,102,0.15);color:#0D7C66">C</div><div class="fv-role-info"><strong>Cashier</strong><span>Min. 2 per shift</span></div><div class="fv-role-count">4 assigned</div></div>
+                <div class="fv-role"><div class="fv-role-icon" style="background:rgba(25,118,210,0.15);color:#1976D2">F</div><div class="fv-role-info"><strong>Floor Manager</strong><span>Min. 1 per shift</span></div><div class="fv-role-count">2 assigned</div></div>
+                <div class="fv-role"><div class="fv-role-icon" style="background:rgba(255,152,0,0.15);color:#FF9800">K</div><div class="fv-role-info"><strong>Kitchen</strong><span>Min. 3 per shift</span></div><div class="fv-role-count">5 assigned</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Shift Swaps -->
+        <div class="feature-slide" data-slide="2">
+          <div class="fs-text">
+            <span class="fs-tag">Collaboration</span>
+            <h3>Shift Swaps</h3>
+            <p>Workers can propose shift swaps directly with coworkers. Both parties approve, then the manager confirms &mdash; keeping everyone in the loop with zero confusion.</p>
+            <ul class="fs-points">
+              <li>Request a swap in two taps</li>
+              <li>Both workers must approve first</li>
+              <li>Manager gives final confirmation</li>
+              <li>Schedule updates automatically</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-swap">
+                <div class="fv-swap-person">
+                  <div class="fv-swap-avatar" style="background:#FF9800">A</div>
+                  <strong>Alice</strong>
+                  <div class="fv-swap-shift" style="background:#FF9800">Wed &middot; Morning</div>
+                </div>
+                <div class="fv-swap-arrows">
+                  <svg viewBox="0 0 48 24" fill="none" stroke="#0D7C66" stroke-width="2.5"><path d="M4 8h32l-6-6M44 16H12l6 6"/></svg>
+                </div>
+                <div class="fv-swap-person">
+                  <div class="fv-swap-avatar" style="background:#1E88E5">B</div>
+                  <strong>Bob</strong>
+                  <div class="fv-swap-shift" style="background:#1E88E5">Wed &middot; Afternoon</div>
+                </div>
+              </div>
+              <div class="fv-badge green">Pending approval</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Time Off -->
+        <div class="feature-slide" data-slide="3">
+          <div class="fs-text">
+            <span class="fs-tag">Attendance</span>
+            <h3>Time Off &amp; Sick Days</h3>
+            <p>Submit vacation or sick day requests in a few taps. Managers see requests instantly, approve or deny with a reason, and the schedule updates automatically.</p>
+            <ul class="fs-points">
+              <li>Submit vacation, sick, or personal days</li>
+              <li>Pick date ranges from a calendar</li>
+              <li>Track approval status in real time</li>
+              <li>See remaining balance at a glance</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-timeoff">
+                <div class="fv-to-req"><span class="fv-to-badge approved">Approved</span><div><strong>Vacation</strong><span>Feb 15 &ndash; 18 &middot; 4 days</span></div></div>
+                <div class="fv-to-req"><span class="fv-to-badge pending">Pending</span><div><strong>Vacation</strong><span>Mar 10 &ndash; 12 &middot; 3 days</span></div></div>
+                <div class="fv-to-req"><span class="fv-to-badge approved">Approved</span><div><strong>Sick Day</strong><span>Jan 22 &middot; 1 day</span></div></div>
+                <div class="fv-to-bar-wrap">
+                  <div class="fv-to-bar-label"><span>Vacation used</span><span>7 / 21</span></div>
+                  <div class="fv-to-bar"><div class="fv-to-bar-fill" style="width:33%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Chat -->
+        <div class="feature-slide" data-slide="4">
+          <div class="fs-text">
+            <span class="fs-tag">Communication</span>
+            <h3>Real-Time Chat</h3>
+            <p>Built-in messaging between any team members. Send swap requests in conversations, get read receipts, and keep all work communication in one place.</p>
+            <ul class="fs-points">
+              <li>Direct messages between any team members</li>
+              <li>Shift swap requests embedded in chat</li>
+              <li>Read receipts (check / double-check)</li>
+              <li>No more scattered WhatsApp groups</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-chat">
+                <div class="fv-bubble received">Hey, could you swap Wed afternoon for my Thu morning?<span class="fv-time">10:24 AM</span></div>
+                <div class="fv-bubble sent">Let me check... Yeah that works!<span class="fv-time">10:26 AM &#10003;&#10003;</span></div>
+                <div class="fv-bubble received">Sent the swap request. Check it!<span class="fv-time">10:27 AM</span></div>
+                <div class="fv-typing"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 10: Export -->
+        <div class="feature-slide" data-slide="10">
+          <div class="fs-text">
+            <span class="fs-tag">Export</span>
+            <h3>PDF &amp; Excel Export</h3>
+            <p>Generate professional-looking schedule PDFs or Excel spreadsheets with one tap. Perfect for printing, emailing to staff, or keeping records for compliance and payroll.</p>
+            <ul class="fs-points">
+              <li>One-tap PDF generation</li>
+              <li>Excel export for payroll integration</li>
+              <li>Clean, professional formatting</li>
+              <li>Print or email to staff</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-export">
+                <div class="fv-doc">
+                  <div class="fv-doc-icon pdf">PDF</div>
+                  <div class="fv-doc-lines"><div></div><div></div><div></div><div style="width:60%"></div></div>
+                  <div class="fv-doc-label">Schedule_Week9.pdf</div>
+                </div>
+                <div class="fv-doc">
+                  <div class="fv-doc-icon xls">XLS</div>
+                  <div class="fv-doc-lines"><div></div><div></div><div></div><div style="width:60%"></div></div>
+                  <div class="fv-doc-label">Schedule_Week9.xlsx</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 6: Attendance -->
+        <div class="feature-slide" data-slide="6">
+          <div class="fs-text">
+            <span class="fs-tag">Tracking</span>
+            <h3>Attendance Tracking</h3>
+            <p>Mark who showed up and who didn't. Track hours worked per day, week, or month. Spot patterns, manage overtime, and build a reliable record over time.</p>
+            <ul class="fs-points">
+              <li>One-tap attendance marking</li>
+              <li>Track hours per day, week, or month</li>
+              <li>Overtime warnings and alerts</li>
+              <li>Historical records for payroll</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-attendance">
+                <div class="fv-att-row"><span class="fv-att-name">Alice K.</span><span class="fv-att-status present">Present</span><span class="fv-att-hrs">8.0h</span></div>
+                <div class="fv-att-row"><span class="fv-att-name">Bob M.</span><span class="fv-att-status present">Present</span><span class="fv-att-hrs">7.5h</span></div>
+                <div class="fv-att-row"><span class="fv-att-name">Carol T.</span><span class="fv-att-status absent">Absent</span><span class="fv-att-hrs">&mdash;</span></div>
+                <div class="fv-att-row"><span class="fv-att-name">Dan R.</span><span class="fv-att-status present">Present</span><span class="fv-att-hrs">8.0h</span></div>
+              </div>
+              <div class="fv-badge">Total: 23.5 hours today</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 1: Calendar -->
+        <div class="feature-slide" data-slide="1">
+          <div class="fs-text">
+            <span class="fs-tag">Visibility</span>
+            <h3>Color-Coded Calendar</h3>
+            <p>See your entire team's week in a beautiful, color-coded grid. Morning, afternoon, and night shifts are instantly recognizable. Drill into any day for detail.</p>
+            <ul class="fs-points">
+              <li>Full team week view in one screen</li>
+              <li>Color-coded by shift type</li>
+              <li>Tap any cell to see details</li>
+              <li>Spot gaps and coverage issues instantly</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-calendar">
+                <div class="fv-cal-head"><span></span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+                <div class="fv-cal-row"><span>Alice</span><span class="fv-c m"></span><span class="fv-c m"></span><span class="fv-c a"></span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c off"></span><span class="fv-c off"></span></div>
+                <div class="fv-cal-row"><span>Bob</span><span class="fv-c a"></span><span class="fv-c n"></span><span class="fv-c n"></span><span class="fv-c m"></span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c off"></span></div>
+                <div class="fv-cal-row"><span>Carol</span><span class="fv-c n"></span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c a"></span><span class="fv-c a"></span><span class="fv-c off"></span><span class="fv-c m"></span></div>
+                <div class="fv-cal-row"><span>Dan</span><span class="fv-c off"></span><span class="fv-c m"></span><span class="fv-c off"></span><span class="fv-c n"></span><span class="fv-c n"></span><span class="fv-c a"></span><span class="fv-c off"></span></div>
+                <div class="fv-cal-row"><span>Eva</span><span class="fv-c m"></span><span class="fv-c a"></span><span class="fv-c m"></span><span class="fv-c m"></span><span class="fv-c off"></span><span class="fv-c n"></span><span class="fv-c off"></span></div>
+              </div>
+              <div class="fv-cal-legend"><span><i style="background:#FF9800"></i>Morning</span><span><i style="background:#1E88E5"></i>Afternoon</span><span><i style="background:#5C6BC0"></i>Night</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 9: Analytics -->
+        <div class="feature-slide" data-slide="9">
+          <div class="fs-text">
+            <span class="fs-tag">Insights</span>
+            <h3>Analytics &amp; Reports</h3>
+            <p>Get a clear picture of your team's performance with real numbers. Track salary costs, total hours, and attendance rates in an AI-enhanced dashboard that surfaces insights and helps you make smarter staffing decisions.</p>
+            <ul class="fs-points">
+              <li>Weekly and monthly salary breakdowns</li>
+              <li>Attendance and absence rates</li>
+              <li>Overtime alerts and trends</li>
+              <li>Per-worker and per-role statistics</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-3"></div>
+              <div class="fv-analytics">
+                <div class="fv-an-title">Team Dashboard</div>
+                <div class="fv-an-stats">
+                  <div class="fv-an-stat"><strong>$12.4k</strong><span>Salary Cost</span></div>
+                  <div class="fv-an-stat"><strong>156h</strong><span>Total Hours</span></div>
+                  <div class="fv-an-stat"><strong>94%</strong><span>Attendance</span></div>
+                </div>
+                <div class="fv-an-chart">
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:65%"></div><span>M</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:82%"></div><span>T</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:48%"></div><span>W</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:92%"></div><span>T</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:73%"></div><span>F</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:38%"></div><span>S</span></div>
+                  <div class="fv-an-col"><div class="fv-an-bar" style="--h:22%"></div><span>S</span></div>
+                </div>
+                <div class="fv-an-bottom">
+                  <div class="fv-an-stat-sm"><strong>2.5h</strong><span>Avg OT</span></div>
+                  <div class="fv-an-stat-sm"><strong>$18.50</strong><span>Hourly Rate</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Tracking -->
+        <div class="feature-slide" data-slide="5">
+          <div class="fs-text">
+            <span class="fs-tag">HR</span>
+            <h3>Sick &amp; Vacation Tracking</h3>
+            <p>Keep a clear record of every employee's sick days and vacation usage. Track balances in real time and spot trends before they become problems.</p>
+            <ul class="fs-points">
+              <li>Track sick days per worker automatically</li>
+              <li>Monitor vacation balance and usage</li>
+              <li>Visual progress bars for quick overview</li>
+              <li>Historical data for HR reporting</li>
+            </ul>
+          </div>
+          <div class="fs-visual">
+            <div class="fv-card">
+              <div class="fv-dot fv-dot-1"></div>
+              <div class="fv-dot fv-dot-2"></div>
+              <div class="fv-tracking">
+                <div class="fv-tr-row">
+                  <div class="fv-tr-info"><strong>Alice K.</strong><div class="fv-tr-badges"><span class="fv-tr-badge sick">2 sick</span><span class="fv-tr-badge vac">5 / 21</span></div></div>
+                  <div class="fv-tr-bar"><div class="fv-tr-bar-fill" style="--w:24%"></div></div>
+                </div>
+                <div class="fv-tr-row">
+                  <div class="fv-tr-info"><strong>Bob M.</strong><div class="fv-tr-badges"><span class="fv-tr-badge sick">0 sick</span><span class="fv-tr-badge vac">8 / 21</span></div></div>
+                  <div class="fv-tr-bar"><div class="fv-tr-bar-fill" style="--w:38%"></div></div>
+                </div>
+                <div class="fv-tr-row">
+                  <div class="fv-tr-info"><strong>Carol T.</strong><div class="fv-tr-badges"><span class="fv-tr-badge sick">4 sick</span><span class="fv-tr-badge vac">12 / 21</span></div></div>
+                  <div class="fv-tr-bar"><div class="fv-tr-bar-fill" style="--w:57%"></div></div>
+                </div>
+                <div class="fv-tr-row">
+                  <div class="fv-tr-info"><strong>Dan R.</strong><div class="fv-tr-badges"><span class="fv-tr-badge sick">1 sick</span><span class="fv-tr-badge vac">3 / 21</span></div></div>
+                  <div class="fv-tr-bar"><div class="fv-tr-bar-fill" style="--w:14%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="feature-controls">
+          <button class="feature-arrow" id="featurePrev" aria-label="Previous feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="feature-dots">
+            <button class="feature-dot active" data-slide="0"></button>
+            <button class="feature-dot" data-slide="9"></button>
+            <button class="feature-dot" data-slide="10"></button>
+            <button class="feature-dot" data-slide="1"></button>
+            <button class="feature-dot" data-slide="2"></button>
+            <button class="feature-dot" data-slide="3"></button>
+            <button class="feature-dot" data-slide="4"></button>
+            <button class="feature-dot" data-slide="8"></button>
+            <button class="feature-dot" data-slide="5"></button>
+            <button class="feature-dot" data-slide="6"></button>
+            <button class="feature-dot" data-slide="7"></button>
+          </div>
+          <button class="feature-arrow" id="featureNext" aria-label="Next feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </section>
-
 
   <!-- ========== HOW IT WORKS ========== -->
   <section class="how-it-works" id="how-it-works">
@@ -711,8 +1002,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
