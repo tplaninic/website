@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var scaleByW = (PW - 14) / rawW;
   var scaleByH = (PH - 14) / rawH;
   var fitScale = Math.min(scaleByW, scaleByH) * 1.15;
-  cssObject.scale.set(fitScale, fitScale, 1);
+  cssObject.scale.set(fitScale * 1.1, fitScale, 1); // width 10% wider
   cssObject.position.set(0, 0, PD / 2 + 1);
   cssScene.add(cssObject);
 
@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Notch was roughly 55% from left of hero. Camera sees ±328 units.
   // 55% of the way = 0.55 * 656 - 328 = 32.8. But hero-content takes left ~45%,
   // so phone should be at about x = -30 to 0 in scene coords
-  phoneGroup.position.set(-150, 40, 0);
+  phoneGroup.position.set(-220, 40, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
     phoneGroup.rotation.x += (targetRotX - phoneGroup.rotation.x) * 0.06;
 
     // Bob animation
-    phoneGroup.position.y = 40 + Math.sin(autoTime * 0.7) * 6;
+    phoneGroup.position.y = 40 + Math.sin(autoTime * 0.7) * 5;
 
     // Sync CSS3D object to match the phone group's world transform
     var worldPos = phoneMesh.getWorldPosition(new THREE.Vector3());
