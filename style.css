@@ -1160,6 +1160,7 @@ button { font-family: inherit; }
 .for-teams { padding: 100px 0; background: #141414; position: relative; overflow: hidden; }
 
 .teams-split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 960px; margin: 0 auto; }
+.teams-split.teams-3col { grid-template-columns: 1fr 1fr 1fr; max-width: 1140px; gap: 24px; }
 
 .team-col {
   background: rgba(255,255,255,0.04); border-radius: 20px;
@@ -1181,6 +1182,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; justify-content: center;
 }
 .team-col.managers .team-icon-wrap { background: rgba(13,124,102,0.2); color: var(--primary-light); }
+.team-col.shift-mgrs .team-icon-wrap { background: rgba(255,152,0,0.2); color: #FFB74D; }
 .team-col.workers .team-icon-wrap { background: rgba(25,118,210,0.2); color: #5ba3e0; }
 .team-icon-wrap svg { width: 24px; height: 24px; }
 
@@ -1193,6 +1195,7 @@ button { font-family: inherit; }
 .team-col li { display: flex; flex-direction: column; gap: 2px; padding-left: 20px; position: relative; }
 .team-col li::before { content: ''; position: absolute; left: 0; top: 5px; width: 10px; height: 10px; border-radius: 50%; }
 .team-col.managers li::before { background: rgba(13,124,102,0.3); border: 2px solid var(--primary); }
+.team-col.shift-mgrs li::before { background: rgba(255,152,0,0.25); border: 2px solid #FF9800; }
 .team-col.workers li::before { background: rgba(25,118,210,0.25); border: 2px solid var(--blue); }
 .team-col li strong { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.85); }
 .team-col li span { font-size: 0.82rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
@@ -1935,7 +1938,7 @@ button { font-family: inherit; }
   .use-cases-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
   .use-case-card { padding: 28px 24px; }
 
-  .teams-split { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+  .teams-split, .teams-split.teams-3col { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
   .team-header { padding: 20px 24px 0; }
   .team-header-body { padding: 14px 24px 28px; }
 
