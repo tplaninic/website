@@ -608,8 +608,8 @@ document.addEventListener('DOMContentLoaded', () => {
   cssContainer.appendChild(cssRenderer.domElement);
 
   // ===== Phone Body (WebGL) =====
-  // Fixed phone body dimensions
-  var PW = 290, PH = 540, PD = 18;
+  // Phone body dimensions — width is good, reduce height
+  var PW = 285, PH = 480, PD = 18;
 
   function makeRoundedRect(w, h, r) {
     var s = new THREE.Shape();
@@ -722,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Position the phone at the right side of the hero
   // FOV=40 at z=900: visible half-width ≈ 900*tan(20°) ≈ 328 units
   // Place phone at ~60% to the right
-  phoneGroup.position.set(100, 0, 0);
+  phoneGroup.position.set(50, 0, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
