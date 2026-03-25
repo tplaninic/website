@@ -804,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Scroll: fly phone to right sidebar during features section =====
   var heroStartX = -400; // original position
-  var sidebarX = 250; // right sidebar position in scene units
+  var sidebarX = 500; // right sidebar position in scene units
   var targetPhoneX = heroStartX;
   var targetPhoneScale = 1;
   var targetPhoneYOffset = 0;
