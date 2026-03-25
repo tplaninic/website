@@ -325,21 +325,11 @@ button { font-family: inherit; }
   height: 650px;
   background: #1a1a2e;
   border-radius: 40px;
-  padding: 12px;
+  padding: 14px;
   box-sizing: border-box;
-  transform: translateZ(7px);
+  transform: translateZ(8px);
   box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset,
-    8px 0 0 #15152a, -8px 0 0 #15152a, 0 -8px 0 #18182e, 0 8px 0 #12122a;
-}
-
-.phone-screen {
-  width: 100%;
-  height: 100%;
-  background: var(--white);
-  border-radius: 28px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+    14px 0 0 #15152a, -14px 0 0 #15152a, 0 -14px 0 #18182e, 0 14px 0 #12122a;
 }
 
 /* BACK */
@@ -348,8 +338,9 @@ button { font-family: inherit; }
   height: 650px;
   background: linear-gradient(145deg, #22223a, #15152a);
   border-radius: 40px;
-  transform: rotateY(180deg) translateZ(7px);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06) inset;
+  transform: rotateY(180deg) translateZ(8px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06) inset,
+    14px 0 0 #12122a, -14px 0 0 #12122a, 0 -14px 0 #15152a, 0 14px 0 #10102a;
 }
 .phone-back-camera {
   width: 28px;
@@ -376,8 +367,8 @@ button { font-family: inherit; }
 .phone-notch { width: 100px; height: 6px; background: #2a2a3e; border-radius: 3px; margin: 8px auto 10px; }
 
 .phone-screen {
-  background: var(--white); border-radius: 26px; overflow: hidden; display: flex; flex-direction: column;
-  position: relative;
+  background: var(--white); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column;
+  position: relative; flex: 1;
 }
 
 /* ===== PHONE SCREEN OVERLAYS (for scroll-follow feature switching) ===== */

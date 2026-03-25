@@ -414,55 +414,74 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Create fixed phone wrapper (clone the phone into it)
-    const fixedWrap = document.createElement('div');
-    fixedWrap.className = 'phone-fixed-wrap';
-    fixedWrap.innerHTML = ''; // will hold a reference, not a clone
-    document.body.appendChild(fixedWrap);
-
-    let originalParent = null;
-    let originalNextSibling = null;
-
-    function movePhoneToFixed() {
+    // Fly phone from hero to fixed sidebar using GSAP
+    function flyPhoneToSidebar() {
       if (phoneIsFixed || !phoneFloat) return;
       phoneIsFixed = true;
-      // Remember where the phone was
-      originalParent = phoneFloat.parentElement;
-      originalNextSibling = phoneFloat.nextSibling;
-      // Stop bob animation and dragging
-      phoneFloat.classList.add('dragging');
-      phoneFloat.style.transform = 'rotateY(-8deg) rotateX(2deg)';
-      phoneFloat.style.animation = 'none';
-      // Mark hero visual as empty to preserve layout
-      if (heroVisual) heroVisual.classList.add('phone-away');
-      // Move to fixed wrapper
-      fixedWrap.appendChild(phoneFloat);
-      fixedWrap.classList.add('visible');
-      // Update overlay based on current carousel slide
-      updatePhoneOverlay(currentSlide);
+      phoneFloat.classList.add('dragging'); // stop bob animation
+
+      // Get phone's current position on screen
+      const rect = phoneFloat.getBoundingClientRect();
+      const parent = phoneFloat.parentElement;
+
+      // Calculate target position (right side, vertically centered)
+      const targetX = window.innerWidth - 360 - rect.left;
+      const targetY = (window.innerHeight / 2 - rect.height * 0.38) - rect.top;
+
+      // Animate to fixed-like position
+      gsap.to(phoneFloat, {
+        x: targetX,
+        y: targetY,
+        scale: 0.7,
+        rotateY: -12,
+        rotateX: 3,
+        duration: 0.8,
+        ease: 'power2.out',
+        onComplete: () => {
+          // Switch to actual fixed positioning
+          phoneFloat.style.position = 'fixed';
+          phoneFloat.style.right = '40px';
+          phoneFloat.style.top = '50%';
+          phoneFloat.style.left = 'auto';
+          phoneFloat.style.zIndex = '100';
+          gsap.set(phoneFloat, { x: 0, y: '-50%', scale: 0.7, rotateY: -12, rotateX: 3 });
+          if (heroVisual) heroVisual.classList.add('phone-away');
+          updatePhoneOverlay(currentSlide);
+        }
+      });
     }
 
-    function movePhoneToHero() {
-      if (!phoneIsFixed || !phoneFloat || !originalParent) return;
+    function flyPhoneToHero() {
+      if (!phoneIsFixed || !phoneFloat) return;
       phoneIsFixed = false;
-      // Move back
-      fixedWrap.classList.remove('visible');
+
+      // Remove fixed positioning
+      phoneFloat.style.position = '';
+      phoneFloat.style.right = '';
+      phoneFloat.style.top = '';
+      phoneFloat.style.left = '';
+      phoneFloat.style.zIndex = '';
       if (heroVisual) heroVisual.classList.remove('phone-away');
-      if (originalNextSibling) {
-        originalParent.insertBefore(phoneFloat, originalNextSibling);
-      } else {
-        originalParent.appendChild(phoneFloat);
-      }
-      // Restore animation
-      phoneFloat.classList.remove('dragging');
-      phoneFloat.style.transform = '';
-      phoneFloat.style.animation = '';
-      // Clear overlays
-      overlays.forEach(o => o.classList.remove('active'));
+
+      // Animate back to original position
+      gsap.to(phoneFloat, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotateY: -10,
+        rotateX: 3,
+        duration: 0.8,
+        ease: 'power2.out',
+        onComplete: () => {
+          phoneFloat.classList.remove('dragging');
+          phoneFloat.style.transform = '';
+          gsap.set(phoneFloat, { clearProps: 'all' });
+          overlays.forEach(o => o.classList.remove('active'));
+        }
+      });
     }
 
-    // Observe carousel changes: watch for active pill changes to sync phone overlay
-    // We poll the current slide state via a MutationObserver on the pills
+    // Sync phone screen with carousel
     let lastSyncedSlide = -1;
     const pillContainer = document.getElementById('featureNav');
     if (pillContainer) {
@@ -476,7 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pillObserver.observe(p, { attributes: true, attributeFilter: ['class'] });
       });
     }
-    // Periodic sync fallback (catches auto-advance edge cases)
     setInterval(() => {
       if (phoneIsFixed && currentSlide !== lastSyncedSlide) {
         lastSyncedSlide = currentSlide;
@@ -484,17 +502,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, 500);
 
-    // ScrollTrigger: pin the phone through the features section
+    // ScrollTrigger: fly phone when scrolling past hero into features
     if (heroSection && featuresSection) {
       ScrollTrigger.create({
         trigger: heroSection,
         start: 'bottom top+=200',
         endTrigger: featuresSection,
         end: 'bottom center',
-        onEnter: movePhoneToFixed,
-        onLeaveBack: movePhoneToHero,
-        onLeave: movePhoneToHero,
-        onEnterBack: movePhoneToFixed,
+        onEnter: flyPhoneToSidebar,
+        onLeaveBack: flyPhoneToHero,
+        onLeave: flyPhoneToHero,
+        onEnterBack: flyPhoneToSidebar,
       });
     }
   }
