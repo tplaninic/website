@@ -748,7 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Position phone next to the paragraph (left ~50% of hero)
   // The hero container max-width is 1140px, paragraph takes left ~45%
   // Phone should start at roughly 50% from left = center of hero
-  phoneGroup.position.set(250, 20, 0);
+  phoneGroup.position.set(250, -10, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
@@ -927,7 +927,7 @@ document.addEventListener('DOMContentLoaded', () => {
     phoneGroup.rotation.x += (targetRotX - phoneGroup.rotation.x) * 0.06;
 
     // Bob animation + scroll-based position
-    var baseY = 20 + Math.sin(autoTime * 0.7) * 5;
+    var baseY = -10 + Math.sin(autoTime * 0.7) * 5;
     // Quick initial burst, then slow crawl to target
     var dx = targetPhoneX - phoneGroup.position.x;
     phoneGroup.position.x += dx * 0.25;
