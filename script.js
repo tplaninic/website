@@ -803,52 +803,45 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ===== Scroll: fly phone to right sidebar during features section =====
-  var heroStartX = -400; // original position
-  var sidebarX = 500; // right sidebar position in scene units
+  var heroStartX = -400;
+  var sidebarX = 450;
   var targetPhoneX = heroStartX;
   var targetPhoneScale = 1;
-  var targetPhoneYOffset = 0;
+  var phoneVisible = true;
   var featuresEl = document.getElementById('features');
+
+  // Make container fixed from the start
+  container.style.position = 'fixed';
+  container.style.top = '0';
+  container.style.left = '0';
 
   window.addEventListener('scroll', function() {
     var scrollY = window.scrollY || window.pageYOffset;
     var heroH = heroSection ? heroSection.offsetHeight : 700;
     var featuresTop = featuresEl ? featuresEl.offsetTop : heroH + 200;
     var featuresH = featuresEl ? featuresEl.offsetHeight : 800;
+    var featuresEnd = featuresTop + featuresH;
 
-    // Phase 1: In hero — phone at original position
-    if (scrollY < heroH * 0.5) {
+    if (scrollY < heroH * 0.4) {
+      // In hero — original position
       targetPhoneX = heroStartX;
       targetPhoneScale = 1;
-      targetPhoneYOffset = 0;
-      container.style.position = 'absolute';
-      container.style.top = '0';
-    }
-    // Phase 2: Transitioning hero → features — fly to sidebar
-    else if (scrollY < featuresTop) {
-      var progress = (scrollY - heroH * 0.5) / (featuresTop - heroH * 0.5);
-      progress = Math.max(0, Math.min(1, progress));
-      targetPhoneX = heroStartX + (sidebarX - heroStartX) * progress;
-      targetPhoneScale = 1 - 0.25 * progress; // shrink to 0.75
-      targetPhoneYOffset = 0;
-      // Switch to fixed positioning during transition
-      container.style.position = 'fixed';
-      container.style.top = '0';
-    }
-    // Phase 3: In features section — phone pinned at sidebar
-    else if (scrollY < featuresTop + featuresH) {
+      phoneVisible = true;
+    } else if (scrollY < featuresTop) {
+      // Transitioning to sidebar
+      var p = (scrollY - heroH * 0.4) / (featuresTop - heroH * 0.4);
+      p = Math.max(0, Math.min(1, p));
+      targetPhoneX = heroStartX + (sidebarX - heroStartX) * p;
+      targetPhoneScale = 1 - 0.3 * p;
+      phoneVisible = true;
+    } else if (scrollY < featuresEnd) {
+      // In features — pinned at sidebar
       targetPhoneX = sidebarX;
-      targetPhoneScale = 0.75;
-      targetPhoneYOffset = 0;
-      container.style.position = 'fixed';
-      container.style.top = '0';
-    }
-    // Phase 4: Past features — fade out
-    else {
-      targetPhoneX = sidebarX;
-      targetPhoneScale = 0.75;
-      container.style.position = 'absolute';
-      container.style.top = '0';
+      targetPhoneScale = 0.7;
+      phoneVisible = true;
+    } else {
+      // Past features — hide
+      phoneVisible = false;
     }
   }, { passive: true });
 
@@ -867,11 +860,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Bob animation + scroll-based position
     var baseY = 50 + Math.sin(autoTime * 0.7) * 5;
-    phoneGroup.position.x += (targetPhoneX - phoneGroup.position.x) * 0.06;
-    phoneGroup.position.y = baseY + (targetPhoneYOffset * 0.06);
-    var currentScale = phoneGroup.scale.x + (targetPhoneScale - phoneGroup.scale.x) * 0.06;
+    phoneGroup.position.x += (targetPhoneX - phoneGroup.position.x) * 0.08;
+    phoneGroup.position.y = baseY;
+    var currentScale = phoneGroup.scale.x + (targetPhoneScale - phoneGroup.scale.x) * 0.08;
     phoneGroup.scale.setScalar(currentScale);
     cssObject.scale.set(fitScale * 1.15 * currentScale, fitScale * currentScale, 1);
+
+    // Show/hide phone
+    container.style.opacity = phoneVisible ? '1' : '0';
 
     // Sync CSS3D object to match the phone group
     cssObject.position.set(phoneGroup.position.x, phoneGroup.position.y, PD / 2 + 1);
