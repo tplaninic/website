@@ -608,8 +608,8 @@ document.addEventListener('DOMContentLoaded', () => {
   cssContainer.appendChild(cssRenderer.domElement);
 
   // ===== Phone Body (WebGL) =====
-  // Fixed phone body dimensions (don't rely on CSS measurements which include padding)
-  var PW = 270, PH = 540, PD = 18;
+  // Fixed phone body dimensions
+  var PW = 290, PH = 540, PD = 18;
 
   function makeRoundedRect(w, h, r) {
     var s = new THREE.Shape();
@@ -800,7 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide screen when viewing the back (rotated past ~80 degrees)
     var absRotY = Math.abs(phoneGroup.rotation.y % (Math.PI * 2));
     if (absRotY > Math.PI) absRotY = Math.PI * 2 - absRotY;
-    var showScreen = absRotY < 1.4; // ~80 degrees
+    var showScreen = absRotY < 1.57; // 90 degrees — hide only when fully past side
     cssObject.visible = showScreen;
     phoneMockup.style.opacity = showScreen ? '1' : '0';
 
