@@ -280,130 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startAuto();
   }
 
-  // ===== 3D Phone Drag to Rotate =====
-  const phoneFloat = document.querySelector('.phone-float');
-  if (phoneFloat) {
-    let isDragging = false, startX = 0, startY = 0;
-    let rotY = 0, rotX = 0, curRotY = 0, curRotX = 0;
-
-    phoneFloat.addEventListener('mousedown', function(e) {
-      if (phoneFloat.classList.contains('phone-sidebar')) return;
-      isDragging = true; startX = e.clientX; startY = e.clientY;
-      phoneFloat.style.animationPlayState = 'paused';
-      e.preventDefault();
-    });
-    document.addEventListener('mousemove', function(e) {
-      if (!isDragging) return;
-      rotY = curRotY + (e.clientX - startX) * 0.4;
-      rotX = Math.max(-20, Math.min(20, curRotX - (e.clientY - startY) * 0.2));
-      phoneFloat.style.transform = 'translateY(0) rotateY(' + rotY + 'deg) rotateX(' + rotX + 'deg)';
-    });
-    document.addEventListener('mouseup', function() {
-      if (!isDragging) return;
-      isDragging = false; curRotY = rotY; curRotX = rotX;
-      setTimeout(function() {
-        if (!isDragging && !phoneFloat.classList.contains('phone-sidebar')) {
-          phoneFloat.style.transition = 'transform 1s ease';
-          phoneFloat.style.transform = '';
-          phoneFloat.style.animationPlayState = '';
-          curRotY = 0; curRotX = 0; rotY = 0; rotX = 0;
-          setTimeout(function() { phoneFloat.style.transition = ''; }, 1000);
-        }
-      }, 3000);
-    });
-    // Touch
-    phoneFloat.addEventListener('touchstart', function(e) {
-      if (phoneFloat.classList.contains('phone-sidebar')) return;
-      isDragging = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      phoneFloat.style.animationPlayState = 'paused';
-    }, { passive: true });
-    document.addEventListener('touchmove', function(e) {
-      if (!isDragging) return;
-      rotY = curRotY + (e.touches[0].clientX - startX) * 0.4;
-      rotX = Math.max(-20, Math.min(20, curRotX - (e.touches[0].clientY - startY) * 0.2));
-      phoneFloat.style.transform = 'translateY(0) rotateY(' + rotY + 'deg) rotateX(' + rotX + 'deg)';
-    }, { passive: true });
-    document.addEventListener('touchend', function() {
-      if (!isDragging) return;
-      isDragging = false; curRotY = rotY; curRotX = rotX;
-      setTimeout(function() {
-        if (!isDragging && !phoneFloat.classList.contains('phone-sidebar')) {
-          phoneFloat.style.transition = 'transform 1s ease';
-          phoneFloat.style.transform = '';
-          phoneFloat.style.animationPlayState = '';
-          curRotY = 0; curRotX = 0; rotY = 0; rotX = 0;
-          setTimeout(function() { phoneFloat.style.transition = ''; }, 1000);
-        }
-      }, 3000);
-    });
-  }
-
-  // ===== Phone Fly to Sidebar (desktop only) =====
-  if (window.innerWidth > 1024 && phoneFloat) {
-    var heroSection = document.getElementById('hero');
-    var heroVisual = document.querySelector('.hero-visual');
-    var isInSidebar = false;
-    var flyLocked = false; // prevent re-triggering during animation
-
-    window.addEventListener('scroll', function() {
-      if (flyLocked) return;
-      var scrollY = window.scrollY || window.pageYOffset;
-
-      // Trigger: start flying after scrolling 150px
-      if (scrollY > 150 && !isInSidebar) {
-        isInSidebar = true;
-        flyLocked = true;
-        heroSection.classList.add('phone-flying');
-        if (heroVisual) heroVisual.classList.add('phone-away');
-
-        // Capture current position
-        var rect = phoneFloat.getBoundingClientRect();
-        phoneFloat.style.position = 'fixed';
-        phoneFloat.style.left = rect.left + 'px';
-        phoneFloat.style.top = rect.top + 'px';
-        phoneFloat.style.zIndex = '999';
-        phoneFloat.style.animation = 'none';
-        phoneFloat.style.transform = 'scale(1)';
-        void phoneFloat.offsetWidth; // reflow
-
-        // Animate to sidebar
-        phoneFloat.style.transition = 'all 1s cubic-bezier(0.23,1,0.32,1)';
-        phoneFloat.style.left = (window.innerWidth - 340) + 'px';
-        phoneFloat.style.top = '12%';
-        phoneFloat.style.transform = 'scale(0.7)';
-
-        setTimeout(function() { flyLocked = false; }, 1050);
-
-      } else if (scrollY <= 100 && isInSidebar) {
-        // Scrolled back to top — fly back
-        isInSidebar = false;
-        flyLocked = true;
-
-        var heroRect = heroVisual ? heroVisual.getBoundingClientRect() : null;
-        var targetLeft = heroRect ? (heroRect.left + heroRect.width / 2 - 140) : (window.innerWidth * 0.55);
-        var targetTop = heroRect ? Math.max(heroRect.top + 40, 160) : 200;
-
-        phoneFloat.style.transition = 'all 1s cubic-bezier(0.23,1,0.32,1)';
-        phoneFloat.style.left = targetLeft + 'px';
-        phoneFloat.style.top = targetTop + 'px';
-        phoneFloat.style.transform = 'scale(1)';
-
-        setTimeout(function() {
-          phoneFloat.style.position = '';
-          phoneFloat.style.left = '';
-          phoneFloat.style.top = '';
-          phoneFloat.style.zIndex = '';
-          phoneFloat.style.animation = '';
-          phoneFloat.style.transform = '';
-          phoneFloat.style.transition = '';
-          heroSection.classList.remove('phone-flying');
-          if (heroVisual) heroVisual.classList.remove('phone-away');
-          flyLocked = false;
-        }, 1050);
-      }
-    }, { passive: true });
-  }
-
   // ===== FAQ Accordion =====
   const faqItems = document.querySelectorAll('.faq-item');
 
@@ -628,3 +504,157 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+// ===== Three.js 3D Phone (desktop only) =====
+(function() {
+  if (window.innerWidth <= 768) return;
+  if (typeof THREE === 'undefined') return;
+
+  var canvas = document.getElementById('phone3d');
+  var heroVisual = document.querySelector('.hero-visual');
+  var phoneMockup = document.querySelector('.phone-mockup.hero-phone');
+  if (!canvas || !heroVisual || !phoneMockup) return;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  function resize() {
+    var w = heroVisual.offsetWidth;
+    var h = heroVisual.offsetHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Phone dimensions
+  var PW = 3.0, PH = 6.0, PD = 0.22, PR = 0.45;
+
+  function makeRoundedRect(w, h, r) {
+    var s = new THREE.Shape();
+    s.moveTo(-w/2+r, -h/2);
+    s.lineTo(w/2-r, -h/2);
+    s.quadraticCurveTo(w/2, -h/2, w/2, -h/2+r);
+    s.lineTo(w/2, h/2-r);
+    s.quadraticCurveTo(w/2, h/2, w/2-r, h/2);
+    s.lineTo(-w/2+r, h/2);
+    s.quadraticCurveTo(-w/2, h/2, -w/2, h/2-r);
+    s.lineTo(-w/2, -h/2+r);
+    s.quadraticCurveTo(-w/2, -h/2, -w/2+r, -h/2);
+    return s;
+  }
+
+  // Phone body — extruded rounded rect with bevel
+  var bodyGeo = new THREE.ExtrudeGeometry(makeRoundedRect(PW, PH, PR), {
+    depth: PD, bevelEnabled: true, bevelThickness: 0.03,
+    bevelSize: 0.03, bevelSegments: 4
+  });
+  bodyGeo.center();
+  var bodyMat = new THREE.MeshPhysicalMaterial({
+    color: 0x1a1a2e, metalness: 0.8, roughness: 0.25,
+    clearcoat: 0.5, clearcoatRoughness: 0.2
+  });
+  var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
+  scene.add(phoneMesh);
+
+  // Screen on front face — will get captured texture
+  var screenW = PW - 0.35, screenH = PH - 0.4;
+  var screenGeo = new THREE.PlaneGeometry(screenW, screenH);
+  var screenMat = new THREE.MeshBasicMaterial({ color: 0xf5f5f5 });
+  var screenMesh = new THREE.Mesh(screenGeo, screenMat);
+  screenMesh.position.z = PD / 2 + 0.02;
+  phoneMesh.add(screenMesh);
+
+  // Back face
+  var backGeo = new THREE.PlaneGeometry(PW - 0.1, PH - 0.1);
+  var backMat = new THREE.MeshPhysicalMaterial({
+    color: 0x15152a, metalness: 0.6, roughness: 0.4
+  });
+  var backMesh = new THREE.Mesh(backGeo, backMat);
+  backMesh.position.z = -PD / 2 - 0.01;
+  backMesh.rotation.y = Math.PI;
+  phoneMesh.add(backMesh);
+
+  // Camera lens on back
+  var lensMesh = new THREE.Mesh(
+    new THREE.RingGeometry(0.08, 0.15, 32),
+    new THREE.MeshBasicMaterial({ color: 0x333355, side: THREE.DoubleSide })
+  );
+  lensMesh.position.set(0, PH/2 - 0.6, -PD/2 - 0.02);
+  lensMesh.rotation.y = Math.PI;
+  phoneMesh.add(lensMesh);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  var mainLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  mainLight.position.set(4, 4, 6);
+  scene.add(mainLight);
+  var rimLight = new THREE.DirectionalLight(0x0D7C66, 0.4);
+  rimLight.position.set(-3, 1, -3);
+  scene.add(rimLight);
+
+  camera.position.set(0, 0, 9);
+
+  // Capture CSS phone screen as texture
+  setTimeout(function() {
+    if (typeof html2canvas === 'undefined') {
+      heroVisual.classList.add('has-3d');
+      return;
+    }
+    html2canvas(phoneMockup, {
+      backgroundColor: '#ffffff', scale: 1.5, useCORS: true, logging: false
+    }).then(function(cap) {
+      var tex = new THREE.CanvasTexture(cap);
+      screenMat.map = tex;
+      screenMat.color.set(0xffffff);
+      screenMat.needsUpdate = true;
+      heroVisual.classList.add('has-3d');
+    }).catch(function() {
+      heroVisual.classList.add('has-3d');
+    });
+  }, 800);
+
+  // Drag to rotate
+  var isDragging = false, prevMX = 0, prevMY = 0;
+  var targetRotY = -0.12, targetRotX = 0.05, autoTime = 0;
+
+  canvas.addEventListener('mousedown', function(e) {
+    isDragging = true; prevMX = e.clientX; prevMY = e.clientY;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    targetRotY += (e.clientX - prevMX) * 0.006;
+    targetRotX = Math.max(-0.5, Math.min(0.5, targetRotX + (e.clientY - prevMY) * 0.004));
+    prevMX = e.clientX; prevMY = e.clientY;
+  });
+  window.addEventListener('mouseup', function() { isDragging = false; });
+
+  canvas.addEventListener('touchstart', function(e) {
+    isDragging = true; prevMX = e.touches[0].clientX; prevMY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    targetRotY += (e.touches[0].clientX - prevMX) * 0.006;
+    targetRotX = Math.max(-0.5, Math.min(0.5, targetRotX + (e.touches[0].clientY - prevMY) * 0.004));
+    prevMX = e.touches[0].clientX; prevMY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', function() { isDragging = false; });
+
+  // Render loop
+  function animate() {
+    requestAnimationFrame(animate);
+    autoTime += 0.008;
+    if (!isDragging) {
+      targetRotY += Math.sin(autoTime) * 0.002 - targetRotY * 0.001;
+    }
+    phoneMesh.rotation.y += (targetRotY - phoneMesh.rotation.y) * 0.06;
+    phoneMesh.rotation.x += (targetRotX - phoneMesh.rotation.x) * 0.06;
+    phoneMesh.position.y = Math.sin(autoTime * 0.7) * 0.12;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
