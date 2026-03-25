@@ -76,38 +76,34 @@
             <div class="phone-frame">
               <div class="phone-notch"></div>
               <div class="phone-screen">
-                <div class="mock-status-bar">
-                  <span>9:41</span>
-                  <div class="mock-status-icons">
-                    <div class="mock-signal"></div>
-                    <div class="mock-wifi"></div>
-                    <div class="mock-battery"></div>
+                <div class="wrok-screen">
+                  <div class="ws-header">
+                    <div class="ws-header-top">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                      <span class="ws-title">My Schedule</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    </div>
+                    <div class="ws-week">
+                      <span class="ws-arrow">&lsaquo;</span>
+                      <span class="ws-week-text">Mar 24 &ndash; 30</span>
+                      <span class="ws-arrow">&rsaquo;</span>
+                    </div>
                   </div>
-                </div>
-                <div class="mock-app-bar">
-                  <svg class="mock-menu-icon" viewBox="0 0 24 24" fill="none" stroke="#3C3C3C" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                  <span class="mock-app-title">My Schedule</span>
-                  <svg class="mock-bell-icon" viewBox="0 0 24 24" fill="none" stroke="#3C3C3C" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-                </div>
-                <div class="mock-week-nav">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                  <span>Feb 23 &ndash; Mar 1</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-                <div class="mock-schedule">
-                  <div class="mock-day"><span class="mock-day-label">Mon<br><span class="mock-day-num">23</span></span><div class="mock-shift morning"><span class="mock-shift-name">Morning</span><span class="mock-shift-time">06:00 – 14:00</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Tue<br><span class="mock-day-num">24</span></span><div class="mock-shift morning"><span class="mock-shift-name">Morning</span><span class="mock-shift-time">06:00 – 14:00</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Wed<br><span class="mock-day-num">25</span></span><div class="mock-shift afternoon"><span class="mock-shift-name">Afternoon</span><span class="mock-shift-time">14:00 – 22:00</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Thu<br><span class="mock-day-num">26</span></span><div class="mock-shift night"><span class="mock-shift-name">Night</span><span class="mock-shift-time">22:00 – 06:00</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Fri<br><span class="mock-day-num">27</span></span><div class="mock-shift afternoon"><span class="mock-shift-name">Afternoon</span><span class="mock-shift-time">14:00 – 22:00</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Sat<br><span class="mock-day-num">28</span></span><div class="mock-shift off"><span class="mock-shift-name">Day Off</span><span class="mock-shift-time">&nbsp;</span></div></div>
-                  <div class="mock-day"><span class="mock-day-label">Sun<br><span class="mock-day-num">1</span></span><div class="mock-shift off"><span class="mock-shift-name">Day Off</span><span class="mock-shift-time">&nbsp;</span></div></div>
-                </div>
-                <div class="mock-bottom-nav">
-                  <div class="mock-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Schedule</span></div>
-                  <div class="mock-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg><span>Team</span></div>
-                  <div class="mock-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Chat</span></div>
-                  <div class="mock-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33"/></svg><span>Settings</span></div>
+                  <div class="ws-schedule">
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Mon</span><span class="ws-day-num">24</span></div><div class="ws-shift ws-morning"><span>Morning</span><span>06:00 – 14:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Tue</span><span class="ws-day-num">25</span></div><div class="ws-shift ws-morning"><span>Morning</span><span>06:00 – 14:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Wed</span><span class="ws-day-num">26</span></div><div class="ws-shift ws-afternoon"><span>Afternoon</span><span>14:00 – 22:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Thu</span><span class="ws-day-num">27</span></div><div class="ws-shift ws-night"><span>Night</span><span>22:00 – 06:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Fri</span><span class="ws-day-num">28</span></div><div class="ws-shift ws-afternoon"><span>Afternoon</span><span>14:00 – 22:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Sat</span><span class="ws-day-num">29</span></div><div class="ws-shift ws-off"><span>Day Off</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Sun</span><span class="ws-day-num">30</span></div><div class="ws-shift ws-off"><span>Day Off</span></div></div>
+                  </div>
+                  <div class="ws-nav">
+                    <div class="ws-nav-item ws-active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Schedule</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Team</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Chat</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 4l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 01-1.51-1.5"/></svg><span>More</span></div>
+                  </div>
                 </div>
               </div>
             </div>
