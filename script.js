@@ -828,11 +828,13 @@ document.addEventListener('DOMContentLoaded', () => {
       targetPhoneScale = 1;
       phoneVisible = true;
     } else if (scrollY < featuresTop) {
-      // Fly to sidebar as soon as scrolling starts
+      // Fly to sidebar — fast at first, then ease (power curve)
       var p = scrollY / featuresTop;
       p = Math.max(0, Math.min(1, p));
-      targetPhoneX = heroStartX + (sidebarX - heroStartX) * p;
-      targetPhoneScale = 1 - 0.3 * p;
+      // Apply ease-out power curve: p^0.3 means 90% done at ~30% scroll
+      var eased = Math.pow(p, 0.3);
+      targetPhoneX = heroStartX + (sidebarX - heroStartX) * eased;
+      targetPhoneScale = 1 - 0.3 * eased;
       phoneVisible = true;
     } else if (scrollY < featuresEnd) {
       // In features — pinned at sidebar
@@ -869,6 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (wsSchedule) {
     wsSchedule.style.minHeight = '320px';
     wsSchedule.style.maxHeight = '320px';
+    wsSchedule.style.width = wsSchedule.offsetWidth + 'px';
   }
 
   function updatePhoneScreen() {
@@ -936,7 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.opacity = phoneVisible ? '1' : '0';
 
     // Sync CSS3D object to match the phone group
-    cssObject.position.set(phoneGroup.position.x, phoneGroup.position.y, PD / 2 + 1);
+    cssObject.position.set(phoneGroup.position.x - 5, phoneGroup.position.y, PD / 2 + 1);
     cssObject.rotation.copy(phoneGroup.rotation);
 
     // Hide screen when viewing the back (rotated past ~80 degrees)
