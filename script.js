@@ -748,7 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Position phone next to the paragraph (left ~50% of hero)
   // The hero container max-width is 1140px, paragraph takes left ~45%
   // Phone should start at roughly 50% from left = center of hero
-  phoneGroup.position.set(-400, 50, 0);
+  phoneGroup.position.set(250, 50, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
@@ -803,8 +803,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ===== Scroll: fly phone to right sidebar during features section =====
-  var heroStartX = -400;
-  var sidebarX = 450;
+  var heroStartX = 250;
+  var sidebarX = 400;
   var targetPhoneX = heroStartX;
   var targetPhoneScale = 1;
   var phoneVisible = true;
