@@ -560,13 +560,21 @@ document.addEventListener('DOMContentLoaded', () => {
   var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
   scene.add(phoneMesh);
 
-  // Screen on front face — will get captured texture
+  // Screen on front face
   var screenW = PW - 0.35, screenH = PH - 0.4;
   var screenGeo = new THREE.PlaneGeometry(screenW, screenH);
+  var screenTex = null; // will be set by html2canvas
   var screenMat = new THREE.MeshBasicMaterial({ color: 0xf5f5f5 });
   var screenMesh = new THREE.Mesh(screenGeo, screenMat);
   screenMesh.position.z = PD / 2 + 0.02;
   phoneMesh.add(screenMesh);
+
+  // Also add a white background behind the screen (prevents bleed-through)
+  var screenBgGeo = new THREE.PlaneGeometry(screenW + 0.02, screenH + 0.02);
+  var screenBgMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  var screenBgMesh = new THREE.Mesh(screenBgGeo, screenBgMat);
+  screenBgMesh.position.z = PD / 2 + 0.015;
+  phoneMesh.add(screenBgMesh);
 
   // Back face
   var backGeo = new THREE.PlaneGeometry(PW - 0.1, PH - 0.1);
@@ -599,23 +607,32 @@ document.addEventListener('DOMContentLoaded', () => {
   camera.position.set(0, 0, 9);
 
   // Capture CSS phone screen as texture
-  setTimeout(function() {
-    if (typeof html2canvas === 'undefined') {
-      heroVisual.classList.add('has-3d');
-      return;
-    }
+  var textureApplied = false;
+  function capturePhoneScreen() {
+    if (typeof html2canvas === 'undefined') return;
+    // Make sure CSS phone is visible for capture
+    phoneMockup.style.visibility = 'visible';
     html2canvas(phoneMockup, {
-      backgroundColor: '#ffffff', scale: 1.5, useCORS: true, logging: false
+      backgroundColor: '#ffffff', scale: 2, useCORS: true, logging: false
     }).then(function(cap) {
-      var tex = new THREE.CanvasTexture(cap);
-      screenMat.map = tex;
+      screenTex = new THREE.CanvasTexture(cap);
+      screenMat.map = screenTex;
       screenMat.color.set(0xffffff);
       screenMat.needsUpdate = true;
-      heroVisual.classList.add('has-3d');
-    }).catch(function() {
-      heroVisual.classList.add('has-3d');
+      textureApplied = true;
+      // Now hide CSS phone and enable interaction after render
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          heroVisual.classList.add('has-3d');
+          canvas.classList.add('interactive');
+        });
+      });
+    }).catch(function(err) {
+      console.warn('html2canvas failed:', err);
     });
-  }, 800);
+  }
+  // Capture after CSS phone is fully painted
+  setTimeout(capturePhoneScreen, 1200);
 
   // Drag to rotate
   var isDragging = false, prevMX = 0, prevMY = 0;
@@ -644,6 +661,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
   window.addEventListener('touchend', function() { isDragging = false; });
 
+  // Scroll-based positioning: phone slides to the right as you scroll
+  var scrollTargetX = 0; // 0 = centered in hero, positive = right
+  var scrollTargetScale = 1;
+  var currentScrollX = 0, currentScrollScale = 1;
+
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var heroH = heroVisual.offsetHeight || 600;
+    var progress = Math.min(1, Math.max(0, scrollY / (heroH * 0.6)));
+    // Move phone to the right and shrink as user scrolls
+    scrollTargetX = progress * 3.5; // slide right in 3D space
+    scrollTargetScale = 1 - progress * 0.25; // shrink to 0.75
+  }, { passive: true });
+
   // Render loop
   function animate() {
     requestAnimationFrame(animate);
@@ -653,7 +684,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     phoneMesh.rotation.y += (targetRotY - phoneMesh.rotation.y) * 0.06;
     phoneMesh.rotation.x += (targetRotX - phoneMesh.rotation.x) * 0.06;
+
+    // Scroll-based position
+    currentScrollX += (scrollTargetX - currentScrollX) * 0.08;
+    currentScrollScale += (scrollTargetScale - currentScrollScale) * 0.08;
+    phoneMesh.position.x = currentScrollX;
     phoneMesh.position.y = Math.sin(autoTime * 0.7) * 0.12;
+    phoneMesh.scale.setScalar(currentScrollScale);
+
     renderer.render(scene, camera);
   }
   animate();

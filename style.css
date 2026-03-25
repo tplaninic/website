@@ -303,9 +303,10 @@ button { font-family: inherit; }
   top: 0; right: 0;
   width: 100%; height: 100%;
   z-index: 2;
-  pointer-events: auto;
-  cursor: grab;
+  pointer-events: none;
 }
+.phone3d-canvas.interactive { pointer-events: auto; cursor: grab; }
+.phone3d-canvas.interactive:active { cursor: grabbing; }
 .phone3d-canvas:active { cursor: grabbing; }
 /* Hide CSS phone on desktop when 3D is active */
 .hero-visual.has-3d .phone-float { visibility: hidden; }
