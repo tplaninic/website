@@ -92,192 +92,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   faders.forEach(el => fadeObserver.observe(el));
 
-  // ===== Feature Carousel =====
-  const showcase = document.getElementById('featureShowcase');
-  const slides = document.querySelectorAll('.feature-slide');
-  const pills = document.querySelectorAll('.feature-pill');
-  const dots = document.querySelectorAll('.feature-dot');
-  const prevBtn = document.getElementById('featurePrev');
-  const nextBtn = document.getElementById('featureNext');
-  const featureNav = document.getElementById('featureNav');
+  // ========== PHONE FEATURES SCROLL ==========
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
 
-  // Slide order matches the pill order (Auto-Scheduling, Analytics, Export, Calendar, ...)
-  const slideOrder = [0, 9, 10, 1, 2, 3, 4, 8, 5, 6, 7];
-  let currentSlide = 0;       // actual data-slide value of the active slide
-  let autoTimer = null;
-  const SLIDE_INTERVAL = 6000;
-  const totalSlides = slides.length;
+    const panels = document.querySelectorAll('.pf-panel');
+    const screens = document.querySelectorAll('.pf-screen');
+    const phone = document.querySelector('.phone-features .phone-mockup');
 
-  // Index of currentSlide within slideOrder
-  function orderIndex() {
-    const i = slideOrder.indexOf(currentSlide);
-    return i >= 0 ? i : 0;
-  }
+    if (panels.length && screens.length && phone) {
+      // Highlight active panel and switch phone screen
+      panels.forEach((panel, i) => {
+        ScrollTrigger.create({
+          trigger: panel,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => activateScreen(i),
+          onEnterBack: () => activateScreen(i),
+        });
+      });
 
-  // ===== Lock carousel height to tallest slide =====
-  function normalizeShowcaseHeight() {
-    if (!showcase || slides.length === 0) return;
-    // Reset so we can measure naturally
-    showcase.style.height = 'auto';
-    let maxH = 0;
-    // Measure each slide individually (absolute so they don't stack)
-    slides.forEach(s => {
-      s.style.cssText = 'position:absolute !important;top:0 !important;left:0 !important;right:0 !important;opacity:1 !important;transform:none !important;visibility:hidden !important;';
-      const h = s.offsetHeight;
-      if (h > maxH) maxH = h;
-    });
-    // Restore all inline styles
-    slides.forEach(s => { s.style.cssText = ''; });
-    if (maxH > 0) showcase.style.height = maxH + 'px';
-  }
-
-  normalizeShowcaseHeight();
-  window.addEventListener('resize', normalizeShowcaseHeight);
-
-  function goToSlide(index, direction) {
-    const currentEl = showcase.querySelector('.feature-slide[data-slide="' + currentSlide + '"]');
-    if (index === currentSlide && currentEl && currentEl.classList.contains('active')) return;
-
-    // Wrap using slideOrder
-    const curOI = slideOrder.indexOf(index);
-    if (curOI < 0) return; // safety
-
-    const dir = direction || (slideOrder.indexOf(index) > orderIndex() ? 'next' : 'prev');
-
-    const oldEl = showcase.querySelector('.feature-slide[data-slide="' + currentSlide + '"]');
-    const newEl = showcase.querySelector('.feature-slide[data-slide="' + index + '"]');
-    if (!oldEl || !newEl) return;
-
-    // Outgoing slide
-    oldEl.classList.remove('active');
-    oldEl.classList.add(dir === 'next' ? 'exit-left' : 'exit-right');
-
-    // Incoming slide
-    newEl.classList.remove('exit-left', 'exit-right');
-    newEl.classList.add(dir === 'next' ? 'enter-right' : 'enter-left');
-
-    // Force reflow to trigger transition
-    void newEl.offsetWidth;
-
-    newEl.classList.remove('enter-right', 'enter-left');
-    newEl.classList.add('active');
-
-    currentSlide = index;
-
-    // Clean up old slide after transition
-    setTimeout(() => {
-      oldEl.classList.remove('exit-left', 'exit-right');
-    }, 500);
-
-    // Update pills
-    pills.forEach(p => p.classList.remove('active'));
-    const activePill = document.querySelector('.feature-pill[data-slide="' + currentSlide + '"]');
-    if (activePill) {
-      activePill.classList.add('active');
-      // Scroll pill into view (container-only, never moves the page)
-      const navWrap = featureNav ? featureNav.closest('.feature-nav-wrap') || featureNav.parentElement : null;
-      if (navWrap) {
-        const wrapRect = navWrap.getBoundingClientRect();
-        const pillRect = activePill.getBoundingClientRect();
-        if (pillRect.left < wrapRect.left || pillRect.right > wrapRect.right) {
-          const scrollTarget = activePill.offsetLeft - navWrap.offsetWidth / 2 + activePill.offsetWidth / 2;
-          navWrap.scrollTo({ left: scrollTarget, behavior: 'smooth' });
+      function activateScreen(index) {
+        panels.forEach((p, i) => p.classList.toggle('active', i === index));
+        screens.forEach((s, i) => s.classList.toggle('active', i === index));
+        // Subtle phone rotation
+        const rotations = [-3, -1, 1, 3, -2];
+        if (phone) {
+          phone.style.transform = `translateY(0) rotateY(${rotations[index] || 0}deg) rotateX(2deg)`;
         }
       }
+
+      // Activate first panel
+      activateScreen(0);
     }
-
-    // Update dots
-    dots.forEach(d => d.classList.remove('active'));
-    const activeDot = document.querySelector('.feature-dot[data-slide="' + currentSlide + '"]');
-    if (activeDot) activeDot.classList.add('active');
-  }
-
-  function nextSlide() {
-    const nextIdx = (orderIndex() + 1) % slideOrder.length;
-    goToSlide(slideOrder[nextIdx], 'next');
-  }
-
-  function prevSlide() {
-    const prevIdx = (orderIndex() - 1 + slideOrder.length) % slideOrder.length;
-    goToSlide(slideOrder[prevIdx], 'prev');
-  }
-
-  function startAuto() {
-    stopAuto();
-    autoTimer = setInterval(nextSlide, SLIDE_INTERVAL);
-  }
-
-  function stopAuto() {
-    if (autoTimer) {
-      clearInterval(autoTimer);
-      autoTimer = null;
-    }
-  }
-
-  // Pill clicks
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const idx = parseInt(pill.dataset.slide, 10);
-      const dir = idx > currentSlide ? 'next' : 'prev';
-      goToSlide(idx, dir);
-      startAuto();
-    });
-  });
-
-  // Dot clicks
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const idx = parseInt(dot.dataset.slide, 10);
-      const dir = idx > currentSlide ? 'next' : 'prev';
-      goToSlide(idx, dir);
-      startAuto();
-    });
-  });
-
-  // Arrow clicks
-  if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAuto(); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAuto(); });
-
-  // Pause on hover
-  if (showcase) {
-    showcase.addEventListener('mouseenter', stopAuto);
-    showcase.addEventListener('mouseleave', startAuto);
-  }
-
-  // Keyboard navigation when showcase is in view
-  document.addEventListener('keydown', (e) => {
-    if (!showcase) return;
-    const rect = showcase.getBoundingClientRect();
-    const inView = rect.top < window.innerHeight && rect.bottom > 0;
-    if (!inView) return;
-
-    if (e.key === 'ArrowLeft') { prevSlide(); startAuto(); }
-    if (e.key === 'ArrowRight') { nextSlide(); startAuto(); }
-  });
-
-  // Touch swipe support
-  if (showcase) {
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    showcase.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    showcase.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) nextSlide();
-        else prevSlide();
-        startAuto();
-      }
-    }, { passive: true });
-  }
-
-  // Initialize carousel
-  if (totalSlides > 0) {
-    startAuto();
   }
 
   // ===== FAQ Accordion =====
