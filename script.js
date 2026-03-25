@@ -693,29 +693,25 @@ document.addEventListener('DOMContentLoaded', () => {
   glass1.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.6);
   phoneMesh.add(glass1);
 
-  // Second lens (top-right) — outer ring + inner dark cylinder (no separate glass plane)
-  var lens2OuterGeo = new THREE.CylinderGeometry(12, 12, 3, 32);
+  // Second lens (top-right) — match main lens style
+  var lens2OuterGeo = new THREE.CylinderGeometry(12, 12, 4, 32);
   lens2OuterGeo.rotateX(Math.PI / 2);
   var lens2Outer = new THREE.Mesh(lens2OuterGeo, ringMat);
   lens2Outer.position.set(-PW/2 + 80, PH/2 - 40, -PD/2 - 5);
   phoneMesh.add(lens2Outer);
-  var lens2InnerGeo = new THREE.CylinderGeometry(8, 8, 4, 32);
-  lens2InnerGeo.rotateX(Math.PI / 2);
-  var lens2Inner = new THREE.Mesh(lens2InnerGeo, glassMat);
-  lens2Inner.position.set(-PW/2 + 80, PH/2 - 40, -PD/2 - 5.5);
-  phoneMesh.add(lens2Inner);
+  var glass2 = new THREE.Mesh(new THREE.CircleGeometry(9, 32), glassMat);
+  glass2.position.set(-PW/2 + 80, PH/2 - 40, -PD/2 - 7.1);
+  phoneMesh.add(glass2);
 
-  // Third lens (bottom-left)
-  var lens3OuterGeo = new THREE.CylinderGeometry(12, 12, 3, 32);
+  // Third lens (bottom-left) — match main lens style
+  var lens3OuterGeo = new THREE.CylinderGeometry(12, 12, 4, 32);
   lens3OuterGeo.rotateX(Math.PI / 2);
   var lens3Outer = new THREE.Mesh(lens3OuterGeo, ringMat);
   lens3Outer.position.set(-PW/2 + 40, PH/2 - 80, -PD/2 - 5);
   phoneMesh.add(lens3Outer);
-  var lens3InnerGeo = new THREE.CylinderGeometry(8, 8, 4, 32);
-  lens3InnerGeo.rotateX(Math.PI / 2);
-  var lens3Inner = new THREE.Mesh(lens3InnerGeo, glassMat);
-  lens3Inner.position.set(-PW/2 + 40, PH/2 - 80, -PD/2 - 5.5);
-  phoneMesh.add(lens3Inner);
+  var glass3 = new THREE.Mesh(new THREE.CircleGeometry(9, 32), glassMat);
+  glass3.position.set(-PW/2 + 40, PH/2 - 80, -PD/2 - 7.1);
+  phoneMesh.add(glass3);
 
   // Flash
   var flashGeo = new THREE.CylinderGeometry(5, 5, 2, 16);
@@ -727,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Wrok logo on back — load PNG via Image, fallback to canvas text for local dev
   function addLogoToPhone(tex, w, h) {
     var geo = new THREE.PlaneGeometry(w, h);
-    var mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false, opacity: 0.4 });
+    var mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false, opacity: 0.6 });
     var mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(0, -60, -PD/2 - 10);
     mesh.rotation.y = Math.PI;
@@ -737,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
   logoImg.onload = function() {
     var t = new THREE.Texture(logoImg);
     t.needsUpdate = true;
-    addLogoToPhone(t, 100, 100 / (logoImg.width / logoImg.height));
+    addLogoToPhone(t, 150, 150 / (logoImg.width / logoImg.height));
   };
   logoImg.onerror = function() {
     var c = document.createElement('canvas');
@@ -749,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
     x.fillText('Wrok', 256, 64);
     addLogoToPhone(new THREE.CanvasTexture(c), 120, 30);
   };
-  logoImg.src = 'wrok_logo.png';
+  logoImg.src = 'wrok_icon.png';
 
   // Add inner detail to main lens (reflective center dot)
   var lensDot1 = new THREE.Mesh(new THREE.CircleGeometry(4, 16), new THREE.MeshBasicMaterial({ color: 0x1a1a3a, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
