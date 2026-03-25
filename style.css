@@ -393,8 +393,9 @@ button { font-family: inherit; }
 }
 .ws-schedule {
   flex: 1; padding: 8px 12px; display: flex; flex-direction: column;
-  gap: 6px; justify-content: center;
+  gap: 6px; justify-content: center; overflow: hidden;
 }
+.ws-schedule > * { flex-shrink: 0; }
 .ws-day {
   display: flex; align-items: center; gap: 10px;
 }

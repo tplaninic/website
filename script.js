@@ -865,6 +865,13 @@ document.addEventListener('DOMContentLoaded', () => {
     7: { title: 'Roles', type: 'schedule' },          // Roles
   };
 
+  // Lock the schedule container height so all screens are the same size
+  var originalScheduleH = wsSchedule ? wsSchedule.offsetHeight : 0;
+  if (wsSchedule && originalScheduleH > 0) {
+    wsSchedule.style.minHeight = originalScheduleH + 'px';
+    wsSchedule.style.maxHeight = originalScheduleH + 'px';
+  }
+
   function updatePhoneScreen() {
     var activePill = document.querySelector('.feature-pill.active');
     if (!activePill) return;
@@ -880,8 +887,6 @@ document.addEventListener('DOMContentLoaded', () => {
       var days = wsSchedule.querySelectorAll('.ws-shift');
       days.forEach(function(d) { d.style.transition = 'opacity 0.3s'; d.style.opacity = '0'; });
       setTimeout(function() {
-        // Injected content goes directly into .ws-schedule which already has
-        // the correct flex layout, padding, and dimensions. No wrapper divs needed.
         if (screen.type === 'swaps') {
           wsSchedule.innerHTML = '<div style="background:#E3F2FD;border-radius:12px;padding:14px;border-left:3px solid #1E88E5"><div style="font-size:0.6rem;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Swap Request</div><div style="font-weight:800;font-size:0.82rem;color:#1a1a2e">Ana K. ⇄ Marko H.</div><div style="font-size:0.68rem;color:#888;margin:4px 0">Mon Morning ↔ Tue Afternoon</div><div style="display:flex;gap:6px;margin-top:8px"><span style="flex:1;background:#4CAF50;color:#fff;padding:8px;border-radius:10px;text-align:center;font-size:0.68rem;font-weight:700">✓ Approve</span><span style="flex:1;background:#f44336;color:#fff;padding:8px;border-radius:10px;text-align:center;font-size:0.68rem;font-weight:700">✗ Deny</span></div></div><div style="background:#f5f5f5;border-radius:12px;padding:12px;opacity:0.6"><div style="font-size:0.6rem;color:#999;text-transform:uppercase">Completed</div><div style="font-weight:700;font-size:0.72rem;color:#444;margin-top:4px">Ivan P. ⇄ Luka M.</div><div style="color:#4CAF50;font-size:0.65rem;margin-top:4px">✓ Approved</div></div>';
         } else if (screen.type === 'chat') {
@@ -920,9 +925,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Bob animation + scroll-based position
     var baseY = 20 + Math.sin(autoTime * 0.7) * 5;
-    phoneGroup.position.x += (targetPhoneX - phoneGroup.position.x) * 0.15;
+    // Exponential ease-out: fast start, slow finish
+    var dx = targetPhoneX - phoneGroup.position.x;
+    phoneGroup.position.x += dx * 0.12 + (dx > 0 ? 1 : dx < 0 ? -1 : 0) * Math.min(Math.abs(dx) * 0.03, 8);
     phoneGroup.position.y = baseY;
-    var currentScale = phoneGroup.scale.x + (targetPhoneScale - phoneGroup.scale.x) * 0.15;
+    var ds = targetPhoneScale - phoneGroup.scale.x;
+    var currentScale = phoneGroup.scale.x + ds * 0.12 + (ds > 0 ? 1 : ds < 0 ? -1 : 0) * Math.min(Math.abs(ds) * 0.03, 0.02);
     phoneGroup.scale.setScalar(currentScale);
     cssObject.scale.set(fitScale * 1.15 * currentScale, fitScale * currentScale, 1);
 
