@@ -298,25 +298,49 @@ button { font-family: inherit; }
 .section-wave-top { bottom: auto; top: -1px; }
 
 /* ===== PHONE MOCKUP ===== */
-.hero-visual { perspective: 900px; }
 .phone-float {
   animation: phone-bob 6s ease-in-out infinite;
-  cursor: grab;
+  transition: none;
 }
-.phone-float.dragging { animation: none; cursor: grabbing; }
-@keyframes phone-bob { 0%, 100% { transform: translateY(0) rotateY(-6deg); } 50% { transform: translateY(-12px) rotateY(-6deg); } }
-.phone-float.phone-fixed { position: fixed !important; z-index: 1000; animation: none; cursor: default; }
-.hero.phone-flying { overflow: visible !important; }
-.hero-visual.phone-away { min-width: 280px; min-height: 500px; }
+@keyframes phone-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-.phone-mockup { width: 300px; position: relative; }
+/* Phone flies to sidebar when scrolling past hero */
+.phone-float.phone-sidebar {
+  position: fixed !important;
+  right: 30px;
+  top: 50%;
+  left: auto !important;
+  transform: translateY(-50%) scale(0.75) !important;
+  animation: none;
+  z-index: 999;
+  transition: right 0.8s cubic-bezier(0.23,1,0.32,1),
+              top 0.8s cubic-bezier(0.23,1,0.32,1),
+              transform 0.8s cubic-bezier(0.23,1,0.32,1),
+              opacity 0.5s ease;
+}
+.hero-visual.phone-away {
+  min-width: 280px;
+  min-height: 500px;
+}
+/* Override hero overflow so phone can escape */
+.hero.phone-flying { overflow: visible !important; }
+
+@media (max-width: 1024px) {
+  .phone-float.phone-sidebar {
+    position: relative !important;
+    right: auto;
+    top: auto;
+    transform: none !important;
+    animation: phone-bob 6s ease-in-out infinite;
+    z-index: auto;
+  }
+}
+
+.phone-mockup { width: 280px; position: relative; }
 
 .phone-frame {
-  background: #1a1a2e; border-radius: 40px; padding: 12px;
-  border: 6px solid #13132a;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset,
-    0 0 40px rgba(13,124,102,0.15),
-    inset 0 0 20px rgba(0,0,0,0.3);
+  background: #1a1a2e; border-radius: 36px; padding: 10px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 0 40px rgba(13,124,102,0.15);
 }
 
 .phone-notch { width: 90px; height: 5px; background: #2a2a3e; border-radius: 3px; margin: 6px auto 8px; }
@@ -370,24 +394,6 @@ button { font-family: inherit; }
 .mock-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; color: #aaa; font-size: 0.55rem; font-weight: 500; }
 .mock-nav-item svg { width: 16px; height: 16px; }
 .mock-nav-item.active { color: var(--primary); }
-
-/* ===== 3D PHONE CANVAS ===== */
-.phone3d-canvas {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.4s ease;
-}
-.hero-visual .phone-float { position: relative; z-index: 1; }
-/* When 3D is active, hide the entire CSS phone (Three.js renders everything) */
-.hero-visual.has-3d .phone-mockup { visibility: hidden; }
-/* Hide 3D canvas on small screens */
-@media (max-width: 768px) {
-  .phone3d-canvas { display: none; }
-  .hero-visual.has-3d .phone-mockup { visibility: visible; }
-}
 
 /* ===== SLOGAN BAR ===== */
 .slogan-bar {
