@@ -559,23 +559,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 3000);
     });
 
-    // Scroll-based: shrink + slide right as user scrolls (desktop only)
-    if (window.innerWidth > 1024) {
-      var heroVisual = document.querySelector('.hero-visual');
-      window.addEventListener('scroll', function() {
-        if (isDrag) return;
-        var scrollY = window.scrollY || window.pageYOffset;
-        var heroH = heroVisual ? heroVisual.offsetHeight : 600;
-        var progress = Math.min(1, Math.max(0, scrollY / (heroH * 0.7)));
-        // Apply scale and translation via CSS transform on the hero-visual
-        var translateX = progress * 120; // px to the right
-        var scale = 1 - progress * 0.3; // shrink to 0.7
-        heroVisual.style.transform = 'translateX(' + translateX + 'px) scale(' + scale + ')';
-        heroVisual.style.transformOrigin = 'right center';
-        // Fade when scrolled far
-        heroVisual.style.opacity = Math.max(0, 1 - progress * 1.5);
-      }, { passive: true });
-    }
   }
 
 });
@@ -646,8 +629,8 @@ document.addEventListener('DOMContentLoaded', () => {
   bodyGeo.center();
 
   var bodyMat = new THREE.MeshPhysicalMaterial({
-    color: 0x1a1a2e, metalness: 0.8, roughness: 0.25,
-    clearcoat: 0.5, clearcoatRoughness: 0.2
+    color: 0x2d2d44, metalness: 0.7, roughness: 0.3,
+    clearcoat: 0.4, clearcoatRoughness: 0.3
   });
   var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
   glScene.add(phoneMesh);
@@ -669,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
   phoneMesh.add(lensMesh);
 
   // Lighting
-  glScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  glScene.add(new THREE.AmbientLight(0xffffff, 0.7));
   var mainLight = new THREE.DirectionalLight(0xffffff, 0.9);
   mainLight.position.set(400, 400, 600);
   glScene.add(mainLight);
@@ -680,9 +663,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== CSS Phone Screen (CSS3D) =====
   // Scale the CSS phone to match the 3D body dimensions
   var cssObject = new THREE.CSS3DObject(phoneMockup);
-  // The phone-mockup is 280px wide, body is PW (290) units
-  // CSS3D: 1px = 1 unit, so scale slightly to fill the body
-  var screenScale = (PW - 20) / phoneMockup.offsetWidth; // inset 10px each side
+  // CSS3D: 1px = 1 Three.js unit. Scale the CSS phone to fit inside the 3D body.
+  var mockupW = phoneMockup.offsetWidth || 280;
+  var mockupH = phoneMockup.offsetHeight || 560;
+  // Use the tighter dimension to ensure it fits both ways
+  var scaleW = (PW - 22) / mockupW;
+  var scaleH = (PH - 22) / mockupH;
+  var screenScale = Math.min(scaleW, scaleH);
   cssObject.scale.set(screenScale, screenScale, 1);
   cssObject.position.set(0, 0, PD / 2 + 1);
   cssScene.add(cssObject);
@@ -693,8 +680,8 @@ document.addEventListener('DOMContentLoaded', () => {
   phoneGroup.add(phoneMesh);
   glScene.add(phoneGroup);
 
-  // Position the phone group where the hero phone normally sits (right side)
-  phoneGroup.position.set(W * 0.22, 0, 0);
+  // Position the phone group in the right portion of the hero
+  phoneGroup.position.set(W * 0.15, 0, 0);
   phoneMesh.position.set(0, 0, 0);
 
   // Mark 3D as active
