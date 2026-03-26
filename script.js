@@ -784,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var scaleByH = (PH - 14) / rawH;
   var fitScale = Math.min(scaleByW, scaleByH) * 1.21;
   cssObject.scale.set(fitScale * 1.15, fitScale, 1);
-  cssObject.position.set(0, 0, PD / 2 + 8);
+  cssObject.position.set(-3, 0, PD / 2 + 12);
   cssScene.add(cssObject);
 
   // Create a group to rotate WebGL phone body
@@ -1000,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sync CSS3D object to match the phone group
     // Adjust screen offset based on scale — when phone shrinks, screen needs to shift slightly
     var scaleOffset = (1 - currentScale) * 5;
-    cssObject.position.set(phoneGroup.position.x - 1 - scaleOffset, phoneGroup.position.y, PD / 2 + 8);
+    cssObject.position.set(phoneGroup.position.x - 3 - scaleOffset, phoneGroup.position.y, PD / 2 + 12);
     cssObject.rotation.copy(phoneGroup.rotation);
 
     // Hide screen when viewing the back (rotated past ~80 degrees)
