@@ -998,9 +998,8 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.opacity = phoneVisible ? '1' : '0';
 
     // Sync CSS3D object to match the phone group
-    // Adjust screen offset based on scale — when phone shrinks, screen needs to shift slightly
-    var scaleOffset = (1 - currentScale) * 5;
-    cssObject.position.set(phoneGroup.position.x - 3 - scaleOffset, phoneGroup.position.y, PD / 2 + 12);
+    // Offset scales proportionally with the phone so screen stays centered at any size
+    cssObject.position.set(phoneGroup.position.x - 3 * currentScale - (1 - currentScale) * 40, phoneGroup.position.y, PD / 2 + 12);
     cssObject.rotation.copy(phoneGroup.rotation);
 
     // Hide screen when viewing the back (rotated past ~80 degrees)
