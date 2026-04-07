@@ -531,7 +531,7 @@
       }
 
       // Show cancel button only for active paid subscriptions
-      if (sub.status === 'ACTIVE' && !sub.isTrial && sub.stripeSubscriptionId) {
+      if (sub.status === 'ACTIVE' && !sub.isTrial) {
         document.getElementById('cancelSection').style.display = '';
       }
     }
