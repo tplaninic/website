@@ -1023,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Compute the screen position in the phone's local space, then transform to world space
     // so the screen stays on the front surface of the phone as it rotates.
     var localOffset = new THREE.Vector3(
-      8 * currentScale - (1 - currentScale) * 40,
+      -(1 - currentScale) * 40,
       0,
       PD / 2 + 2
     );
