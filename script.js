@@ -1043,3 +1043,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   animate();
 })();
+
+/* ---------- Free-trial invite (shows once visitor scrolls deep) ---------- */
+(function () {
+  const invite = document.getElementById('trialInvite');
+  if (!invite) return;
+
+  const STORAGE_KEY = 'wrok_trial_invite_state';
+  const DISMISS_DAYS = 14; // re-show after this many days if user dismissed
+  const TRIGGER_RATIO = 0.55; // fire once user has scrolled past 55% of the page
+
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+
+  const now = Date.now();
+  const dismissedAt = typeof state.dismissedAt === 'number' ? state.dismissedAt : 0;
+  const daysSince = (now - dismissedAt) / (1000 * 60 * 60 * 24);
+  if (state.accepted || (dismissedAt && daysSince < DISMISS_DAYS)) return;
+
+  let shown = false;
+  function show() {
+    if (shown) return;
+    shown = true;
+    invite.classList.add('visible');
+    invite.setAttribute('aria-hidden', 'false');
+  }
+  function hide() {
+    invite.classList.remove('visible');
+    invite.setAttribute('aria-hidden', 'true');
+  }
+  function persist(patch) {
+    try {
+      const next = Object.assign({}, state, patch);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      state = next;
+    } catch (_) {}
+  }
+
+  function onScroll() {
+    const scrolled = window.scrollY + window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    if (docHeight <= window.innerHeight) return;
+    if (scrolled / docHeight >= TRIGGER_RATIO) {
+      show();
+      window.removeEventListener('scroll', onScroll);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  document.getElementById('trialInviteClose').addEventListener('click', () => {
+    hide();
+    persist({ dismissedAt: now });
+  });
+  document.getElementById('trialInviteLater').addEventListener('click', () => {
+    hide();
+    persist({ dismissedAt: now });
+  });
+  document.getElementById('trialInviteCta').addEventListener('click', () => {
+    persist({ accepted: true, acceptedAt: now });
+    // Let the mailto: navigation happen naturally.
+  });
+})();

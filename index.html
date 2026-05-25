@@ -1121,6 +1121,22 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
+  <!-- Free trial invite — slides up after the visitor scrolls past most of the page -->
+  <div class="trial-invite" id="trialInvite" role="dialog" aria-labelledby="trialInviteTitle" aria-hidden="true">
+    <button class="trial-invite-close" id="trialInviteClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="trial-invite-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <h3 id="trialInviteTitle">Want to try Wrok for free?</h3>
+    <p>Email us at <strong>info@wrokapp.com</strong> and we'll set you up with a free trial so you can test everything before committing.</p>
+    <div class="trial-invite-actions">
+      <a class="trial-invite-cta" href="mailto:info@wrokapp.com?subject=Free%20trial%20request&body=Hi%20Wrok%20team%2C%0A%0AI%27d%20like%20to%20try%20the%20app.%20Please%20set%20me%20up%20with%20a%20free%20trial.%0A%0AThanks!" id="trialInviteCta">Email us for a trial</a>
+      <button class="trial-invite-later" id="trialInviteLater">Maybe later</button>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
   <script src="script.js"></script>
