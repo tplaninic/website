@@ -43,7 +43,7 @@
       <li><strong>Messages:</strong> Content of messages sent through the in-app chat</li>
       <li><strong>Device information:</strong> FCM tokens for push notifications, device type</li>
       <li><strong>Location data:</strong> GPS coordinates when using the clock-in/check-in feature (only when explicitly triggered by the user)</li>
-      <li><strong>Usage data:</strong> Crash reports and error logs via Firebase Crashlytics</li>
+      <li><strong>Usage data:</strong> Crash reports and error logs via Firebase Crashlytics (mobile app) and Sentry (web app); anonymous usage analytics via Firebase Analytics, collected only if you accept analytics consent</li>
     </ul>
 
     <h2>3. How We Use Your Data</h2>
@@ -62,9 +62,12 @@
     <p>We use the following third-party services:</p>
     <ul>
       <li><strong>Firebase Cloud Messaging (FCM):</strong> Push notifications</li>
-      <li><strong>Firebase Crashlytics:</strong> Crash and error reporting</li>
+      <li><strong>Firebase Crashlytics:</strong> Crash and error reporting (mobile app)</li>
+      <li><strong>Firebase Analytics:</strong> Anonymous usage analytics, only with your consent</li>
+      <li><strong>Sentry:</strong> Crash and error reporting for the web app, processed in the EU region</li>
       <li><strong>RevenueCat:</strong> In-app subscription management</li>
-      <li><strong>Google Play Billing:</strong> Payment processing for subscriptions</li>
+      <li><strong>Google Play Billing:</strong> Payment processing for subscriptions on Android</li>
+      <li><strong>Stripe:</strong> Payment processing for subscriptions on the web</li>
       <li><strong>Cloudflare:</strong> DNS, CDN, and security</li>
     </ul>
 
