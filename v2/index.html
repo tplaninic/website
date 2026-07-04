@@ -11,7 +11,9 @@
 <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
 <style>
 :root{
   --ink:#0B1512; --pine:#0E2A22; --pine-2:#123A2E; --brand:#0D7C66; --brand-hi:#15A385;
@@ -250,6 +252,52 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 .foot-logo img{height:28px;margin-bottom:14px}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:26px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.4)}
 
+
+/* editorial body voice */
+.hero-sub,.sec-head p,.oc p,.seg p,.faq-item p,.founder-text,.comp-facts span{font-family:"Newsreader",serif}
+.hero-sub{font-size:19px}
+/* hero line mask reveal */
+.hl{display:inline-block;overflow:hidden;vertical-align:bottom}
+.hl .line{display:inline-block}
+.js .hl .line{transform:translateY(112%)}
+/* ticker */
+.ticker{background:var(--paper);border-bottom:1px solid var(--line);overflow:hidden;padding:13px 0;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:flex;gap:44px;width:max-content;animation:tick 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track span{font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.ticker-track span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brand);margin-right:10px;vertical-align:1px}
+@keyframes tick{to{transform:translateX(-50%)}}
+/* spotlight cards */
+.oc{--mx:50%;--my:50%}
+.oc::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(13,124,102,.07),transparent 45%)}
+.oc:hover::after{opacity:1}
+/* fake cursor */
+.gm-cursor{position:absolute;z-index:6;width:20px;height:20px;opacity:0;pointer-events:none;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))}
+.gm-click{position:absolute;z-index:5;width:34px;height:34px;border-radius:50%;border:2px solid var(--mint);opacity:0;pointer-events:none;transform:scale(.3)}
+/* day view overlay */
+.gm-dayview{position:absolute;inset:44px 10px 10px;z-index:4;background:#101D18;border:1px solid rgba(127,216,193,.22);border-radius:12px;padding:14px;opacity:0;visibility:hidden;transform:translateY(10px)}
+.dv-title{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--mint);margin-bottom:12px;display:flex;justify-content:space-between}
+.dv-title .dv-back{color:rgba(255,255,255,.45)}
+.dv-row{display:grid;grid-template-columns:56px 1fr;align-items:center;margin-bottom:9px}
+.dv-name{font-family:var(--font-mono);font-size:10px;color:rgba(255,255,255,.7)}
+.dv-track{position:relative;height:26px;background:rgba(255,255,255,.04);border-radius:6px}
+.dv-block{position:absolute;top:3px;bottom:3px;border-radius:5px;color:#0B1512;font-family:var(--font-mono);font-size:8.5px;font-weight:600;display:flex;align-items:center;padding:0 7px;overflow:hidden;white-space:nowrap;transform-origin:left center}
+.dv-hours{display:grid;grid-template-columns:56px 1fr;margin-bottom:6px}
+.dv-hours div:last-child{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.35)}
+.dv-live{margin-top:10px;font-family:var(--font-mono);font-size:9.5px;color:rgba(255,255,255,.5)}
+.dv-live b{color:var(--mint)}
+/* pinned flagship spacing */
+.flagship.pinned-active{padding-top:0}
+/* founder */
+.founder{padding:64px 0}
+.founder-card{max-width:720px;border-left:3px solid var(--brand);padding:6px 0 6px 30px}
+.founder-text{font-size:20px;line-height:1.6;color:var(--text);font-style:italic}
+.founder-sig{margin-top:18px;display:flex;align-items:baseline;gap:12px}
+.sig-name{font-family:var(--font-display);font-weight:800;font-size:20px}
+.sig-role{font-size:13px;color:var(--muted)}
+.sig-role a{color:var(--brand);border-bottom:1px solid currentColor}
+@media (prefers-reduced-motion: reduce){.ticker-track{animation:none}.js .hl .line{transform:none}}
+
 @media(max-width:960px){
   .hero-inner,.flag-grid,.comp-grid,.worker-sec .flag-grid{grid-template-columns:1fr;gap:44px}
   .oc-grid{grid-template-columns:1fr}
@@ -287,8 +335,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
   <div class="hero-inner">
     <div>
       <div class="eyebrow" style="color:var(--mint)">Shift scheduling for small teams</div>
-      <h1 style="margin-top:18px">Your week&rsquo;s schedule, <span class="accent">done before your coffee is.</span></h1>
-      <p class="hero-sub">Wrok builds a fair, legal schedule for your caf&eacute;, shop or salon in seconds &mdash; and when something doesn&rsquo;t fit, it tells you exactly what to fix. Swaps, timesheets and work-time records included.</p>
+      <h1 style="margin-top:18px"><span class="hl"><span class="line">Your week&rsquo;s schedule,</span></span> <span class="hl"><span class="line accent">done before your coffee is.</span></span></h1>
+      <p class="hero-sub">Wrok builds the whole week for your caf&eacute;, shop or salon in about thirty seconds. When something can&rsquo;t work, it says why and offers the fix. Swaps, timesheets and the paperwork ride along.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="https://app.wrokapp.com" target="_blank" rel="noopener">Start free &mdash; up to 4 workers</a>
         <a class="btn btn-ghost" href="#scheduler">See it build a schedule</a>
@@ -300,24 +348,27 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
       </ul>
     </div>
     <div class="hero-visual">
-      <span class="hero-badge-live">LIVE SCHEDULE</span>
       <div class="grid-mock" id="heroMock" aria-hidden="true"></div>
     </div>
   </div>
   <div class="hero-fade"></div>
 </header>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track">
+<span>06:02 &middot; Ana clocked in &middot; GPS ok</span><span>Swap approved: Fri night, Marko &rarr; Ana</span><span>Week 28 generated in 4.1 s</span><span>evidencija-2026-06.xlsx exported</span><span>Petra set: can&rsquo;t work Tuesdays</span><span>Saturday coverage 3/3</span><span>Ivan requested 14.&ndash;18.7. off</span><span>Payroll export sent to the accountant</span>
+<span>06:02 &middot; Ana clocked in &middot; GPS ok</span><span>Swap approved: Fri night, Marko &rarr; Ana</span><span>Week 28 generated in 4.1 s</span><span>evidencija-2026-06.xlsx exported</span><span>Petra set: can&rsquo;t work Tuesdays</span><span>Saturday coverage 3/3</span><span>Ivan requested 14.&ndash;18.7. off</span><span>Payroll export sent to the accountant</span>
+</div></div>
 <!-- ============ FLAGSHIP: the scheduler that explains itself ============ -->
 <section class="flagship" id="scheduler">
   <div class="wrap">
     <div class="flag-grid">
       <div class="reveal">
-        <div class="eyebrow">The flagship</div>
-        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">A scheduler that explains itself</h2>
-        <p style="font-size:17px;color:var(--muted)">Anyone can generate a schedule. Wrok is built for the moment it <em>can&rsquo;t</em>: instead of failing silently, it names the exact conflict &mdash; and offers a one-tap fix.</p>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:0 0 16px">A scheduler that explains itself</h2>
+        <p style="font-size:17px;color:var(--muted)">Anyone can generate a schedule. Wrok is built for the moment it <em>can&rsquo;t</em>. It names the conflict and hands you the fix.</p>
         <ul class="flag-points">
-          <li><span class="n">01</span><div><b>Every rule, at once.</b> Roles, minimum staffing, rest hours, max workdays, rotations, vacations, sick days, worker availability.</div></li>
-          <li><span class="n">02</span><div><b>Conflicts become suggestions.</b> &ldquo;Marko would exceed 6 consecutive days &mdash; move Thursday to Petra?&rdquo; One tap, fixed.</div></li>
-          <li><span class="n">03</span><div><b>Under-staffing is visible before it hurts.</b> Per-day coverage counts turn red while you still have time to react.</div></li>
+          <li><span class="n">1</span><div><b>It checks everything at once.</b> Rest hours, roles, rotations, who is on vacation, who can&rsquo;t work Tuesdays.</div></li>
+          <li><span class="n">2</span><div><b>Conflicts come with a button.</b> &ldquo;Marko would hit 6 days in a row. Move Thursday to Petra?&rdquo; Tap. Done.</div></li>
+          <li><span class="n">3</span><div><b>Keep scrolling.</b> The demo on the right will generate the week, catch a conflict, fix it, then open Thursday&rsquo;s day view. That&rsquo;s the real product, drawn in HTML.</div></li>
         </ul>
       </div>
       <div class="flag-visual reveal">
@@ -331,16 +382,15 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 <section class="outcomes" id="features">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Everything after the schedule</div>
       <h2>The schedule is just the start</h2>
-      <p>Wrok runs the whole shift lifecycle &mdash; the day itself, the hours worked, the paperwork nobody enjoys.</p>
+      <p>The day itself, the hours people actually worked, the paperwork. It&rsquo;s all in here.</p>
     </div>
     <div class="oc-grid">
       <div class="oc reveal">
         <span class="oc-new">NEW</span>
         <div class="oc-tag">Day view</div>
         <h3>Run the day, hour by hour</h3>
-        <p>Plan activities inside each shift &mdash; bar, terrace, kitchen, breaks. Drag to rearrange, let auto-fill do the busywork, and see who&rsquo;s where right now.</p>
+        <p>Plan what happens inside each shift: bar, terrace, kitchen, breaks. Drag things around. See who is where right now.</p>
         <div class="oc-mock" aria-hidden="true">
           <div class="tl-hours"><div></div><div><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span></div></div>
           <div class="tl-row"><div class="tl-name">Ana</div><div class="tl-track"><span class="tl-block" style="left:0%;width:37%;background:#0D7C66">Bar</span><span class="tl-block" style="left:37.5%;width:12%;background:#B9B2A4">Break</span><span class="tl-block" style="left:50%;width:38%;background:#4FA3D8">Terrace</span></div></div>
@@ -352,7 +402,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
         <span class="oc-new">NEW</span>
         <div class="oc-tag">Timesheets</div>
         <h3>Planned vs. reality, reconciled</h3>
-        <p>GPS clock-in meets the schedule. Late arrivals, missing punches and no-shows get flagged; you correct with a full audit trail, then approve and lock the day.</p>
+        <p>GPS clock-in meets the plan. Late arrivals and missing punches get flagged. You fix them, the app remembers who changed what, then you lock the day.</p>
         <div class="oc-mock" aria-hidden="true">
           <div class="ts-row"><div>Worker</div><div>Planned</div><div>Actual</div><div>Status</div></div>
           <div class="ts-row"><div>Ana K.</div><div>06:00&ndash;14:00</div><div>06:02&ndash;14:04</div><span class="ts-flag ok">Approved</span></div>
@@ -362,8 +412,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
       </div>
       <div class="oc reveal">
         <div class="oc-tag">Team workflows</div>
-        <h3>Swaps, leave &amp; chat &mdash; without the group text</h3>
-        <p>Workers propose swaps, request vacation and mark days they can&rsquo;t work. You approve with one tap. Built-in chat and tasks keep everything in one place, with push notifications that actually arrive.</p>
+        <h3>Swaps, leave &amp; chat, minus the group text</h3>
+        <p>Workers propose swaps and request vacation from their phone. You tap approve. Chat and tasks live in the same app, so Monday doesn&rsquo;t start in three different inboxes.</p>
         <div class="oc-mock" aria-hidden="true" style="padding:12px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-body)">
           <div style="display:flex;gap:8px;align-items:center;font-size:11.5px"><span style="width:22px;height:22px;border-radius:50%;background:var(--pine-2);color:var(--mint);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">MB</span><div style="background:var(--paper-2);border-radius:10px;padding:7px 11px">Can anyone take my Friday night?</div></div>
           <div style="display:flex;gap:8px;align-items:center;font-size:11.5px;justify-content:flex-end"><div style="background:rgba(13,124,102,.1);border-radius:10px;padding:7px 11px">I&rsquo;ll take it 👍</div><span style="width:22px;height:22px;border-radius:50%;background:var(--pine-2);color:var(--mint);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">AK</span></div>
@@ -374,7 +424,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
         <span class="oc-new">NEW</span>
         <div class="oc-tag">Paperwork, automated</div>
         <h3>Exports your accountant will love</h3>
-        <p>Inspection-ready work-time records, payroll-ready hour splits (overtime, night, Sunday, holiday), schedule PDFs and Excel reports &mdash; one click each. Everyone&rsquo;s shifts sync to Google, Apple or Outlook calendars too.</p>
+        <p>Work-time records ready for a labour inspection. Hour splits your accountant can import. Schedule PDFs for the wall. And every shift lands in Google, Apple or Outlook calendars on its own.</p>
         <div class="oc-mock" aria-hidden="true" style="padding:14px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--font-mono)">
           <span class="dm-file">&#9679; evidencija-2026-06.xlsx</span>
           <span class="dm-file">&#9679; payroll-jun-2026.csv</span>
@@ -391,14 +441,13 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
   <div class="wrap">
     <div class="flag-grid">
       <div class="reveal">
-        <div class="eyebrow">For your team</div>
-        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">An app your staff will actually open</h2>
-        <p style="font-size:17px;color:var(--muted)">Their schedule, always current, in their pocket &mdash; and in their own calendar app. They can offer swaps, request time off and mark the days they can&rsquo;t work, so the schedule is right the first time.</p>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:0 0 16px">An app your staff will actually open</h2>
+        <p style="font-size:17px;color:var(--muted)">Their schedule lives in their pocket and in their own calendar app. They can offer swaps, ask for time off and mark days they can&rsquo;t work. The schedule comes out right the first time.</p>
         <ul class="flag-points" style="margin-top:26px">
-          <li><span class="n">&#10003;</span><div><b>My week at a glance</b> &mdash; shifts, times and who they&rsquo;re working with.</div></li>
-          <li><span class="n">&#10003;</span><div><b>Swap requests</b> with manager approval &mdash; no group-chat chaos.</div></li>
-          <li><span class="n">&#10003;</span><div><b>&ldquo;I can&rsquo;t work Tuesdays&rdquo;</b> &mdash; recurring availability the scheduler respects.</div></li>
-          <li><span class="n">&#10003;</span><div><b>Calendar sync</b> &mdash; shifts appear in Google, Apple or Outlook automatically.</div></li>
+          <li><span class="n">&#10003;</span><div>My week, with times and teammates.</div></li>
+          <li><span class="n">&#10003;</span><div>Swap requests that wait for your approval.</div></li>
+          <li><span class="n">&#10003;</span><div>&ldquo;I can&rsquo;t work Tuesdays.&rdquo; Set once, respected every week.</div></li>
+          <li><span class="n">&#10003;</span><div>Shifts show up in Google or Apple Calendar on their own.</div></li>
         </ul>
         <div class="store-row">
           <a class="store-badge" href="https://play.google.com/store/apps/details?id=hr.tomislav.planinic.schedule.schedule_app" target="_blank" rel="noopener"><svg width="20" height="22" viewBox="0 0 24 26" fill="currentColor"><path d="M1.6.9C1.2 1.3 1 1.9 1 2.7v20.6c0 .8.2 1.4.6 1.8l.1.1L13.3 13.6v-.3L1.7.9h-.1z" opacity=".9"/><path d="M17.2 17.5l-3.9-3.9v-.3l3.9-3.9.1.1 4.6 2.6c1.3.7 1.3 1.9 0 2.7l-4.6 2.6-.1.1z" opacity=".7"/><path d="M17.3 17.4l-4-4L1.6 25.1c.4.5 1.1.5 1.9.1l13.8-7.8" opacity=".8"/><path d="M17.3 9.5L3.5.7C2.7.3 2 .3 1.6.8l11.7 11.7 4-4z" opacity=".6"/></svg><span><small>GET IT ON</small>Google Play</span></a>
@@ -428,15 +477,14 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
   <div class="wrap">
     <div class="comp-grid">
       <div class="reveal">
-        <div class="eyebrow">Croatian labour-law ready</div>
-        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">Records that pass inspection</h2>
-        <p style="color:rgba(255,255,255,.65);font-size:17px">Since October 2024, every Croatian employer must keep detailed work-time records under the new Pravilnik (NN 55/24) &mdash; start and end of work, breaks, overtime, night and Sunday hours, absences. Wrok keeps them as a side-effect of the schedule you already run.</p>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:0 0 16px">Records that pass inspection</h2>
+        <p style="color:rgba(255,255,255,.65);font-size:17px">Since October 2024 every Croatian employer has to keep detailed work-time records under the new Pravilnik, NN 55/24. Start and end of work, breaks, overtime, night hours, absences. Wrok keeps all of it as a side effect of the schedule you already run.</p>
         <ul class="comp-facts">
-          <li><b>One-click &ldquo;Evidencija radnog vremena&rdquo;</b><span>A month per worker, every NN 55/24 field, ready for the labour inspector &mdash; in Excel.</span></li>
-          <li><b>Filled automatically</b><span>Clock-ins, schedules, breaks, vacations and sick days flow straight into the record.</span></li>
-          <li><b>Approve &amp; lock</b><span>Approved days are frozen with an audit trail &mdash; what you exported is what happened.</span></li>
+          <li><b>One click, one workbook</b><span>A month per worker, every NN 55/24 field, in Excel. Hand it to the inspector.</span></li>
+          <li><b>Nobody types it in</b><span>Clock-ins, schedules, breaks and sick days flow straight into the record.</span></li>
+          <li><b>Approve, then it&rsquo;s frozen</b><span>Locked days can&rsquo;t drift. What you exported is what happened.</span></li>
         </ul>
-        <div style="margin-top:34px"><span class="comp-fine">&euro;8,090&ndash;13,270</span><div class="micro" style="margin-top:6px">the fine for missing work-time records &mdash; the export is included from the Growth plan.</div></div>
+        <div style="margin-top:34px"><span class="comp-fine">&euro;8,090&ndash;13,270</span><div class="micro" style="margin-top:6px">the legal fine for missing work-time records. The export ships with the Growth plan.</div></div>
       </div>
       <div class="reveal">
         <div class="doc-mock">
@@ -463,26 +511,31 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 <section>
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Built for</div>
       <h2>Teams that live in shifts</h2>
     </div>
     <div class="seg-grid">
-      <div class="seg reveal"><span class="ico">&#9749;</span><h3>Caf&eacute;s &amp; restaurants</h3><p>When the rota is right, the floor runs itself &mdash; even in high season.</p>
-        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Rotating shift patterns</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Bar / terrace / kitchen day view</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Seasonal helpers across locations</li></ul></div>
-      <div class="seg reveal"><span class="ico">&#128722;</span><h3>Retail &amp; shops</h3><p>Coverage counts that keep every opening hour staffed &mdash; never over, never under.</p>
-        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Min-staffing rules per role</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Weekend &amp; holiday fairness</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Multi-location workers</li></ul></div>
-      <div class="seg reveal"><span class="ico">&#9986;</span><h3>Salons &amp; services</h3><p>Small teams, personal schedules &mdash; and the paperwork handled on the side.</p>
-        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Free for up to 4 workers</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Work-time records included</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Vacation &amp; sick tracking</li></ul></div>
+      <div class="seg reveal"><h3>Caf&eacute;s &amp; restaurants</h3><p>When the rota is right, the floor runs itself. Rotating patterns, the bar-terrace-kitchen day view, and seasonal helpers who float between locations. Built with high season in mind.</p></div>
+      <div class="seg reveal"><h3>Retail &amp; shops</h3><p>Coverage counts that keep every opening hour staffed. Never two people standing around, never a register with nobody on it. Weekend fairness the staff can see.</p></div>
+      <div class="seg reveal"><h3>Salons &amp; services</h3><p>Four people, personal schedules, and the work-time records handled on the side. This is the team size Wrok is free for, on purpose.</p></div>
     </div>
   </div>
 </section>
+<!-- ============ FOUNDER NOTE ============ -->
+<section class="founder">
+  <div class="wrap">
+    <div class="founder-card reveal">
+      <p class="founder-text">Wrok is built by one person, in Croatia. It exists because I watched a caf&eacute; run its schedule as a photo of a piece of paper in a WhatsApp group, and every week someone got burned by it. I ship most weeks. If something is broken or missing, write to me and there is a decent chance it&rsquo;s fixed before Friday.</p>
+      <div class="founder-sig"><span class="sig-name">Tomislav</span><span class="sig-role">builds Wrok &middot; <a href="mailto:info@wrokapp.com">info@wrokapp.com</a></span></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PRICING ============ -->
 <section class="pricing" id="pricing">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Pricing</div>
       <h2>Free for small teams. Honest for everyone.</h2>
-      <p>One subscription covers all your workplaces. Prices exclude VAT.</p>
+      <p>One subscription covers all your workplaces. Prices are without VAT. Pay by card, or ask for a ponuda and pay by bank transfer.</p>
     </div>
     <div class="reveal">
       <div class="bill-toggle" role="group" aria-label="Billing period">
@@ -535,7 +588,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
       </div>
     </div>
     <div class="ent-line reveal">More than 100 workers? <a href="mailto:info@wrokapp.com">Talk to us about Enterprise &rarr;</a></div>
-    <div class="price-note reveal">No credit card for the Free plan &middot; cancel anytime &middot; pay by card, or request an offer (ponuda) and pay by bank transfer with an R1 invoice.</div>
+    <div class="price-note reveal">No card needed for the Free plan. Cancel anytime. R1 invoices, of course.</div>
   </div>
 </section>
 
@@ -543,16 +596,15 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 <section id="faq">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">FAQ</div>
       <h2>Fair questions</h2>
     </div>
     <div class="faq-list reveal">
-      <details class="faq-item"><summary>Is it really free?<span class="pm">+</span></summary><p>Yes &mdash; up to 4 workers and 1 workplace, forever, with the full scheduling feature set. No credit card, no trial clock. Paid plans start at &euro;14.99/month when your team grows.</p></details>
-      <details class="faq-item"><summary>Does it cover Croatian work-time record rules?<span class="pm">+</span></summary><p>Yes. Wrok exports an &ldquo;Evidencija radnog vremena&rdquo; Excel workbook structured around the Pravilnik NN 55/24 fields &mdash; start/end of work, breaks, daily totals, overtime, night and Sunday hours, and absence categories. Electronic records are explicitly permitted by the Pravilnik.</p></details>
-      <details class="faq-item"><summary>What platforms does it run on?<span class="pm">+</span></summary><p>The web app runs in any browser today &mdash; on desktop it&rsquo;s a full scheduling grid with drag &amp; drop. The Android app is live on Google Play, and the iOS app is on its way.</p></details>
-      <details class="faq-item"><summary>How does the automatic scheduling actually work?<span class="pm">+</span></summary><p>It&rsquo;s a constraint engine: it takes your shift types, staffing minimums per role, rest-hour rules, rotation patterns, availability, vacations and sick days, and searches for a schedule that satisfies all of them. When that&rsquo;s impossible, it doesn&rsquo;t guess &mdash; it shows which shift failed, why, and what change would fix it.</p></details>
-      <details class="faq-item"><summary>We run everything through Excel and a group chat. How hard is switching?<span class="pm">+</span></summary><p>Set up takes minutes: create your shift types, invite workers with a code, and generate your first week. You can keep your old Excel for reference &mdash; most teams stop opening it after the second week.</p></details>
-      <details class="faq-item"><summary>Where is my data stored?<span class="pm">+</span></summary><p>In the EU, transmitted over HTTPS and processed under GDPR. You can export or delete your data at any time, and only members of your workplace can see your team&rsquo;s information.</p></details>
+      <details class="faq-item"><summary>Is it really free?<span class="pm">+</span></summary><p>Yes. Up to 4 workers and 1 workplace, forever, with the full scheduling feature set. No card, no trial timer. When the team grows past that, plans start at &euro;14.99 a month.</p></details>
+      <details class="faq-item"><summary>Does it cover Croatian work-time record rules?<span class="pm">+</span></summary><p>Yes. Wrok exports an &ldquo;Evidencija radnog vremena&rdquo; workbook built around the NN 55/24 fields: start and end of work, breaks, daily totals, overtime, night and Sunday hours, absence categories. Electronic records are explicitly allowed by the Pravilnik, so this can be your only record system.</p></details>
+      <details class="faq-item"><summary>What platforms does it run on?<span class="pm">+</span></summary><p>The web app runs in any browser. On a desktop it&rsquo;s a full scheduling grid with drag and drop, not a stretched phone screen. The Android app is on Google Play. iOS is on its way.</p></details>
+      <details class="faq-item"><summary>How does the automatic scheduling actually work?<span class="pm">+</span></summary><p>It&rsquo;s a constraint engine, not a magic wand. It takes your shift types, staffing minimums, rest-hour rules, rotations, availability and absences, and searches for a week that satisfies all of them. When that&rsquo;s impossible it doesn&rsquo;t guess. It shows which shift failed, why, and what change would fix it.</p></details>
+      <details class="faq-item"><summary>We run everything through Excel and a group chat. How hard is switching?<span class="pm">+</span></summary><p>Set up your shift types, invite workers with a code, generate your first week. Maybe fifteen minutes. Keep the old Excel around for reference. Most teams stop opening it after the second week.</p></details>
+      <details class="faq-item"><summary>Where is my data stored?<span class="pm">+</span></summary><p>In the EU, over HTTPS, under GDPR. You can export or delete your data whenever you want. Only members of your workplace can see your team&rsquo;s information.</p></details>
     </div>
   </div>
 </section>
@@ -560,9 +612,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 <!-- ============ FINAL CTA ============ -->
 <section class="final dark">
   <div class="wrap">
-    <div class="eyebrow" style="color:var(--mint);margin-bottom:16px">Ready when you are</div>
     <h2>Next week&rsquo;s schedule could take 30 seconds.</h2>
-    <p>Free for up to 4 workers &mdash; forever. No credit card.</p>
+    <p>Free for up to 4 workers, forever. No card.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="https://app.wrokapp.com" target="_blank" rel="noopener">Open the web app</a>
       <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=hr.tomislav.planinic.schedule.schedule_app" target="_blank" rel="noopener">Get it on Google Play</a>
@@ -575,7 +626,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
     <div class="foot-grid">
       <div class="foot-logo">
         <img src="../wrok_logo_white_trimmed.png" alt="Wrok">
-        <p style="max-width:280px;font-size:13.5px">Shift scheduling, timesheets and work-time records for small teams. Built in Croatia, for teams across the EU.</p>
+        <p style="max-width:280px;font-size:13.5px">Shift schedules, timesheets and work-time records for small teams. Made in Croatia.</p>
       </div>
       <div><h4>Product</h4><a href="#scheduler">Scheduler</a><a href="#features">Features</a><a href="#compliance">Compliance</a><a href="#pricing">Pricing</a></div>
       <div><h4>Resources</h4><a href="#faq">FAQ</a><a href="mailto:info@wrokapp.com">Contact support</a><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></div>
@@ -587,15 +638,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;bord
 
 <script>
 document.documentElement.classList.add("js");
-// nav
 var nav=document.getElementById("nav");
 addEventListener("scroll",function(){nav.classList.toggle("scrolled",scrollY>10)},{passive:true});
 document.getElementById("burger").addEventListener("click",function(){document.getElementById("navLinks").classList.toggle("open")});
 document.querySelectorAll("#navLinks a").forEach(function(a){a.addEventListener("click",function(){document.getElementById("navLinks").classList.remove("open")})});
-// reveal
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
-// billing toggle
 document.querySelectorAll(".bill-toggle button").forEach(function(b){
   b.addEventListener("click",function(){
     document.querySelectorAll(".bill-toggle button").forEach(function(x){x.classList.remove("on")});
@@ -606,53 +654,105 @@ document.querySelectorAll(".bill-toggle button").forEach(function(b){
     });
   });
 });
-// ---- schedule mock builder + generation animation ----
+document.querySelectorAll(".oc").forEach(function(card){
+  card.addEventListener("mousemove",function(e){
+    var r=card.getBoundingClientRect();
+    card.style.setProperty("--mx",(e.clientX-r.left)+"px");
+    card.style.setProperty("--my",(e.clientY-r.top)+"px");
+  });
+});
+
 var WORKERS=["Ana","Marko","Petra","Ivan"];
 var DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var PLAN=[["m","m","a","n","a","off","off"],["a","n","m","m","off","a","m"],["off","a","a","off","m","n","a"],["n","off","off","a","a","m","n"]];
 var NAMES={m:"Morning",a:"Afternoon",n:"Night",off:"OFF"};
-function buildMock(el,withGen){
-  var h='<div class="gm-clip"><div class="gm-head"><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-title">CAFFE BAR LUNA &mdash; WEEK 27</span>'+(withGen?'<span class="gm-gen"><span class="spin"></span>GENERATE</span>':"")+"</div>";
+function buildMock(el){
+  var h='<div class="gm-clip"><div class="gm-head"><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-title">CAFFE BAR LUNA / WEEK 27</span><span class="gm-gen"><span class="spin"></span>GENERATE</span></div>';
   h+='<div class="gm-table"><div class="gm-cell"></div>';
-  DAYS.forEach(function(d,i){h+='<div class="gm-cell gm-day"><span>'+d+"</span><span class=\"gm-cov\" data-cov=\""+i+"\">&ndash;/3</span></div>"});
+  DAYS.forEach(function(d,i){h+='<div class="gm-cell gm-day" data-day="'+i+'"><span>'+d+'</span><span class="gm-cov">3/3</span></div>'});
   PLAN.forEach(function(row,r){
-    h+='<div class="gm-cell gm-worker"><span class="gm-ava">'+WORKERS[r].slice(0,2).toUpperCase()+"</span>"+WORKERS[r]+"</div>";
-    row.forEach(function(s,c){h+='<div class="gm-cell"><span class="chip '+s+'" data-rc="'+r+"-"+c+'">'+NAMES[s]+"</span></div>"});
+    h+='<div class="gm-cell gm-worker"><span class="gm-ava">'+WORKERS[r].slice(0,2).toUpperCase()+'</span>'+WORKERS[r]+'</div>';
+    row.forEach(function(sh,c){h+='<div class="gm-cell"><span class="chip '+sh+'" data-rc="'+r+'-'+c+'">'+NAMES[sh]+'</span></div>'});
   });
-  h+="</div></div>";
-  h+='<div class="gm-toast" role="status"><span class="msg"></span><button class="fixbtn">Fix it</button></div>';
+  h+='</div></div>';
+  h+='<div class="gm-dayview"><div class="dv-title"><span>THURSDAY / DAY VIEW</span><span class="dv-back">&larr; back to week</span></div>';
+  h+='<div class="dv-hours"><div></div><div><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span></div></div>';
+  h+='<div class="dv-row"><span class="dv-name">Ana</span><div class="dv-track"><span class="dv-block" style="left:0%;width:38%;background:#7FD8C1">Bar</span><span class="dv-block" style="left:38%;width:12%;background:#B9B2A4">Break</span><span class="dv-block" style="left:50%;width:38%;background:#63C3F0">Terrace</span></div></div>';
+  h+='<div class="dv-row"><span class="dv-name">Petra</span><div class="dv-track"><span class="dv-block" style="left:0%;width:50%;background:#E8A33D">Kitchen</span><span class="dv-block" style="left:50%;width:12%;background:#B9B2A4">Break</span><span class="dv-block" style="left:62%;width:26%;background:#7FD8C1">Bar</span></div></div>';
+  h+='<div class="dv-row"><span class="dv-name">Ivan</span><div class="dv-track"><span class="dv-block" style="left:25%;width:37%;background:#63C3F0">Terrace</span><span class="dv-block" style="left:62%;width:26%;background:#9B84E0">Close</span></div></div>';
+  h+='<div class="dv-live">LIVE: <b>Ana</b> clocked in 08:02 &middot; on Bar &middot; GPS ok</div></div>';
+  h+='<div class="gm-toast" role="status"><span class="msg"></span><button class="fixbtn" type="button">Fix it</button></div>';
+  h+='<svg class="gm-cursor" viewBox="0 0 24 24"><path fill="#fff" stroke="#0B1512" stroke-width="1.4" d="M5 2l14 8.5-6.2 1.6L16 19l-3 1.4-3.2-6.9L5 17z"/></svg>';
+  h+='<div class="gm-click"></div>';
   el.innerHTML=h;
 }
-function covCount(el,c){var n=0;PLAN.forEach(function(row){if(row[c]!=="off")n++});return n}
-function animate(el,loop){
-  var chips=[].slice.call(el.querySelectorAll(".chip"));
-  var toast=el.querySelector(".gm-toast"),msg=toast.querySelector(".msg"),fix=toast.querySelector(".fixbtn");
-  var covs=[].slice.call(el.querySelectorAll(".gm-cov"));
-  function reset(){chips.forEach(function(ch){ch.classList.remove("on","conflict")});toast.classList.remove("show","ok");covs.forEach(function(cv){cv.textContent="–/3";cv.classList.remove("low")})}
-  function run(){
-    reset();
-    chips.forEach(function(ch,i){setTimeout(function(){ch.classList.add("on")},250+i*46)});
-    setTimeout(function(){covs.forEach(function(cv,i){var n=covCount(el,i);cv.textContent=n+"/3";if(n<3)cv.classList.add("low")})},250+chips.length*46);
-    setTimeout(function(){
-      var target=el.querySelector('[data-rc="1-3"]');if(target)target.classList.add("conflict");
-      toast.classList.remove("ok");fix.style.display="";msg.innerHTML="<b>Marko</b> would exceed 6 consecutive days on Thursday.";toast.classList.add("show");
-    },2600);
-    setTimeout(function(){fix.classList.add("flash")},3600);
-    setTimeout(function(){
-      var t=el.querySelector('[data-rc="1-3"]');if(t){t.classList.remove("conflict");t.className="chip off on";t.textContent=NAMES.off}
-      var t2=el.querySelector('[data-rc="2-3"]');if(t2){t2.className="chip m on";t2.textContent=NAMES.m}
-      fix.classList.remove("flash");fix.style.display="none";
-      toast.classList.add("ok");msg.innerHTML="<b>Fixed.</b> Thursday moved to Petra &mdash; 21 shifts, 0 conflicts.";
-    },4900);
-    if(loop)setTimeout(run,9500);
-  }
-  run();
+function buildSeq(el){
+  var q=function(sel){return el.querySelector(sel)},qa=function(sel){return [].slice.call(el.querySelectorAll(sel))};
+  var chips=qa(".chip"),toast=q(".gm-toast"),msg=q(".msg"),fix=q(".fixbtn");
+  var cursor=q(".gm-cursor"),click=q(".gm-click"),dayview=q(".gm-dayview"),table=q(".gm-clip"),blocks=qa(".dv-block");
+  var thuHead=q('[data-day="3"]');
+  gsap.set(chips,{opacity:0,scale:.6});
+  gsap.set(dayview,{autoAlpha:0,y:10});
+  gsap.set(blocks,{scaleX:0});
+  var mockR=el.getBoundingClientRect(),thuR=thuHead.getBoundingClientRect();
+  var tx=thuR.left-mockR.left+thuR.width/2-4, ty=thuR.top-mockR.top+thuR.height/2;
+  gsap.set(cursor,{x:tx+150,y:ty+230,opacity:0});
+  gsap.set(click,{x:tx-13,y:ty-13});
+  var tl=gsap.timeline({paused:true,defaults:{ease:"power2.out"}});
+  tl.to(chips,{opacity:1,scale:1,duration:.5,stagger:.045,ease:"back.out(1.6)"})
+    .set(q('[data-rc="1-3"]'),{className:"chip m on conflict"})
+    .set(msg,{innerHTML:"<b>Marko</b> would hit 6 days in a row on Thursday."})
+    .to(toast,{opacity:1,y:0,duration:.4,onStart:function(){toast.classList.add("show")},onReverseComplete:function(){toast.classList.remove("show")}})
+    .to(fix,{scale:1.12,duration:.14,yoyo:true,repeat:3},"+=.3")
+    .set(q('[data-rc="1-3"]'),{className:"chip off on",textContent:"OFF"},"+=.2")
+    .set(q('[data-rc="2-3"]'),{className:"chip m on",textContent:"Morning"})
+    .set(msg,{innerHTML:"<b>Fixed.</b> Thursday moved to Petra. 21 shifts, 0 conflicts."})
+    .set(fix,{display:"none"})
+    .add(function(){toast.classList.add("ok")})
+    .to({},{duration:.5})
+    .to(cursor,{opacity:1,duration:.2})
+    .to(cursor,{x:tx,y:ty,duration:.9,ease:"power2.inOut"})
+    .to(cursor,{scale:.82,duration:.09,yoyo:true,repeat:1})
+    .to(click,{opacity:.9,scale:1.4,duration:.4,ease:"power1.out"},"<")
+    .to(click,{opacity:0,duration:.2})
+    .to(table,{opacity:.12,filter:"blur(3px)",duration:.45},"<")
+    .to(toast,{opacity:0,y:8,duration:.3},"<")
+    .to(cursor,{opacity:0,duration:.25},"<")
+    .to(dayview,{autoAlpha:1,y:0,duration:.5},"<.1")
+    .to(blocks,{scaleX:1,duration:.45,stagger:.08,ease:"power3.out"})
+    .to({},{duration:.8});
+  return tl;
 }
-var hero=document.getElementById("heroMock");buildMock(hero,true);
-var flag=document.getElementById("flagMock");buildMock(flag,true);
-animate(hero,true);
-var flagStarted=false;
-new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting&&!flagStarted){flagStarted=true;animate(flag,true);obs.disconnect()}})},{threshold:.35}).observe(flag);
+function loopSeq(el){
+  var tl=buildSeq(el);
+  function cycle(){tl.play(0).eventCallback("onComplete",function(){setTimeout(function(){tl.reverse();},1800);tl.eventCallback("onReverseComplete",function(){setTimeout(cycle,900)})})}
+  cycle();
+  return tl;
+}
+function staticFinal(el){
+  el.querySelectorAll(".chip").forEach(function(c){c.style.opacity=1;c.style.transform="none"});
+}
+window.addEventListener("load",function(){
+  var hero=document.getElementById("heroMock"),flag=document.getElementById("flagMock");
+  buildMock(hero);buildMock(flag);
+  if(!window.gsap){staticFinal(hero);staticFinal(flag);return}
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to(".hl .line",{y:0,duration:.9,stagger:.12,ease:"power3.out",delay:.15});
+  gsap.from(".hero-sub,.hero-actions,.hero-proof",{opacity:0,y:18,duration:.7,stagger:.1,delay:.55});
+  var mm=gsap.matchMedia();
+  mm.add({desktop:"(min-width: 960px)",reduce:"(prefers-reduced-motion: reduce)"},function(ctx){
+    if(ctx.conditions.reduce){staticFinal(hero);staticFinal(flag);return}
+    var started=false;
+    new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting&&!started){started=true;loopSeq(hero);obs.disconnect()}})},{threshold:.3}).observe(hero);
+    if(ctx.conditions.desktop){
+      var tl=buildSeq(flag);
+      ScrollTrigger.create({animation:tl,trigger:"#scheduler",start:"top 76px",end:"+=220%",pin:true,scrub:1,anticipatePin:1});
+    }else{
+      var fStarted=false;
+      new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting&&!fStarted){fStarted=true;loopSeq(flag);obs.disconnect()}})},{threshold:.3}).observe(flag);
+    }
+  });
+});
 </script>
 </body>
 </html>
