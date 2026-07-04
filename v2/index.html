@@ -1,0 +1,658 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- V2 PREVIEW - remove noindex before launch -->
+<meta name="robots" content="noindex">
+<title>Wrok | Shift scheduling that fixes itself. Records that pass inspection.</title>
+<meta name="description" content="Wrok builds a fair, legal shift schedule for your team in seconds - and tells you exactly how to fix it when it can't. Timesheets, work-time records (NN 55/24), payroll exports, calendar sync. Free for up to 4 workers.">
+<meta name="theme-color" content="#0B1512">
+<link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1512; --pine:#0E2A22; --pine-2:#123A2E; --brand:#0D7C66; --brand-hi:#15A385;
+  --mint:#7FD8C1; --paper:#FAF7F0; --paper-2:#F1ECE1; --card:#FFFFFF; --text:#1A2420;
+  --muted:#5C6B64; --line:#E3DDCF; --amber:#E8A33D; --red:#D65A4A; --blue:#4FA3D8; --violet:#8A6FD1;
+  --radius:14px; --radius-lg:22px;
+  --font-display:"Bricolage Grotesque",sans-serif; --font-body:"Instrument Sans",sans-serif; --font-mono:"Spline Sans Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--text);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased}
+::selection{background:var(--mint);color:var(--ink)}
+h1,h2,h3{font-family:var(--font-display);line-height:1.06;letter-spacing:-0.02em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--brand)}
+.dark .eyebrow{color:var(--mint)}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15.5px;padding:14px 26px;border-radius:999px;border:1.5px solid transparent;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 24px rgba(13,124,102,.35)}
+.btn-primary:hover{background:var(--brand-hi);transform:translateY(-2px);box-shadow:0 14px 32px rgba(13,124,102,.45)}
+.btn-ghost{border-color:rgba(255,255,255,.25);color:#fff}
+.btn-ghost:hover{border-color:var(--mint);color:var(--mint)}
+.btn-ghost-dark{border-color:var(--line);color:var(--text)}
+.btn-ghost-dark:hover{border-color:var(--brand);color:var(--brand)}
+.micro{font-size:13px;color:var(--muted)}
+.dark .micro{color:rgba(255,255,255,.55)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .25s ease, box-shadow .25s ease}
+.nav.scrolled{background:rgba(11,21,18,.92);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.07)}
+.nav-inner{max-width:1180px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;gap:34px}
+.nav-logo img{height:30px}
+.nav-links{display:flex;gap:26px;margin-left:auto;align-items:center}
+.nav-links a{color:rgba(255,255,255,.75);font-size:14.5px;font-weight:500;transition:color .15s}
+.nav-links a:hover{color:#fff}
+.lang-pill{font-family:var(--font-mono);font-size:11.5px;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;color:rgba(255,255,255,.6);cursor:default}
+.nav-cta{background:var(--brand);color:#fff!important;padding:10px 20px;border-radius:999px;font-weight:600;transition:background .15s}
+.nav-cta:hover{background:var(--brand-hi)}
+.nav-burger{display:none;margin-left:auto;background:none;border:0;width:40px;height:40px;cursor:pointer}
+.nav-burger span,.nav-burger span::before,.nav-burger span::after{display:block;width:22px;height:2px;background:#fff;border-radius:2px;position:relative;margin:0 auto;transition:transform .2s}
+.nav-burger span::before,.nav-burger span::after{content:"";position:absolute;left:0}
+.nav-burger span::before{top:-7px}.nav-burger span::after{top:7px}
+
+/* ---------- hero ---------- */
+.hero{background:radial-gradient(1200px 700px at 78% -10%, #16463A 0%, transparent 55%), radial-gradient(900px 600px at -10% 110%, #10332A 0%, transparent 50%), var(--ink);color:#fff;padding:150px 0 0;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");pointer-events:none}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(127,216,193,.05) 1px, transparent 1px),linear-gradient(90deg, rgba(127,216,193,.05) 1px, transparent 1px);background-size:56px 56px;mask-image:radial-gradient(800px 500px at 60% 20%, #000 20%, transparent 75%)}
+.hero-inner{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;max-width:1180px;margin:0 auto;padding:0 28px}
+.hero h1{font-size:clamp(40px,5.4vw,68px);font-weight:800}
+.hero h1 .accent{color:var(--mint);display:inline-block}
+.hero-sub{margin:22px 0 30px;font-size:18px;color:rgba(255,255,255,.72);max-width:480px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-proof{display:flex;gap:22px;flex-wrap:wrap;margin:34px 0 0;padding:0}
+.hero-proof li{list-style:none;display:flex;gap:8px;align-items:center;font-size:13px;color:rgba(255,255,255,.6)}
+.hero-proof svg{flex:none}
+.hero-visual{position:relative;perspective:1400px;padding-bottom:70px}
+.hero-badge-live{position:absolute;top:-14px;right:18px;z-index:3;background:var(--mint);color:var(--ink);font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;padding:6px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+
+/* schedule grid mockup */
+.grid-mock{position:relative;background:#101D18;border:1px solid rgba(127,216,193,.16);border-radius:var(--radius-lg);box-shadow:0 40px 90px rgba(0,0,0,.5);transform:rotateX(4deg) rotateY(-7deg);transform-style:preserve-3d;font-family:var(--font-mono)}
+.gm-head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.gm-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.14)}
+.gm-title{margin-left:8px;font-size:11.5px;color:rgba(255,255,255,.5);letter-spacing:.08em}
+.gm-gen{margin-left:auto;background:var(--brand);color:#fff;font-size:11px;font-weight:600;padding:6px 14px;border-radius:8px;display:flex;gap:7px;align-items:center}
+.gm-gen .spin{width:10px;height:10px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gm-clip{border-radius:inherit;overflow:hidden}
+.gm-table{display:grid;grid-template-columns:92px repeat(7,1fr);font-size:10px}
+.gm-cell{padding:7px 6px;border-top:1px solid rgba(255,255,255,.05);border-left:1px solid rgba(255,255,255,.05);min-height:34px;display:flex;align-items:center;justify-content:center}
+.gm-day{color:rgba(255,255,255,.55);flex-direction:column;gap:2px;font-weight:600}
+.gm-cov{font-size:9px;color:var(--mint)}
+.gm-cov.low{color:var(--red)}
+.gm-worker{justify-content:flex-start;color:rgba(255,255,255,.75);gap:7px;padding-left:12px}
+.gm-ava{width:18px;height:18px;border-radius:50%;background:var(--pine-2);color:var(--mint);display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:600;flex:none}
+.chip{width:100%;text-align:center;border-radius:6px;padding:5px 2px;font-weight:600;font-size:9px;color:#0B1512;opacity:0;transform:scale(.6);transition:opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1)}
+.chip.on{opacity:1;transform:scale(1)}
+.chip.m{background:#FFB74D}.chip.a{background:#63C3F0}.chip.n{background:#9B84E0}.chip.off{background:transparent;border:1px dashed rgba(255,255,255,.18);color:rgba(255,255,255,.35)}
+.chip.conflict{outline:2px solid var(--red);outline-offset:1px;animation:pulse 1s ease infinite}
+@keyframes pulse{50%{outline-color:rgba(214,90,74,.35)}}
+.gm-toast{position:absolute;left:50%;bottom:-60px;transform:translateX(-50%);width:88%;background:#17251F;border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--amber);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:12px;color:rgba(255,255,255,.85);box-shadow:0 24px 50px rgba(0,0,0,.55);opacity:0;translate:0 12px;transition:opacity .35s, translate .35s;font-family:var(--font-body)}
+.gm-toast.show{opacity:1;translate:0 0}
+.gm-toast.ok{border-left-color:var(--brand-hi)}
+.gm-toast .fixbtn{margin-left:auto;background:var(--brand);border:0;color:#fff;font-weight:600;font-size:11.5px;padding:7px 14px;border-radius:8px;cursor:pointer;flex:none;font-family:var(--font-body)}
+.gm-toast .fixbtn.flash{animation:flash .5s ease 2}
+@keyframes flash{50%{background:var(--mint);color:var(--ink)}}
+.hero-fade{height:110px;background:linear-gradient(transparent,var(--paper));margin-top:80px;position:relative}
+
+/* ---------- sections ---------- */
+section{padding:96px 0}
+.sec-head{max-width:640px;margin-bottom:56px}
+.sec-head h2{font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px}
+.sec-head p{font-size:17px;color:var(--muted)}
+.reveal{opacity:1;transform:none}
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease, transform .6s ease}
+.js .reveal.in{opacity:1;transform:none}
+
+/* flagship */
+.flagship{padding-top:40px}
+.flag-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+.flag-points{margin:26px 0 0;padding:0}
+.flag-points li{list-style:none;display:flex;gap:14px;margin-bottom:18px;font-size:15.5px}
+.flag-points .n{font-family:var(--font-mono);color:var(--brand);font-weight:600;font-size:13px;background:rgba(13,124,102,.1);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex:none}
+.flag-visual .grid-mock{transform:none;box-shadow:0 30px 70px rgba(26,36,32,.18);border-color:var(--line)}
+.flag-visual{position:relative;padding-bottom:74px}
+
+/* outcome cards */
+.outcomes{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.oc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:34px;position:relative;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease}
+.oc:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(26,36,32,.10)}
+.oc h3{font-size:23px;font-weight:700;margin:16px 0 10px}
+.oc p{color:var(--muted);font-size:15px;max-width:420px}
+.oc-tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);font-weight:600}
+.oc-mock{margin-top:26px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-family:var(--font-mono);font-size:10.5px;background:#FDFCF9}
+.oc-new{position:absolute;top:20px;right:20px;background:var(--amber);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;font-family:var(--font-mono)}
+/* day timeline mock */
+.tl-row{display:grid;grid-template-columns:70px 1fr;border-top:1px solid var(--line)}
+.tl-row:first-child{border-top:0}
+.tl-name{padding:10px 8px;color:var(--muted);font-weight:600;border-right:1px solid var(--line);display:flex;align-items:center}
+.tl-track{position:relative;height:38px;background:repeating-linear-gradient(90deg,transparent 0 calc(12.5% - 1px),var(--line) calc(12.5% - 1px) 12.5%)}
+.tl-block{position:absolute;top:6px;bottom:6px;border-radius:6px;color:#fff;font-weight:600;font-size:9px;display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden}
+.tl-hours{display:grid;grid-template-columns:70px 1fr;color:var(--muted)}
+.tl-hours div:last-child{display:flex;justify-content:space-between;padding:6px 8px;font-size:9px}
+/* timesheet mock */
+.ts-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .9fr;padding:9px 12px;border-top:1px solid var(--line);align-items:center;gap:6px}
+.ts-row:first-child{border-top:0;background:var(--paper-2);color:var(--muted);font-weight:600}
+.ts-flag{font-size:9px;font-weight:700;border-radius:5px;padding:3px 7px;justify-self:start}
+.ts-flag.late{background:rgba(232,163,61,.16);color:#B77817}
+.ts-flag.miss{background:rgba(214,90,74,.14);color:var(--red)}
+.ts-flag.ok{background:rgba(13,124,102,.12);color:var(--brand)}
+.ts-strike{color:var(--muted);text-decoration:line-through;margin-right:5px}
+/* doc mock */
+.doc-mock{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;position:relative;font-family:var(--font-mono);box-shadow:0 14px 30px rgba(26,36,32,.08)}
+.doc-mock .dm-title{font-size:10px;font-weight:600;letter-spacing:.06em;margin-bottom:10px}
+.dm-line{height:7px;background:var(--paper-2);border-radius:3px;margin:6px 0}
+.dm-table{border:1px solid var(--line);border-radius:6px;margin-top:10px;overflow:hidden}
+.dm-tr{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;font-size:8.5px;color:var(--muted)}
+.dm-tr div{padding:5px 7px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.dm-tr:first-child div{border-top:0;background:var(--paper-2);font-weight:600;color:var(--text)}
+.dm-tr div:first-child{border-left:0}
+.dm-stamp{position:absolute;top:14px;right:14px;border:2px solid var(--brand);color:var(--brand);font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:6px;transform:rotate(6deg);background:rgba(13,124,102,.05)}
+.dm-file{display:inline-flex;gap:7px;align-items:center;margin-top:12px;background:rgba(13,124,102,.09);color:var(--brand);font-size:9.5px;font-weight:600;padding:5px 11px;border-radius:999px}
+/* worker section */
+.worker-sec .flag-grid{grid-template-columns:1.05fr .95fr}
+.phone-mock{width:290px;margin:0 auto;background:#101D18;border-radius:38px;padding:12px;box-shadow:0 34px 70px rgba(26,36,32,.28);border:1px solid rgba(255,255,255,.08)}
+.pm-screen{background:var(--paper);border-radius:28px;overflow:hidden;font-family:var(--font-body)}
+.pm-head{background:var(--pine);color:#fff;padding:20px 18px 14px;font-weight:600;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.pm-head .pm-sub{display:block;font-size:10.5px;font-weight:400;color:var(--mint);margin-top:2px;font-family:var(--font-mono)}
+.pm-body{padding:14px 14px 18px;display:flex;flex-direction:column;gap:10px}
+.pm-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12px}
+.pm-card .t{font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.pm-card .s{color:var(--muted);font-size:11px;margin-top:3px}
+.pm-shift-dot{width:8px;height:8px;border-radius:50%;background:#FFB74D;display:inline-block;margin-right:6px}
+.pm-btns{display:flex;gap:8px;margin-top:10px}
+.pm-btns span{flex:1;text-align:center;font-size:11px;font-weight:600;padding:7px 0;border-radius:8px}
+.pm-accept{background:var(--brand);color:#fff}
+.pm-decline{background:var(--paper-2);color:var(--muted)}
+.pm-days{display:flex;gap:5px;margin-top:9px}
+.pm-day{flex:1;text-align:center;font-size:10px;font-weight:600;padding:7px 0;border-radius:8px;background:var(--paper-2);color:var(--text);font-family:var(--font-mono)}
+.pm-day.x{background:rgba(214,90,74,.12);color:var(--red);text-decoration:line-through}
+.pm-cal{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600}
+.pm-cal .ico{width:26px;height:26px;border-radius:8px;background:rgba(13,124,102,.1);color:var(--brand);display:flex;align-items:center;justify-content:center}
+.store-row{display:flex;gap:14px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.store-badge{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:600;transition:transform .18s}
+.store-badge:hover{transform:translateY(-2px)}
+.store-badge small{display:block;font-size:9.5px;font-weight:400;opacity:.65;letter-spacing:.04em}
+.store-soon{opacity:.55;pointer-events:none}
+
+/* compliance */
+.compliance{background:linear-gradient(160deg,var(--pine) 0%, var(--ink) 70%);color:#fff;position:relative;overflow:hidden}
+.compliance .sec-head p{color:rgba(255,255,255,.65)}
+.comp-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.comp-facts{margin:30px 0 0;padding:0}
+.comp-facts li{list-style:none;border-left:2px solid rgba(127,216,193,.35);padding:4px 0 4px 18px;margin-bottom:20px}
+.comp-facts b{display:block;font-size:16px;margin-bottom:3px}
+.comp-facts span{color:rgba(255,255,255,.6);font-size:14px}
+.comp-fine{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,4vw,52px);color:var(--mint);letter-spacing:-.02em}
+.compliance .doc-mock{transform:rotate(-1.5deg)}
+
+/* segments */
+.seg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.seg{border:1px solid var(--line);border-radius:var(--radius-lg);padding:32px;background:var(--card);transition:transform .25s, box-shadow .25s}
+.seg:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(26,36,32,.10)}
+.seg .ico{font-size:26px}
+.seg h3{font-size:20px;margin:16px 0 10px;font-weight:700}
+.seg p{color:var(--muted);font-size:14.5px}
+.seg ul{margin:16px 0 0;padding:0}
+.seg li{list-style:none;font-size:13.5px;padding:5px 0;display:flex;gap:9px;align-items:center}
+.seg li svg{color:var(--brand);flex:none}
+
+/* pricing */
+.pricing{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bill-toggle{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px;margin-bottom:44px;font-size:14px;font-weight:600}
+.bill-toggle button{border:0;background:none;padding:9px 22px;border-radius:999px;cursor:pointer;font:inherit;color:var(--muted)}
+.bill-toggle button.on{background:var(--pine);color:#fff}
+.bill-toggle .save{color:var(--brand);font-size:12px;margin-left:5px}
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;align-items:stretch}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:30px 26px;display:flex;flex-direction:column;position:relative}
+.plan.hot{border-color:var(--brand);box-shadow:0 20px 50px rgba(13,124,102,.16)}
+.plan .pop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;padding:5px 14px;border-radius:999px;font-family:var(--font-mono)}
+.plan h3{font-size:19px;font-weight:700}
+.plan .for{font-size:12.5px;color:var(--muted);margin:4px 0 18px}
+.plan .amount{font-family:var(--font-display);font-size:40px;font-weight:800;letter-spacing:-.03em}
+.plan .amount small{font-size:14px;color:var(--muted);font-family:var(--font-body);font-weight:500}
+.plan ul{margin:20px 0 26px;padding:0;flex:1}
+.plan li{list-style:none;font-size:13.5px;padding:5px 0;display:flex;gap:9px;align-items:flex-start}
+.plan li svg{color:var(--brand);flex:none;margin-top:3px}
+.plan .btn{justify-content:center}
+.price-note{margin-top:26px;font-size:13px;color:var(--muted)}
+.ent-line{margin-top:18px;font-size:14.5px}
+.ent-line a{color:var(--brand);font-weight:600;border-bottom:1px solid currentColor}
+
+/* faq */
+.faq-list{max-width:760px}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-family:var(--font-display);font-weight:700;font-size:18px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary .pm{font-family:var(--font-mono);color:var(--brand);font-size:20px;transition:transform .2s}
+.faq-item[open] summary .pm{transform:rotate(45deg)}
+.faq-item p{padding:0 0 22px;color:var(--muted);max-width:640px;font-size:15px}
+
+/* final cta */
+.final{background:radial-gradient(900px 500px at 50% -20%, #16463A 0%, transparent 60%), var(--ink);color:#fff;text-align:center;padding:110px 0}
+.final h2{font-size:clamp(34px,4.4vw,58px);font-weight:800;max-width:760px;margin:0 auto 18px}
+.final p{color:rgba(255,255,255,.65);font-size:17px;margin-bottom:36px}
+.final .hero-actions{justify-content:center}
+
+/* footer */
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:64px 0 40px;border-top:1px solid rgba(255,255,255,.07);font-size:14px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
+.foot-grid h4{color:#fff;font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-mono);margin-bottom:16px;font-weight:600}
+.foot-grid a{display:block;padding:5px 0;transition:color .15s}
+.foot-grid a:hover{color:var(--mint)}
+.foot-logo img{height:28px;margin-bottom:14px}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:26px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.4)}
+
+@media(max-width:960px){
+  .hero-inner,.flag-grid,.comp-grid,.worker-sec .flag-grid{grid-template-columns:1fr;gap:44px}
+  .oc-grid{grid-template-columns:1fr}
+  .seg-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none;position:fixed;inset:0;background:var(--ink);flex-direction:column;justify-content:center;font-size:20px}
+  .nav-links.open{display:flex}
+  .nav-burger{display:block;z-index:60}
+  .grid-mock{transform:none}
+  section{padding:72px 0}
+}
+@media(max-width:560px){.price-grid{grid-template-columns:1fr}.hero{padding-top:120px}}
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><img src="../wrok_logo_white_trimmed.png" alt="Wrok"></a>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#scheduler">Scheduler</a>
+      <a href="#features">Features</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <span class="lang-pill" title="Hrvatska verzija — uskoro">EN · HR</span>
+      <a href="https://app.wrokapp.com" target="_blank" rel="noopener" class="nav-cta">Open web app</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow" style="color:var(--mint)">Shift scheduling for small teams</div>
+      <h1 style="margin-top:18px">Your week&rsquo;s schedule, <span class="accent">done before your coffee is.</span></h1>
+      <p class="hero-sub">Wrok builds a fair, legal schedule for your caf&eacute;, shop or salon in seconds &mdash; and when something doesn&rsquo;t fit, it tells you exactly what to fix. Swaps, timesheets and work-time records included.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://app.wrokapp.com" target="_blank" rel="noopener">Start free &mdash; up to 4 workers</a>
+        <a class="btn btn-ghost" href="#scheduler">See it build a schedule</a>
+      </div>
+      <ul class="hero-proof">
+        <li><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" color="#7FD8C1"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>No credit card</li>
+        <li><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" color="#7FD8C1"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>GDPR &middot; EU hosting</li>
+        <li><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" color="#7FD8C1"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Live on web &amp; Google Play</li>
+      </ul>
+    </div>
+    <div class="hero-visual">
+      <span class="hero-badge-live">LIVE SCHEDULE</span>
+      <div class="grid-mock" id="heroMock" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div class="hero-fade"></div>
+</header>
+<!-- ============ FLAGSHIP: the scheduler that explains itself ============ -->
+<section class="flagship" id="scheduler">
+  <div class="wrap">
+    <div class="flag-grid">
+      <div class="reveal">
+        <div class="eyebrow">The flagship</div>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">A scheduler that explains itself</h2>
+        <p style="font-size:17px;color:var(--muted)">Anyone can generate a schedule. Wrok is built for the moment it <em>can&rsquo;t</em>: instead of failing silently, it names the exact conflict &mdash; and offers a one-tap fix.</p>
+        <ul class="flag-points">
+          <li><span class="n">01</span><div><b>Every rule, at once.</b> Roles, minimum staffing, rest hours, max workdays, rotations, vacations, sick days, worker availability.</div></li>
+          <li><span class="n">02</span><div><b>Conflicts become suggestions.</b> &ldquo;Marko would exceed 6 consecutive days &mdash; move Thursday to Petra?&rdquo; One tap, fixed.</div></li>
+          <li><span class="n">03</span><div><b>Under-staffing is visible before it hurts.</b> Per-day coverage counts turn red while you still have time to react.</div></li>
+        </ul>
+      </div>
+      <div class="flag-visual reveal">
+        <div class="grid-mock" id="flagMock" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUTCOME CARDS ============ -->
+<section class="outcomes" id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Everything after the schedule</div>
+      <h2>The schedule is just the start</h2>
+      <p>Wrok runs the whole shift lifecycle &mdash; the day itself, the hours worked, the paperwork nobody enjoys.</p>
+    </div>
+    <div class="oc-grid">
+      <div class="oc reveal">
+        <span class="oc-new">NEW</span>
+        <div class="oc-tag">Day view</div>
+        <h3>Run the day, hour by hour</h3>
+        <p>Plan activities inside each shift &mdash; bar, terrace, kitchen, breaks. Drag to rearrange, let auto-fill do the busywork, and see who&rsquo;s where right now.</p>
+        <div class="oc-mock" aria-hidden="true">
+          <div class="tl-hours"><div></div><div><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span></div></div>
+          <div class="tl-row"><div class="tl-name">Ana</div><div class="tl-track"><span class="tl-block" style="left:0%;width:37%;background:#0D7C66">Bar</span><span class="tl-block" style="left:37.5%;width:12%;background:#B9B2A4">Break</span><span class="tl-block" style="left:50%;width:38%;background:#4FA3D8">Terrace</span></div></div>
+          <div class="tl-row"><div class="tl-name">Marko</div><div class="tl-track"><span class="tl-block" style="left:0%;width:50%;background:#E8A33D">Kitchen</span><span class="tl-block" style="left:50%;width:12%;background:#B9B2A4">Break</span><span class="tl-block" style="left:62.5%;width:25%;background:#0D7C66">Bar</span></div></div>
+          <div class="tl-row"><div class="tl-name">Petra</div><div class="tl-track"><span class="tl-block" style="left:25%;width:37%;background:#4FA3D8">Terrace</span><span class="tl-block" style="left:62.5%;width:25%;background:#8A6FD1">Close</span></div></div>
+        </div>
+      </div>
+      <div class="oc reveal">
+        <span class="oc-new">NEW</span>
+        <div class="oc-tag">Timesheets</div>
+        <h3>Planned vs. reality, reconciled</h3>
+        <p>GPS clock-in meets the schedule. Late arrivals, missing punches and no-shows get flagged; you correct with a full audit trail, then approve and lock the day.</p>
+        <div class="oc-mock" aria-hidden="true">
+          <div class="ts-row"><div>Worker</div><div>Planned</div><div>Actual</div><div>Status</div></div>
+          <div class="ts-row"><div>Ana K.</div><div>06:00&ndash;14:00</div><div>06:02&ndash;14:04</div><span class="ts-flag ok">Approved</span></div>
+          <div class="ts-row"><div>Marko B.</div><div>14:00&ndash;22:00</div><div>14:12&ndash;22:01</div><span class="ts-flag late">Late 12 min</span></div>
+          <div class="ts-row"><div>Petra N.</div><div>08:00&ndash;16:00</div><div>07:58&ndash; &mdash;</div><span class="ts-flag miss">Missing out</span></div>
+        </div>
+      </div>
+      <div class="oc reveal">
+        <div class="oc-tag">Team workflows</div>
+        <h3>Swaps, leave &amp; chat &mdash; without the group text</h3>
+        <p>Workers propose swaps, request vacation and mark days they can&rsquo;t work. You approve with one tap. Built-in chat and tasks keep everything in one place, with push notifications that actually arrive.</p>
+        <div class="oc-mock" aria-hidden="true" style="padding:12px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-body)">
+          <div style="display:flex;gap:8px;align-items:center;font-size:11.5px"><span style="width:22px;height:22px;border-radius:50%;background:var(--pine-2);color:var(--mint);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">MB</span><div style="background:var(--paper-2);border-radius:10px;padding:7px 11px">Can anyone take my Friday night?</div></div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:11.5px;justify-content:flex-end"><div style="background:rgba(13,124,102,.1);border-radius:10px;padding:7px 11px">I&rsquo;ll take it 👍</div><span style="width:22px;height:22px;border-radius:50%;background:var(--pine-2);color:var(--mint);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">AK</span></div>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;font-size:11px"><span><b>Swap request</b> &middot; Fri Night &middot; Marko &rarr; Ana</span><span style="background:var(--brand);color:#fff;border-radius:7px;padding:5px 12px;font-weight:600;font-size:10.5px">Approve</span></div>
+        </div>
+      </div>
+      <div class="oc reveal">
+        <span class="oc-new">NEW</span>
+        <div class="oc-tag">Paperwork, automated</div>
+        <h3>Exports your accountant will love</h3>
+        <p>Inspection-ready work-time records, payroll-ready hour splits (overtime, night, Sunday, holiday), schedule PDFs and Excel reports &mdash; one click each. Everyone&rsquo;s shifts sync to Google, Apple or Outlook calendars too.</p>
+        <div class="oc-mock" aria-hidden="true" style="padding:14px;display:flex;gap:10px;flex-wrap:wrap;font-family:var(--font-mono)">
+          <span class="dm-file">&#9679; evidencija-2026-06.xlsx</span>
+          <span class="dm-file">&#9679; payroll-jun-2026.csv</span>
+          <span class="dm-file">&#9679; schedule-w27.pdf</span>
+          <span class="dm-file" style="background:rgba(79,163,216,.12);color:#2E7CB0">&#8634; webcal://wrok&hellip;/feed.ics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKER SIDE ============ -->
+<section class="worker-sec">
+  <div class="wrap">
+    <div class="flag-grid">
+      <div class="reveal">
+        <div class="eyebrow">For your team</div>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">An app your staff will actually open</h2>
+        <p style="font-size:17px;color:var(--muted)">Their schedule, always current, in their pocket &mdash; and in their own calendar app. They can offer swaps, request time off and mark the days they can&rsquo;t work, so the schedule is right the first time.</p>
+        <ul class="flag-points" style="margin-top:26px">
+          <li><span class="n">&#10003;</span><div><b>My week at a glance</b> &mdash; shifts, times and who they&rsquo;re working with.</div></li>
+          <li><span class="n">&#10003;</span><div><b>Swap requests</b> with manager approval &mdash; no group-chat chaos.</div></li>
+          <li><span class="n">&#10003;</span><div><b>&ldquo;I can&rsquo;t work Tuesdays&rdquo;</b> &mdash; recurring availability the scheduler respects.</div></li>
+          <li><span class="n">&#10003;</span><div><b>Calendar sync</b> &mdash; shifts appear in Google, Apple or Outlook automatically.</div></li>
+        </ul>
+        <div class="store-row">
+          <a class="store-badge" href="https://play.google.com/store/apps/details?id=hr.tomislav.planinic.schedule.schedule_app" target="_blank" rel="noopener"><svg width="20" height="22" viewBox="0 0 24 26" fill="currentColor"><path d="M1.6.9C1.2 1.3 1 1.9 1 2.7v20.6c0 .8.2 1.4.6 1.8l.1.1L13.3 13.6v-.3L1.7.9h-.1z" opacity=".9"/><path d="M17.2 17.5l-3.9-3.9v-.3l3.9-3.9.1.1 4.6 2.6c1.3.7 1.3 1.9 0 2.7l-4.6 2.6-.1.1z" opacity=".7"/><path d="M17.3 17.4l-4-4L1.6 25.1c.4.5 1.1.5 1.9.1l13.8-7.8" opacity=".8"/><path d="M17.3 9.5L3.5.7C2.7.3 2 .3 1.6.8l11.7 11.7 4-4z" opacity=".6"/></svg><span><small>GET IT ON</small>Google Play</span></a>
+          <span class="store-badge store-soon"><svg width="20" height="22" viewBox="0 0 24 26" fill="currentColor"><path d="M20.1 13.7c0-3.1 2.5-4.6 2.6-4.7-1.4-2.1-3.6-2.4-4.4-2.4-1.9-.2-3.7 1.1-4.6 1.1-1 0-2.4-1.1-4-1.1-2 0-3.9 1.2-5 3-2.1 3.7-.5 9.1 1.5 12.1 1 1.5 2.2 3.1 3.8 3 1.5-.1 2.1-1 3.9-1s2.3 1 4 .9c1.6 0 2.7-1.5 3.7-2.9 1.2-1.7 1.6-3.3 1.7-3.4-.1 0-3.2-1.2-3.2-4.6zM17.1 4.6c.8-1 1.4-2.4 1.2-3.8-1.2 0-2.7.8-3.5 1.8-.8.9-1.5 2.3-1.3 3.7 1.4.1 2.8-.7 3.6-1.7z"/></svg><span><small>COMING SOON</small>App Store</span></span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="phone-mock" aria-hidden="true">
+          <div class="pm-screen">
+            <div class="pm-head"><span>My schedule<span class="pm-sub">Week 27 &middot; Caffe bar Luna</span></span><span style="font-size:16px">&#128276;</span></div>
+            <div class="pm-body">
+              <div class="pm-card"><div class="t"><span><span class="pm-shift-dot"></span>Mon &middot; Morning</span><span style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">06&ndash;14</span></div></div>
+              <div class="pm-card"><div class="t"><span><span class="pm-shift-dot" style="background:#63C3F0"></span>Tue &middot; Afternoon</span><span style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">14&ndash;22</span></div></div>
+              <div class="pm-card"><div class="t"><span>Swap request</span><span style="font-size:10px;background:rgba(232,163,61,.15);color:#B77817;border-radius:6px;padding:3px 8px;font-weight:700">PENDING</span></div><div class="s">Marko offers: Fri &middot; Night 22&ndash;06</div><div class="pm-btns"><span class="pm-accept">Accept</span><span class="pm-decline">Decline</span></div></div>
+              <div class="pm-card"><div class="t"><span>Days I can&rsquo;t work</span></div><div class="pm-days"><span class="pm-day">Mo</span><span class="pm-day x">Tu</span><span class="pm-day">We</span><span class="pm-day">Th</span><span class="pm-day">Fr</span><span class="pm-day">Sa</span><span class="pm-day x">Su</span></div></div>
+              <div class="pm-card pm-cal"><span class="ico">&#128197;</span>Subscribe in Google / Apple calendar<span style="margin-left:auto;color:var(--brand);font-weight:700">&rsaquo;</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPLIANCE ============ -->
+<section class="compliance dark" id="compliance">
+  <div class="wrap">
+    <div class="comp-grid">
+      <div class="reveal">
+        <div class="eyebrow">Croatian labour-law ready</div>
+        <h2 style="font-size:clamp(30px,3.6vw,46px);font-weight:800;margin:14px 0 16px">Records that pass inspection</h2>
+        <p style="color:rgba(255,255,255,.65);font-size:17px">Since October 2024, every Croatian employer must keep detailed work-time records under the new Pravilnik (NN 55/24) &mdash; start and end of work, breaks, overtime, night and Sunday hours, absences. Wrok keeps them as a side-effect of the schedule you already run.</p>
+        <ul class="comp-facts">
+          <li><b>One-click &ldquo;Evidencija radnog vremena&rdquo;</b><span>A month per worker, every NN 55/24 field, ready for the labour inspector &mdash; in Excel.</span></li>
+          <li><b>Filled automatically</b><span>Clock-ins, schedules, breaks, vacations and sick days flow straight into the record.</span></li>
+          <li><b>Approve &amp; lock</b><span>Approved days are frozen with an audit trail &mdash; what you exported is what happened.</span></li>
+        </ul>
+        <div style="margin-top:34px"><span class="comp-fine">&euro;8,090&ndash;13,270</span><div class="micro" style="margin-top:6px">the fine for missing work-time records &mdash; the export is included from the Growth plan.</div></div>
+      </div>
+      <div class="reveal">
+        <div class="doc-mock">
+          <span class="dm-stamp">NN 55/24</span>
+          <div class="dm-title">EVIDENCIJA RADNOG VREMENA &mdash; LIPANJ 2026</div>
+          <div class="dm-line" style="width:45%"></div>
+          <div class="dm-line" style="width:30%"></div>
+          <div class="dm-table">
+            <div class="dm-tr"><div>Datum</div><div>Po&#269;etak</div><div>Zavr&scaron;etak</div><div>Stanka</div><div>Ukupno</div></div>
+            <div class="dm-tr"><div>01.06.</div><div>06:00</div><div>14:00</div><div>30 min</div><div>8,0 h</div></div>
+            <div class="dm-tr"><div>02.06.</div><div>06:02</div><div>14:04</div><div>30 min</div><div>8,0 h</div></div>
+            <div class="dm-tr"><div>03.06.</div><div colspan>Godi&scaron;nji odmor</div><div></div><div></div><div>&mdash;</div></div>
+            <div class="dm-tr"><div>04.06.</div><div>14:00</div><div>22:10</div><div>30 min</div><div>8,2 h</div></div>
+            <div class="dm-tr"><div>05.06.</div><div>22:00</div><div>06:00</div><div>30 min</div><div>7,5 h</div></div>
+          </div>
+          <span class="dm-file">&#9679; Izvoz: evidencija-ana-2026-06.xlsx</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEGMENTS ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Built for</div>
+      <h2>Teams that live in shifts</h2>
+    </div>
+    <div class="seg-grid">
+      <div class="seg reveal"><span class="ico">&#9749;</span><h3>Caf&eacute;s &amp; restaurants</h3><p>When the rota is right, the floor runs itself &mdash; even in high season.</p>
+        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Rotating shift patterns</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Bar / terrace / kitchen day view</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Seasonal helpers across locations</li></ul></div>
+      <div class="seg reveal"><span class="ico">&#128722;</span><h3>Retail &amp; shops</h3><p>Coverage counts that keep every opening hour staffed &mdash; never over, never under.</p>
+        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Min-staffing rules per role</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Weekend &amp; holiday fairness</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Multi-location workers</li></ul></div>
+      <div class="seg reveal"><span class="ico">&#9986;</span><h3>Salons &amp; services</h3><p>Small teams, personal schedules &mdash; and the paperwork handled on the side.</p>
+        <ul><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Free for up to 4 workers</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Work-time records included</li><li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Vacation &amp; sick tracking</li></ul></div>
+    </div>
+  </div>
+</section>
+<!-- ============ PRICING ============ -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2>Free for small teams. Honest for everyone.</h2>
+      <p>One subscription covers all your workplaces. Prices exclude VAT.</p>
+    </div>
+    <div class="reveal">
+      <div class="bill-toggle" role="group" aria-label="Billing period">
+        <button class="on" data-bill="monthly">Monthly</button>
+        <button data-bill="annual">Annual <span class="save">&minus;20%</span></button>
+      </div>
+    </div>
+    <div class="price-grid">
+      <div class="plan reveal">
+        <h3>Free</h3><div class="for">Up to 4 workers &middot; 1 workplace</div>
+        <div class="amount">&euro;0<small> forever</small></div>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Auto-scheduling with fix-it diagnostics</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Day view, swaps, time off, chat &amp; tasks</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Calendar sync for every worker</li>
+        </ul>
+        <a class="btn btn-ghost-dark" href="https://app.wrokapp.com" target="_blank" rel="noopener">Start free</a>
+      </div>
+      <div class="plan reveal">
+        <h3>Starter</h3><div class="for">Up to 15 workers &middot; 2 workplaces</div>
+        <div class="amount" data-m="&euro;14.99" data-a="&euro;11.99">&euro;14.99<small> /month</small></div>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Everything in Free</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Reports &amp; analytics</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>PDF &amp; Excel schedule exports</li>
+        </ul>
+        <a class="btn btn-ghost-dark" href="https://app.wrokapp.com" target="_blank" rel="noopener">Choose Starter</a>
+      </div>
+      <div class="plan hot reveal">
+        <span class="pop">MOST POPULAR</span>
+        <h3>Growth</h3><div class="for">Up to 40 workers &middot; 5 workplaces</div>
+        <div class="amount" data-m="&euro;34.99" data-a="&euro;27.99">&euro;34.99<small> /month</small></div>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Everything in Starter</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>GPS clock-in &amp; timesheets with approval</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Work-time records (NN 55/24) &amp; payroll export</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Shift managers with custom permissions</li>
+        </ul>
+        <a class="btn btn-primary" href="https://app.wrokapp.com" target="_blank" rel="noopener">Choose Growth</a>
+      </div>
+      <div class="plan reveal">
+        <h3>Business</h3><div class="for">Up to 100 workers &middot; unlimited workplaces</div>
+        <div class="amount" data-m="&euro;79.99" data-a="&euro;63.99">&euro;79.99<small> /month</small></div>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Everything in Growth</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Unlimited workplaces</li>
+          <li><svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>Priority support</li>
+        </ul>
+        <a class="btn btn-ghost-dark" href="https://app.wrokapp.com" target="_blank" rel="noopener">Choose Business</a>
+      </div>
+    </div>
+    <div class="ent-line reveal">More than 100 workers? <a href="mailto:info@wrokapp.com">Talk to us about Enterprise &rarr;</a></div>
+    <div class="price-note reveal">No credit card for the Free plan &middot; cancel anytime &middot; pay by card, or request an offer (ponuda) and pay by bank transfer with an R1 invoice.</div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Fair questions</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item"><summary>Is it really free?<span class="pm">+</span></summary><p>Yes &mdash; up to 4 workers and 1 workplace, forever, with the full scheduling feature set. No credit card, no trial clock. Paid plans start at &euro;14.99/month when your team grows.</p></details>
+      <details class="faq-item"><summary>Does it cover Croatian work-time record rules?<span class="pm">+</span></summary><p>Yes. Wrok exports an &ldquo;Evidencija radnog vremena&rdquo; Excel workbook structured around the Pravilnik NN 55/24 fields &mdash; start/end of work, breaks, daily totals, overtime, night and Sunday hours, and absence categories. Electronic records are explicitly permitted by the Pravilnik.</p></details>
+      <details class="faq-item"><summary>What platforms does it run on?<span class="pm">+</span></summary><p>The web app runs in any browser today &mdash; on desktop it&rsquo;s a full scheduling grid with drag &amp; drop. The Android app is live on Google Play, and the iOS app is on its way.</p></details>
+      <details class="faq-item"><summary>How does the automatic scheduling actually work?<span class="pm">+</span></summary><p>It&rsquo;s a constraint engine: it takes your shift types, staffing minimums per role, rest-hour rules, rotation patterns, availability, vacations and sick days, and searches for a schedule that satisfies all of them. When that&rsquo;s impossible, it doesn&rsquo;t guess &mdash; it shows which shift failed, why, and what change would fix it.</p></details>
+      <details class="faq-item"><summary>We run everything through Excel and a group chat. How hard is switching?<span class="pm">+</span></summary><p>Set up takes minutes: create your shift types, invite workers with a code, and generate your first week. You can keep your old Excel for reference &mdash; most teams stop opening it after the second week.</p></details>
+      <details class="faq-item"><summary>Where is my data stored?<span class="pm">+</span></summary><p>In the EU, transmitted over HTTPS and processed under GDPR. You can export or delete your data at any time, and only members of your workplace can see your team&rsquo;s information.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final dark">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--mint);margin-bottom:16px">Ready when you are</div>
+    <h2>Next week&rsquo;s schedule could take 30 seconds.</h2>
+    <p>Free for up to 4 workers &mdash; forever. No credit card.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://app.wrokapp.com" target="_blank" rel="noopener">Open the web app</a>
+      <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=hr.tomislav.planinic.schedule.schedule_app" target="_blank" rel="noopener">Get it on Google Play</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-logo">
+        <img src="../wrok_logo_white_trimmed.png" alt="Wrok">
+        <p style="max-width:280px;font-size:13.5px">Shift scheduling, timesheets and work-time records for small teams. Built in Croatia, for teams across the EU.</p>
+      </div>
+      <div><h4>Product</h4><a href="#scheduler">Scheduler</a><a href="#features">Features</a><a href="#compliance">Compliance</a><a href="#pricing">Pricing</a></div>
+      <div><h4>Resources</h4><a href="#faq">FAQ</a><a href="mailto:info@wrokapp.com">Contact support</a><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></div>
+      <div><h4>Legal</h4><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms of service</a></div>
+    </div>
+    <div class="foot-bottom"><span>&copy; 2026 Wrok. All rights reserved.</span><span>info@wrokapp.com</span></div>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add("js");
+// nav
+var nav=document.getElementById("nav");
+addEventListener("scroll",function(){nav.classList.toggle("scrolled",scrollY>10)},{passive:true});
+document.getElementById("burger").addEventListener("click",function(){document.getElementById("navLinks").classList.toggle("open")});
+document.querySelectorAll("#navLinks a").forEach(function(a){a.addEventListener("click",function(){document.getElementById("navLinks").classList.remove("open")})});
+// reveal
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+// billing toggle
+document.querySelectorAll(".bill-toggle button").forEach(function(b){
+  b.addEventListener("click",function(){
+    document.querySelectorAll(".bill-toggle button").forEach(function(x){x.classList.remove("on")});
+    b.classList.add("on");
+    var annual=b.dataset.bill==="annual";
+    document.querySelectorAll(".plan .amount[data-m]").forEach(function(el){
+      el.innerHTML=(annual?el.dataset.a:el.dataset.m)+"<small> /month"+(annual?", billed yearly":"")+"</small>";
+    });
+  });
+});
+// ---- schedule mock builder + generation animation ----
+var WORKERS=["Ana","Marko","Petra","Ivan"];
+var DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+var PLAN=[["m","m","a","n","a","off","off"],["a","n","m","m","off","a","m"],["off","a","a","off","m","n","a"],["n","off","off","a","a","m","n"]];
+var NAMES={m:"Morning",a:"Afternoon",n:"Night",off:"OFF"};
+function buildMock(el,withGen){
+  var h='<div class="gm-clip"><div class="gm-head"><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-dot"></span><span class="gm-title">CAFFE BAR LUNA &mdash; WEEK 27</span>'+(withGen?'<span class="gm-gen"><span class="spin"></span>GENERATE</span>':"")+"</div>";
+  h+='<div class="gm-table"><div class="gm-cell"></div>';
+  DAYS.forEach(function(d,i){h+='<div class="gm-cell gm-day"><span>'+d+"</span><span class=\"gm-cov\" data-cov=\""+i+"\">&ndash;/3</span></div>"});
+  PLAN.forEach(function(row,r){
+    h+='<div class="gm-cell gm-worker"><span class="gm-ava">'+WORKERS[r].slice(0,2).toUpperCase()+"</span>"+WORKERS[r]+"</div>";
+    row.forEach(function(s,c){h+='<div class="gm-cell"><span class="chip '+s+'" data-rc="'+r+"-"+c+'">'+NAMES[s]+"</span></div>"});
+  });
+  h+="</div></div>";
+  h+='<div class="gm-toast" role="status"><span class="msg"></span><button class="fixbtn">Fix it</button></div>';
+  el.innerHTML=h;
+}
+function covCount(el,c){var n=0;PLAN.forEach(function(row){if(row[c]!=="off")n++});return n}
+function animate(el,loop){
+  var chips=[].slice.call(el.querySelectorAll(".chip"));
+  var toast=el.querySelector(".gm-toast"),msg=toast.querySelector(".msg"),fix=toast.querySelector(".fixbtn");
+  var covs=[].slice.call(el.querySelectorAll(".gm-cov"));
+  function reset(){chips.forEach(function(ch){ch.classList.remove("on","conflict")});toast.classList.remove("show","ok");covs.forEach(function(cv){cv.textContent="–/3";cv.classList.remove("low")})}
+  function run(){
+    reset();
+    chips.forEach(function(ch,i){setTimeout(function(){ch.classList.add("on")},250+i*46)});
+    setTimeout(function(){covs.forEach(function(cv,i){var n=covCount(el,i);cv.textContent=n+"/3";if(n<3)cv.classList.add("low")})},250+chips.length*46);
+    setTimeout(function(){
+      var target=el.querySelector('[data-rc="1-3"]');if(target)target.classList.add("conflict");
+      toast.classList.remove("ok");fix.style.display="";msg.innerHTML="<b>Marko</b> would exceed 6 consecutive days on Thursday.";toast.classList.add("show");
+    },2600);
+    setTimeout(function(){fix.classList.add("flash")},3600);
+    setTimeout(function(){
+      var t=el.querySelector('[data-rc="1-3"]');if(t){t.classList.remove("conflict");t.className="chip off on";t.textContent=NAMES.off}
+      var t2=el.querySelector('[data-rc="2-3"]');if(t2){t2.className="chip m on";t2.textContent=NAMES.m}
+      fix.classList.remove("flash");fix.style.display="none";
+      toast.classList.add("ok");msg.innerHTML="<b>Fixed.</b> Thursday moved to Petra &mdash; 21 shifts, 0 conflicts.";
+    },4900);
+    if(loop)setTimeout(run,9500);
+  }
+  run();
+}
+var hero=document.getElementById("heroMock");buildMock(hero,true);
+var flag=document.getElementById("flagMock");buildMock(flag,true);
+animate(hero,true);
+var flagStarted=false;
+new IntersectionObserver(function(es,obs){es.forEach(function(e){if(e.isIntersecting&&!flagStarted){flagStarted=true;animate(flag,true);obs.disconnect()}})},{threshold:.35}).observe(flag);
+</script>
+</body>
+</html>
