@@ -6,7 +6,10 @@
   <title>Privacy Policy - Wrok</title>
   <meta name="description" content="Wrok privacy policy. How we collect, use, and protect your data.">
   <meta name="theme-color" content="#0D7C66">
-  <link rel="canonical" href="https://wrokapp.com/privacy.html">
+  <!-- Self-referencing. Cloudflare Pages 307s /privacy.html -> /privacy, so a
+       canonical on the .html form would point at a redirect back to this page
+       and Google would refuse to index either. -->
+  <link rel="canonical" href="https://wrokapp.com/privacy">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
