@@ -1,3 +1,58 @@
+# NOTE: robots.txt crawlers obey ONLY the most specific matching User-agent
+# group. A named group does not inherit rules from `User-agent: *`, so the
+# Disallow list must be repeated in every group below.
+
+# ---- Search engines ----
+User-agent: Googlebot
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+User-agent: Bingbot
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+# ---- AI answer engines: retrieval bots ----
+# These fetch pages to answer live user queries and attribute citations.
+# Allowing them is what makes Wrok eligible to be cited in AI answers.
+# (Distinct from the training crawlers GPTBot / ClaudeBot / Google-Extended,
+# which are covered by the catch-all group; blocking those would not affect
+# citation eligibility.)
+
+User-agent: OAI-SearchBot
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+User-agent: Claude-SearchBot
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+User-agent: Claude-User
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+User-agent: PerplexityBot
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+User-agent: Perplexity-User
+Disallow: /payment.html
+Disallow: /payment-success.html
+Disallow: /payment-cancel.html
+Disallow: /manage.html
+
+# ---- Everything else ----
 User-agent: *
 Allow: /
 Disallow: /payment.html
