@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — Wrok</title>
+  <title>Privacy Policy - Wrok</title>
   <meta name="description" content="Wrok privacy policy. How we collect, use, and protect your data.">
   <meta name="theme-color" content="#0D7C66">
-  <link rel="canonical" href="https://wrokapp.com/privacy.html">
+  <!-- Self-referencing. Cloudflare Pages 307s /privacy.html -> /privacy, so a
+       canonical on the .html form would point at a redirect back to this page
+       and Google would refuse to index either. -->
+  <link rel="canonical" href="https://wrokapp.com/privacy">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,78 +22,196 @@
     .legal-nav a { color: #0D7C66; text-decoration: none; font-weight: 500; }
     .legal-nav a:hover { text-decoration: underline; }
     h1 { color: #fff; font-size: 2rem; margin-bottom: 8px; }
-    .legal-date { color: #888; font-size: 0.9rem; margin-bottom: 40px; }
+    .legal-date { color: #888; font-size: 0.9rem; margin-bottom: 24px; }
+    .draft-notice { background: rgba(255,152,0,0.12); border-left: 4px solid #FF9800; border-radius: 8px; padding: 14px 16px; margin: 16px 0 36px; font-size: 0.9rem; color: #e8c98a; }
     h2 { color: #fff; font-size: 1.3rem; margin-top: 36px; margin-bottom: 12px; }
+    h3 { color: #fff; font-size: 1.05rem; margin-top: 20px; margin-bottom: 8px; }
     p, li { margin-bottom: 12px; font-size: 0.95rem; }
     ul { padding-left: 20px; }
     a { color: #0D7C66; }
+    code { background: #1c1c1c; padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; color: #d4d4d4; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+    th, td { border: 1px solid #2a2a2a; padding: 9px 11px; text-align: left; vertical-align: top; }
+    th { background: #161616; color: #fff; }
   </style>
 </head>
 <body>
   <div class="legal-nav"><a href="/">&larr; Back to Wrok</a></div>
   <div class="legal-container">
     <h1>Privacy Policy</h1>
-    <p class="legal-date">Last updated: April 16, 2026</p>
+    <p class="legal-date">Last updated: June 29, 2026</p>
 
-    <h2>1. Who We Are</h2>
-    <p>Wrok ("we", "us", "our") is a shift scheduling and team management application. This policy explains how we collect, use, and protect your personal data when you use our mobile app and website at wrokapp.com.</p>
+    <div class="draft-notice">
+      <strong>One section pending confirmation.</strong> Section 9 (International Transfers) is awaiting
+      confirmation of the specific transfer safeguards used by each processor. All other sections, including the
+      identity of the data controller, are final. Questions:
+      <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a>.
+    </div>
 
-    <h2>2. Data We Collect</h2>
-    <p>We collect the following information when you use Wrok:</p>
+    <h2>1. Introduction</h2>
+    <p>Wrok ("Wrok", "we", "our", "us") is a shift scheduling and team management application for employers and their teams. We are committed to protecting your personal data and respecting your privacy in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws. Our website is <a href="https://wrokapp.com">wrokapp.com</a>.</p>
+    <p>This policy explains what personal data we collect, why we collect it, the lawful basis for each use, who we share it with, how long we keep it, and the rights you have over it.</p>
+
+    <h2>2. Data Controller</h2>
+    <p>The data controller responsible for your personal data is:</p>
     <ul>
-      <li><strong>Account information:</strong> Name, email address, username (provided during registration)</li>
-      <li><strong>Workplace data:</strong> Workplace names, worker names, shift schedules, timetables, sick days, vacation requests</li>
-      <li><strong>Messages:</strong> Content of messages sent through the in-app chat</li>
-      <li><strong>Device information:</strong> FCM tokens for push notifications, device type</li>
-      <li><strong>Location data:</strong> GPS coordinates when using the clock-in/check-in feature (only when explicitly triggered by the user)</li>
-      <li><strong>Usage data:</strong> Crash reports and error logs via Firebase Crashlytics (mobile app) and Sentry (web app); anonymous usage analytics via Firebase Analytics, collected only if you accept analytics consent</li>
+      <li><strong>Legal name:</strong> Tomislav Planinić, operating as a sole trader (natural person)</li>
+      <li><strong>Jurisdiction:</strong> Republic of Croatia (European Union)</li>
+      <li><strong>Contact email:</strong> <a href="mailto:support@wrokapp.com">support@wrokapp.com</a></li>
+      <li><strong>Privacy contact:</strong> <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a></li>
+      <li><strong>Postal address:</strong> Available on request via <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a></li>
+      <li><strong>Data Protection Officer / EU representative:</strong> Not applicable. Wrok is operated by a controller established within the EU and does not meet the Art. 37 GDPR criteria requiring a designated DPO.</li>
+    </ul>
+    <p>Where your employer (the Boss who created the workplace) uploads or manages data about you as part of running their workplace, that employer may act as a separate or joint controller for employment record-keeping purposes. In that case the employer is responsible for the lawfulness of its own use of your data, and you may also direct requests to them.</p>
+
+    <h2>3. Personal Data We Collect</h2>
+    <p>We collect and process the following categories of personal data:</p>
+    <ul>
+      <li><strong>Account data:</strong> Name, email address (Boss accounts), username, and an encrypted (hashed) password. For Shift Managers: name, username, assigned workplace, and permission settings.</li>
+      <li><strong>Schedule and employment data:</strong> Workplace assignments, shift preferences, experience level, work schedules, timetables, worked hours, shift swap and day-off requests, attendance and clock-in records, and tasks.</li>
+      <li><strong>Sick and vacation data (special category):</strong> Records that you are on sick leave or vacation, and the associated dates. Because data revealing that a person is on sick leave can concern a person's health, we treat sick/vacation records as special-category data under Article 9 GDPR and apply the additional safeguards described in Section 5.</li>
+      <li><strong>Push notification tokens:</strong> Firebase Cloud Messaging (FCM) device tokens, only if you opt in to push notifications.</li>
+      <li><strong>Device and usage data:</strong> Device operating system and version, and (only if you consent to analytics) anonymized in-app usage events such as which features are used. Crash and error diagnostics (stack traces, app state at the time of an error, device model, OS version) are collected to keep the app stable.</li>
+      <li><strong>Communication data:</strong> Messages sent within the in-app messaging system, and in-app notification history (read/unread status, type, workplace association).</li>
+      <li><strong>Location data:</strong> GPS coordinates, only when you actively use the clock-in/check-in feature and only with your explicit consent.</li>
+      <li><strong>Purchase data:</strong> Subscription tier, payment status, and billing dates. Payment processing is handled by Google Play on Android and by Stripe on the web. We never store your full card number, CVV, or full card details. We receive only a confirmation of your purchase and subscription status through RevenueCat (Android) or Stripe (web).</li>
+      <li><strong>Invite code data:</strong> Generated invite codes for onboarding workers and shift managers, including associated workplace and permission configuration. Codes expire automatically after 15 minutes.</li>
+      <li><strong>Consent records:</strong> Your consent choices for the privacy policy, analytics, crash reporting, and push notifications, with a timestamp, policy version, and basic device information.</li>
     </ul>
 
-    <h2>3. How We Use Your Data</h2>
+    <h2>4. Purposes and Lawful Bases</h2>
+    <p>We only process your personal data where we have a lawful basis under the GDPR. The table below maps each category to its purpose and lawful basis.</p>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Purpose</th><th>Lawful basis</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account data</td>
+          <td>Create and operate your account; authenticate you; provide the service.</td>
+          <td>Contract (Art. 6(1)(b)).</td>
+        </tr>
+        <tr>
+          <td>Schedule and employment data</td>
+          <td>Generate schedules, manage shifts, swaps, day-off requests, attendance and tasks.</td>
+          <td>Contract (Art. 6(1)(b)); for the employer's workforce management, legitimate interest (Art. 6(1)(f)).</td>
+        </tr>
+        <tr>
+          <td>Sick and vacation data (special category)</td>
+          <td>Record leave so the workplace can be staffed and managed.</td>
+          <td>Art. 6(1)(b) plus Art. 9(2)(b) (processing necessary for carrying out obligations and exercising rights in the field of employment law).</td>
+        </tr>
+        <tr>
+          <td>Push notification tokens</td>
+          <td>Deliver push notifications about schedule changes, swaps, and workplace events.</td>
+          <td>Consent (Art. 6(1)(a)) - you opt in.</td>
+        </tr>
+        <tr>
+          <td>Crash and error reporting</td>
+          <td>Detect, diagnose, and fix crashes and errors to keep the app stable and secure.</td>
+          <td>Legitimate interest (Art. 6(1)(f)). On by default with an easy opt-out in settings.</td>
+        </tr>
+        <tr>
+          <td>Usage analytics</td>
+          <td>Understand how the app is used and improve it (anonymized events only).</td>
+          <td>Consent (Art. 6(1)(a)) - strictly opt-in, off by default.</td>
+        </tr>
+        <tr>
+          <td>Location data (clock-in)</td>
+          <td>Verify workplace attendance when you check in.</td>
+          <td>Consent (Art. 6(1)(a)) - only when you trigger check-in.</td>
+        </tr>
+        <tr>
+          <td>Purchase data</td>
+          <td>Manage subscriptions and provide access to paid features.</td>
+          <td>Contract (Art. 6(1)(b)).</td>
+        </tr>
+        <tr>
+          <td>Retained worker record after deactivation</td>
+          <td>Keep a deactivated worker's name and work history so the employer can continue to manage the workplace and meet record-keeping obligations.</td>
+          <td>Legitimate interest and employment record-keeping (Art. 6(1)(f); Art. 6(1)(c) where a legal retention duty applies). See Section 7.</td>
+        </tr>
+        <tr>
+          <td>Consent records</td>
+          <td>Demonstrate that consent was obtained and honour your choices.</td>
+          <td>Legal obligation / legitimate interest (Art. 6(1)(c) and (f)).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>5. Special-Category (Health) Data: Sick and Vacation</h2>
+    <p>A record that a worker is on sick leave can reveal information about that person's health and is therefore special-category data under Article 9 GDPR. We process this data on the basis of Article 9(2)(b): processing is necessary for the purposes of carrying out the obligations and exercising the specific rights of the employer or the worker in the field of employment law, as authorised by EU or national law. We collect only what is needed to manage staffing (that a person is absent and the dates) and apply role-based access controls so that only authorised people in the workplace can see it. We do not collect medical diagnoses or doctor's notes through the app.</p>
+
+    <h2>6. Data Sharing Between Roles</h2>
+    <p>To enable workplace management, certain data is visible to other roles within the same workplace:</p>
     <ul>
-      <li>To provide and maintain the scheduling service</li>
-      <li>To send push notifications about schedule changes, messages, and requests</li>
-      <li>To verify clock-in location against workplace geofence</li>
-      <li>To diagnose bugs and improve the app via crash reports</li>
-      <li>To send transactional emails (welcome, password reset)</li>
+      <li><strong>Boss accounts</strong> can view worker and shift manager data within their workplaces, including names, schedules, and attendance.</li>
+      <li><strong>Shift Manager accounts</strong> can view worker data within their assigned workplace only, limited by the permissions granted by the Boss.</li>
+      <li><strong>Worker accounts</strong> can see the names of coworkers within their workplace for shift swap purposes.</li>
     </ul>
 
-    <h2>4. Data Storage and Security</h2>
-    <p>Your data is stored securely on servers hosted by Railway (cloud infrastructure). All data is transmitted over HTTPS. Passwords are hashed using BCrypt and are never stored in plain text. We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
-
-    <h2>5. Third-Party Services</h2>
-    <p>We use the following third-party services:</p>
+    <h2>7. Data Retention</h2>
+    <p>We keep personal data only as long as necessary for the purposes for which it was collected, and then delete or anonymize it, unless a longer period is required by law.</p>
     <ul>
-      <li><strong>Firebase Cloud Messaging (FCM):</strong> Push notifications</li>
-      <li><strong>Firebase Crashlytics:</strong> Crash and error reporting (mobile app)</li>
-      <li><strong>Firebase Analytics:</strong> Anonymous usage analytics, only with your consent</li>
-      <li><strong>Sentry:</strong> Crash and error reporting for the web app, processed in the EU region</li>
-      <li><strong>RevenueCat:</strong> In-app subscription management</li>
-      <li><strong>Google Play Billing:</strong> Payment processing for subscriptions on Android</li>
-      <li><strong>Stripe:</strong> Payment processing for subscriptions on the web</li>
-      <li><strong>Cloudflare:</strong> DNS, CDN, and security</li>
+      <li><strong>Active accounts:</strong> Data is retained while your account is active and you use the service.</li>
+      <li><strong>Boss account deletion:</strong> When a Boss deletes their account, the associated workplaces, workers, schedules, and messages are permanently deleted (full erasure).</li>
+      <li><strong>Worker account deletion (important):</strong> When a worker deletes their account, the account is deactivated: login is disabled and personal login/preference data is removed. However, the worker's <strong>name and work history (timetables and past shifts) are intentionally retained</strong> so the employer can keep managing the workplace and meet employment record-keeping obligations. This is done on the basis of the employer's legitimate interest and, where applicable, a legal retention duty. This retained record is erased once it is no longer needed for those purposes, or at the end of any applicable legal retention period.</li>
+      <li><strong>Invite codes:</strong> Expire after 15 minutes; any retained record contains no personal data beyond workplace association.</li>
+      <li><strong>Crash, analytics, and consent records:</strong> Retained only as long as needed for diagnostics, product improvement, and to evidence consent.</li>
     </ul>
 
-    <h2>6. Data Retention</h2>
-    <p>We retain your data for as long as your account is active. When a boss deletes their account, all associated workplaces, workers, schedules, and messages are permanently deleted. When a worker account is deactivated, personal login data is removed, but the name and work history are retained for business record-keeping purposes.</p>
-
-    <h2>7. Your Rights (GDPR)</h2>
-    <p>If you are in the EU/EEA, you have the right to:</p>
+    <h2>8. Processors and Third-Party Services</h2>
+    <p>We use the following processors and service providers. Each processes data only on our instructions under a data processing agreement (DPA), except payment providers who act as independent controllers for payment data.</p>
     <ul>
-      <li><strong>Access</strong> your data (use the "Download My Data" feature in Settings)</li>
-      <li><strong>Rectify</strong> inaccurate data (edit your profile in the app)</li>
-      <li><strong>Delete</strong> your account and data (use "Delete Account" in Settings)</li>
-      <li><strong>Export</strong> your data in a portable format (JSON export in Settings)</li>
+      <li><strong>Firebase Analytics (Google):</strong> Anonymized usage analytics, only if you consent.</li>
+      <li><strong>Firebase Crashlytics (Google):</strong> Crash and error reporting on mobile (legitimate interest, opt-out available).</li>
+      <li><strong>Firebase Cloud Messaging (Google):</strong> Push notification delivery, only if you opt in.</li>
+      <li><strong>Google Sign-In (Google):</strong> Optional authentication for Boss accounts; we receive your name and email from Google and no other account data.</li>
+      <li><strong>RevenueCat:</strong> Subscription management; receives an anonymous user ID and purchase data. See <a href="https://www.revenuecat.com/privacy">RevenueCat's privacy policy</a>.</li>
+      <li><strong>Sentry (EU region):</strong> Crash and error reporting for the web app (legitimate interest, opt-out available); processed in the EU region.</li>
+      <li><strong>Railway / PostgreSQL:</strong> Cloud hosting of our backend services and database.</li>
+      <li><strong>Resend:</strong> Sending transactional emails (for example welcome and password-reset emails).</li>
+      <li><strong>Google Play Billing and Stripe:</strong> Payment processing on Android and web respectively; they handle your payment details directly as independent controllers and we never store your full card details.</li>
+      <li><strong>Cloudflare:</strong> DNS, CDN, and security in front of our services.</li>
+    </ul>
+    <p>We do not sell your personal data.</p>
+
+    <!-- LEGAL REVIEW NEEDED -->
+    <h2>9. International Transfers</h2>
+    <p>Some of the processors above may process data outside the European Economic Area (EEA). Where that happens, we rely on appropriate safeguards such as the European Commission's Standard Contractual Clauses (SCCs) and the relevant data processing agreements (DPAs). [CONFIRM SPECIFIC TRANSFER MECHANISM AND PROCESSOR LOCATIONS]. You can request a copy of the relevant safeguards by contacting <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a>.</p>
+
+    <h2>10. Your Rights</h2>
+    <p>Under the GDPR you have the right to:</p>
+    <ul>
+      <li><strong>Access and portability:</strong> Request a copy of your personal data, including in a structured, machine-readable format. You can export your data directly in the app's settings.</li>
+      <li><strong>Erasure:</strong> Request deletion of your personal data. You can delete your account in the app's settings. Note the retention caveat in Section 7: when a worker deletes their account, the name and work history are retained for the employer's legitimate interest and any legal retention period, and are erased once no longer needed.</li>
+      <li><strong>Rectification:</strong> Correct inaccurate data, for example by editing your profile.</li>
+      <li><strong>Withdraw consent:</strong> Withdraw consent for optional processing (analytics, push notifications, location) at any time in the app's Privacy &amp; Legal settings, without affecting processing already carried out.</li>
+      <li><strong>Object and restrict:</strong> Object to processing based on legitimate interest, and request restriction in certain circumstances.</li>
+      <li><strong>Complain:</strong> Lodge a complaint with a data protection supervisory authority in your country of residence or work.</li>
+    </ul>
+    <p>You can exercise export and account-deletion rights directly in the app. For any other request, contact <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a>.</p>
+
+    <h2>11. Data Security</h2>
+    <ul>
+      <li>Passwords are hashed using BCrypt and never stored in plain text.</li>
+      <li>All communication is encrypted via HTTPS/TLS.</li>
+      <li>JWT-based authentication with role-specific claims and limited token lifetimes.</li>
+      <li>Role-based access control limits each user to data relevant to their role and workplace.</li>
+      <li>Database access is restricted and connection-pooled.</li>
     </ul>
 
-    <h2>8. Children's Privacy</h2>
-    <p>Wrok is not intended for use by anyone under the age of 16. We do not knowingly collect data from children.</p>
+    <h2>12. Cookies and Tracking</h2>
+    <p>The mobile application does not use cookies. Analytics and crash reporting are governed by the bases in Section 4: analytics is strictly opt-in, and crash reporting runs on legitimate interest with an opt-out. You can change these choices at any time in the app's Privacy &amp; Legal settings. The web app presents a cookie/consent banner for tracking preferences.</p>
 
-    <h2>9. Changes to This Policy</h2>
-    <p>We may update this privacy policy from time to time. We will notify you of significant changes through the app or by email.</p>
+    <h2>13. Children's Privacy</h2>
+    <p>Wrok is not intended for anyone under the age of 16. We do not knowingly collect data from children.</p>
 
-    <h2>10. Contact Us</h2>
-    <p>For privacy-related questions, contact us at <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a>.</p>
+    <h2>14. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will notify you of significant changes through the app or by email. The "Last updated" date above indicates the most recent revision.</p>
+
+    <h2>15. Contact Us</h2>
+    <p>If you have questions about this Privacy Policy or wish to exercise your rights, contact us at <a href="mailto:privacy@wrokapp.com">privacy@wrokapp.com</a>.</p>
   </div>
 </body>
 </html>

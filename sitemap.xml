@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Cloudflare Pages serves extensionless URLs; /privacy.html 307s to /privacy.
+     A sitemap must list the final canonical URL, never a redirect. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://wrokapp.com/</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://wrokapp.com/privacy.html</loc>
-    <lastmod>2026-04-16</lastmod>
+    <loc>https://wrokapp.com/privacy</loc>
+    <lastmod>2026-07-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://wrokapp.com/terms.html</loc>
+    <loc>https://wrokapp.com/terms</loc>
     <lastmod>2026-04-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

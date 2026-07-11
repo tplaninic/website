@@ -6,6 +6,7 @@
   <title>Wrok | AI-Powered Shift Scheduling for Modern Teams</title>
   <meta name="description" content="Wrok uses AI to generate optimized shift schedules in seconds. Manage swaps, track time off, and communicate with your team, all from one intelligent app.">
   <meta name="theme-color" content="#0D7C66">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://wrokapp.com/">
 
   <!-- Open Graph -->
@@ -32,11 +33,19 @@
     "operatingSystem": "Web, Android",
     "description": "AI-powered shift scheduling and team management for modern workplaces. Generate optimized schedules in seconds.",
     "url": "https://wrokapp.com",
+    "image": "https://wrokapp.com/wrok_logo.png",
     "offers": {
-      "@type": "Offer",
-      "price": "0",
+      "@type": "AggregateOffer",
       "priceCurrency": "EUR",
-      "description": "Free tier available with up to 4 workers"
+      "lowPrice": "0",
+      "highPrice": "79.99",
+      "offerCount": "4",
+      "offers": [
+        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "EUR", "description": "Up to 4 workers, 1 workplace. Free forever, no credit card required." },
+        { "@type": "Offer", "name": "Starter", "price": "14.99", "priceCurrency": "EUR", "description": "Up to 15 workers, 2 workplaces. Adds analytics, reports, PDF and Excel export." },
+        { "@type": "Offer", "name": "Growth", "price": "34.99", "priceCurrency": "EUR", "description": "Up to 40 workers, 5 workplaces. Adds shift managers and GPS clock-in." },
+        { "@type": "Offer", "name": "Business", "price": "79.99", "priceCurrency": "EUR", "description": "Up to 100 workers, unlimited workplaces. Adds priority support and advanced analytics." }
+      ]
     }
   }
   </script>
@@ -61,16 +70,21 @@
     "name": "Wrok",
     "url": "https://wrokapp.com",
     "logo": "https://wrokapp.com/wrok_logo.png",
+    "email": "support@wrokapp.com",
+    "founder": { "@type": "Person", "name": "Tomislav Planinić" },
+    "address": { "@type": "PostalAddress", "addressCountry": "HR" },
     "description": "AI-powered shift scheduling and team management for shift-based businesses such as cafes, restaurants, retail, and hotels."
   }
   </script>
 
-  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="icon" href="wrok_icon.png" type="image/png" sizes="192x192">
-  <link rel="apple-touch-icon" href="wrok_icon.png">
-  <link rel="icon" href="wrok_icon.png" type="image/png" sizes="any">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -87,7 +101,7 @@
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="#" class="nav-brand">
-        <img src="wrok_logo.png" alt="Wrok logo" class="nav-logo">
+        <img src="wrok_logo.png" alt="Wrok logo" class="nav-logo" width="1024" height="1024" fetchpriority="high" decoding="async">
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
         <span class="hamburger"></span>
@@ -1110,12 +1124,12 @@
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-brand-col">
-          <a href="#" class="footer-brand"><img src="wrok_logo.png" alt="Wrok" class="footer-logo"></a>
+          <a href="#" class="footer-brand"><img src="wrok_logo.png" alt="Wrok" class="footer-logo" width="1024" height="1024" loading="lazy" decoding="async"></a>
           <p class="footer-tagline">AI-powered shift scheduling for modern teams. Build optimized schedules, communicate better, and keep your operations running smoothly.</p>
         </div>
         <div class="footer-links-col"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#how-it-works">How It Works</a></li><li><a href="#for-teams">For Teams</a></li><li><a href="#pricing">Pricing</a></li><li><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></li></ul></div>
         <div class="footer-links-col"><h4>Resources</h4><ul><li><a href="#faq">FAQ</a></li><li><a href="mailto:support@wrokapp.com">Contact Support</a></li></ul></div>
-        <div class="footer-links-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+        <div class="footer-links-col"><h4>Legal</h4><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
       </div>
       <div class="footer-bottom"><span>&copy; 2026 Wrok. All rights reserved.</span></div>
     </div>
@@ -1131,7 +1145,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <div class="trial-invite-logo" aria-hidden="true">
-      <img src="wrok_logo_white_trimmed.png" alt="Wrok">
+      <img src="wrok_logo_white_trimmed.png" alt="Wrok" width="500" height="149" loading="lazy" decoding="async">
     </div>
     <h3 id="trialInviteTitle">Want to try Wrok for free?</h3>
     <p>Email us at <strong>info@wrokapp.com</strong> and we'll set you up with a free trial so you can test everything before committing.</p>
@@ -1141,8 +1155,10 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
-  <script src="script.js"></script>
+  <!-- Deferred: parsed off the critical path, executed in order before DOMContentLoaded.
+       script.js guards on `typeof THREE === 'undefined'` and degrades gracefully. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>
