@@ -8,6 +8,9 @@
   <meta name="theme-color" content="#0D7C66">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://wrokapp.com/">
+  <link rel="alternate" hreflang="en" href="https://wrokapp.com/">
+  <link rel="alternate" hreflang="hr" href="https://wrokapp.com/hr/">
+  <link rel="alternate" hreflang="x-default" href="https://wrokapp.com/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -41,7 +44,7 @@
       "highPrice": "79.99",
       "offerCount": "4",
       "offers": [
-        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "EUR", "description": "Up to 4 workers, 1 workplace. Free forever, no credit card required." },
+        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "EUR", "description": "Up to 6 workers, 1 workplace. Free forever, no credit card required." },
         { "@type": "Offer", "name": "Starter", "price": "14.99", "priceCurrency": "EUR", "description": "Up to 15 workers, 2 workplaces. Adds analytics, reports, PDF and Excel export." },
         { "@type": "Offer", "name": "Growth", "price": "34.99", "priceCurrency": "EUR", "description": "Up to 40 workers, 5 workplaces. Adds shift managers and GPS clock-in." },
         { "@type": "Offer", "name": "Business", "price": "79.99", "priceCurrency": "EUR", "description": "Up to 100 workers, unlimited workplaces. Adds priority support and advanced analytics." }
@@ -54,12 +57,17 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How much does Wrok cost?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok is free for up to 4 workers, forever, with no credit card needed. Paid plans start at 14.99 EUR per month for up to 15 workers and unlock reports, analytics, and more. Save 20 percent with annual billing." } },
+      { "@type": "Question", "name": "How much does Wrok cost?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok is free for up to 6 workers, forever, with no credit card needed. Paid plans start at 14.99 EUR per month for up to 15 workers and unlock reports, analytics, and more. Save 20 percent with annual billing." } },
       { "@type": "Question", "name": "How many team members can I add?", "acceptedAnswer": { "@type": "Answer", "text": "Each plan supports a different team size, from 15 workers on Starter up to 100 on Business. For teams larger than 100, contact us for a custom Enterprise plan. Every plan includes the full feature set." } },
       { "@type": "Question", "name": "How does the AI scheduling work?", "acceptedAnswer": { "@type": "Answer", "text": "Our AI engine processes your shift types, role requirements, minimum staffing levels, worker availability, approved vacations, sick days, and mandatory rest hours at the same time. It optimizes across all these constraints to generate a complete, balanced schedule, and when conflicts arise it provides recommendations to resolve them." } },
       { "@type": "Question", "name": "Is my data secure?", "acceptedAnswer": { "@type": "Answer", "text": "All data is transmitted over HTTPS and stored securely. Only authorized members of your workplace can see your team's schedule and information." } },
       { "@type": "Question", "name": "What platforms is Wrok available on?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok is available now as a web app that runs in any browser, on desktop, tablet, or phone, with nothing to install. Native Android and iOS apps are in development and coming soon." } },
-      { "@type": "Question", "name": "Can workers see the full team schedule?", "acceptedAnswer": { "@type": "Answer", "text": "Workers can see their own personal schedule in full detail. The manager controls how much visibility workers have over the broader team schedule." } }
+      { "@type": "Question", "name": "Can workers see the full team schedule?", "acceptedAnswer": { "@type": "Answer", "text": "Workers can see their own personal schedule in full detail. The manager controls how much visibility workers have over the broader team schedule." } },
+      { "@type": "Question", "name": "What is the best shift scheduling app for a small business?", "acceptedAnswer": { "@type": "Answer", "text": "The best shift scheduling app for a small business automates the rota, stays affordable, and needs no training. Wrok builds a full weekly schedule in seconds, handles swaps, time off, and hours tracking, and is free for teams of up to 6. It is made specifically for small shift-based businesses like cafes, restaurants, retail shops, and warehouses." } },
+      { "@type": "Question", "name": "Is there a free shift scheduling app?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Wrok is free forever for up to 6 workers and one workplace, with no credit card required. The free plan includes AI schedule generation, shift swaps, time-off tracking, and team messaging. Paid plans start at 14.99 EUR per month when you need more workers or reporting." } },
+      { "@type": "Question", "name": "How do I make a work schedule for my employees?", "acceptedAnswer": { "@type": "Answer", "text": "Add your workers and their availability, set your shift types and how many people each shift needs, then let Wrok generate the schedule automatically. It respects vacations, sick days, and mandatory rest hours, and you can adjust any shift by hand before publishing it to your team. The whole process takes a few minutes instead of hours in a spreadsheet." } },
+      { "@type": "Question", "name": "What is a good alternative to When I Work or Deputy?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok is a simpler, more affordable alternative to When I Work and Deputy for small and mid-sized teams. It focuses on one-tap AI schedule generation, shift swaps, time off, hours tracking, and team chat, without the complexity or steep per-user pricing of enterprise tools. It is free to start for up to 6 workers." } },
+      { "@type": "Question", "name": "Which scheduling app is best for cafes and restaurants?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok is built for cafes, bars, and restaurants, where staff work rotating shifts and plans change often. It generates the weekly rota automatically, lets staff request swaps and time off from their phones, tracks hours worked, and keeps team messages in one place. It is free to start for teams of up to 6." } }
     ]
   }
   </script>
@@ -74,6 +82,21 @@
     "founder": { "@type": "Person", "name": "Tomislav Planinić" },
     "address": { "@type": "PostalAddress", "addressCountry": "HR" },
     "description": "AI-powered shift scheduling and team management for shift-based businesses such as cafes, restaurants, retail, and hotels."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to create a shift schedule with Wrok",
+    "description": "Build an optimized weekly work schedule for your team in a few minutes using Wrok's AI scheduling.",
+    "totalTime": "PT5M",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Add your team", "text": "Add your workers and set each person's availability, role, and any recurring days off." },
+      { "@type": "HowToStep", "position": 2, "name": "Define your shifts", "text": "Set your shift types and how many people each shift needs, along with rules like minimum rest hours." },
+      { "@type": "HowToStep", "position": 3, "name": "Generate the schedule", "text": "Let Wrok's AI generate a complete, balanced weekly schedule that respects availability, vacations, sick days, and rest rules." },
+      { "@type": "HowToStep", "position": 4, "name": "Adjust and publish", "text": "Fine-tune any shift by hand, then publish the schedule so your team sees it instantly on their phones." }
+    ]
   }
   </script>
 
@@ -113,6 +136,7 @@
         <li><a href="#for-teams" data-nav>For Teams</a></li>
         <li><a href="#pricing" data-nav>Pricing</a></li>
         <li><a href="#faq" data-nav>FAQ</a></li>
+        <li><a href="/hr/" hreflang="hr" aria-label="Hrvatski">HR</a></li>
         <li><a href="https://app.wrokapp.com" class="nav-cta" target="_blank" rel="noopener">Open web app</a></li>
       </ul>
     </div>
@@ -924,8 +948,8 @@
       <div class="section-header light fade-in">
         <span class="section-label light">Pricing</span>
         <h2 class="section-title">Simple plans that grow with your team</h2>
-        <p class="section-subtitle">Start free with up to 4 workers. Upgrade as your team grows. No per-user fees, ever.</p>
-        <div class="pricing-free-trial-badge fade-in">Free forever for small teams &middot; Save 20% with annual billing</div>
+        <p class="section-subtitle">Start with a 90-day free trial, then stay free forever for up to 6 workers. No per-user fees, ever.</p>
+        <div class="pricing-free-trial-badge fade-in">90-day free trial &middot; Free forever for up to 6 workers &middot; Save 20% with annual billing</div>
 
         <div class="pricing-trust-strip fade-in" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem;margin:1.5rem auto 0;max-width:760px;">
           <span style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;color:#e8e8e8;font-size:0.85rem;font-weight:500;">
@@ -960,7 +984,7 @@
               <span class="pricing-amount" style="font-size:2.4rem">&euro;0</span>
               <span class="pricing-period">/forever</span>
             </div>
-            <span class="pricing-worker-count">Up to 4 workers &middot; 1 workplace</span>
+            <span class="pricing-worker-count">Up to 6 workers &middot; 1 workplace</span>
           </div>
           <div class="pricing-card-body">
             <ul class="pricing-features">
@@ -1082,12 +1106,17 @@
         <h2 class="section-title">Frequently asked questions</h2>
       </div>
       <div class="faq-list">
-        <div class="faq-item fade-in"><button class="faq-question"><span>How much does Wrok cost?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok is free for up to 4 workers, forever, no credit card needed. Paid plans start at &euro;14.99/mo for up to 15 workers and unlock reports, analytics, and more. Save 20% with annual billing. <a href="#pricing" style="color:var(--primary-light)">See our pricing</a> for full details.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>How much does Wrok cost?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok is free for up to 6 workers, forever, no credit card needed. Paid plans start at &euro;14.99/mo for up to 15 workers and unlock reports, analytics, and more. Save 20% with annual billing. <a href="#pricing" style="color:var(--primary-light)">See our pricing</a> for full details.</p></div></div>
         <div class="faq-item fade-in"><button class="faq-question"><span>How many team members can I add?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Each plan supports a different team size, from 15 workers on Starter up to 100 on Business. For teams larger than 100, contact us for a custom Enterprise plan. Every plan includes the full feature set.</p></div></div>
         <div class="faq-item fade-in"><button class="faq-question"><span>How does the AI scheduling work?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Our AI engine processes your shift types, role requirements, minimum staffing levels, worker availability, approved vacations, sick days, and mandatory rest hours simultaneously. It intelligently optimizes across all these constraints to generate a complete, balanced schedule. When conflicts arise, it provides actionable recommendations to resolve them.</p></div></div>
         <div class="faq-item fade-in"><button class="faq-question"><span>Is my data secure?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Absolutely. All data is transmitted over HTTPS and stored securely. Only authorized members of your workplace can see your team's schedule and information.</p></div></div>
         <div class="faq-item fade-in"><button class="faq-question"><span>What platforms is Wrok available on?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok is available now as a web app that runs in any browser, on desktop, tablet, or phone, with nothing to install. Native Android and iOS apps are in development and coming soon.</p></div></div>
         <div class="faq-item fade-in"><button class="faq-question"><span>Can workers see the full team schedule?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Workers can see their own personal schedule with full detail. The manager controls what visibility workers have over the broader team schedule.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>What is the best shift scheduling app for a small business?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>The best shift scheduling app for a small business automates the rota, stays affordable, and needs no training. Wrok builds a full weekly schedule in seconds, handles swaps, time off, and hours tracking, and is free for teams of up to 6. It is made specifically for small shift-based businesses like cafes, restaurants, retail shops, and warehouses.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Is there a free shift scheduling app?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Yes. Wrok is free forever for up to 6 workers and one workplace, with no credit card required. The free plan includes AI schedule generation, shift swaps, time-off tracking, and team messaging. Paid plans start at &euro;14.99/mo when you need more workers or reporting.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>How do I make a work schedule for my employees?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Add your workers and their availability, set your shift types and how many people each shift needs, then let Wrok generate the schedule automatically. It respects vacations, sick days, and mandatory rest hours, and you can adjust any shift by hand before publishing it to your team. The whole process takes a few minutes instead of hours in a spreadsheet.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>What is a good alternative to When I Work or Deputy?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok is a simpler, more affordable alternative to When I Work and Deputy for small and mid-sized teams. It focuses on one-tap AI schedule generation, shift swaps, time off, hours tracking, and team chat, without the complexity or steep per-user pricing of enterprise tools. It is free to start for up to 6 workers.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Which scheduling app is best for cafes and restaurants?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok is built for cafes, bars, and restaurants, where staff work rotating shifts and plans change often. It generates the weekly rota automatically, lets staff request swaps and time off from their phones, tracks hours worked, and keeps team messages in one place. It is free to start for teams of up to 6.</p></div></div>
       </div>
     </div>
   </section>
@@ -1147,10 +1176,10 @@
     <div class="trial-invite-logo" aria-hidden="true">
       <img src="wrok_logo_white_trimmed.png" alt="Wrok" width="500" height="149" loading="lazy" decoding="async">
     </div>
-    <h3 id="trialInviteTitle">Want to try Wrok for free?</h3>
-    <p>Email us at <strong>info@wrokapp.com</strong> and we'll set you up with a free trial so you can test everything before committing.</p>
+    <h3 id="trialInviteTitle">Try Wrok free for 90 days</h3>
+    <p>Create your account in two minutes and get a 90-day free trial of every paid feature. No credit card required, and it stays free forever for up to 6 workers.</p>
     <div class="trial-invite-actions">
-      <a class="trial-invite-cta" href="mailto:info@wrokapp.com?subject=Free%20trial%20request&body=Hi%20Wrok%20team%2C%0A%0AI%27d%20like%20to%20try%20the%20app.%20Please%20set%20me%20up%20with%20a%20free%20trial.%0A%0AThanks!" id="trialInviteCta">Email us for a trial</a>
+      <a class="trial-invite-cta" href="https://app.wrokapp.com" target="_blank" rel="noopener" id="trialInviteCta">Start free trial</a>
       <button class="trial-invite-later" id="trialInviteLater">Maybe later</button>
     </div>
   </div>

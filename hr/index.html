@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wrok | Aplikacija za raspored smjena i upravljanje timom</title>
+  <meta name="description" content="Wrok je aplikacija za raspored smjena koja uz pomoć umjetne inteligencije u nekoliko sekundi slaže raspored. Raspoređivanje radnika, evidencija radnog vremena, zamjene smjena i timski chat na jednom mjestu.">
+  <meta name="theme-color" content="#0D7C66">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://wrokapp.com/hr/">
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="hr" href="https://wrokapp.com/hr/">
+  <link rel="alternate" hreflang="en" href="https://wrokapp.com/">
+  <link rel="alternate" hreflang="x-default" href="https://wrokapp.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://wrokapp.com/hr/">
+  <meta property="og:title" content="Wrok | Aplikacija za raspored smjena">
+  <meta property="og:description" content="Složite raspored smjena u nekoliko sekundi uz pomoć umjetne inteligencije. Zamjene smjena, godišnji odmori, evidencija radnog vremena i timski chat na jednom mjestu. Besplatno za male timove.">
+  <meta property="og:image" content="https://wrokapp.com/wrok_logo.png">
+  <meta property="og:site_name" content="Wrok">
+  <meta property="og:locale" content="hr_HR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wrok | Aplikacija za raspored smjena">
+  <meta name="twitter:description" content="Složite raspored smjena u nekoliko sekundi uz pomoć umjetne inteligencije. Besplatno za male timove.">
+  <meta name="twitter:image" content="https://wrokapp.com/wrok_logo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Wrok",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, Android",
+    "inLanguage": "hr",
+    "description": "Aplikacija za raspored smjena i upravljanje timom uz pomoć umjetne inteligencije. Složite optimiziran raspored radnika u nekoliko sekundi.",
+    "url": "https://wrokapp.com/hr/",
+    "image": "https://wrokapp.com/wrok_logo.png",
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "EUR",
+      "lowPrice": "0",
+      "highPrice": "79.99",
+      "offerCount": "4",
+      "offers": [
+        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "EUR", "description": "Do 6 radnika, 1 lokacija. Besplatno zauvijek, bez kreditne kartice." },
+        { "@type": "Offer", "name": "Starter", "price": "14.99", "priceCurrency": "EUR", "description": "Do 15 radnika, 2 lokacije. Dodaje analitiku, izvještaje te izvoz u PDF i Excel." },
+        { "@type": "Offer", "name": "Growth", "price": "34.99", "priceCurrency": "EUR", "description": "Do 40 radnika, 5 lokacija. Dodaje voditelje smjena i prijavu dolaska putem GPS-a." },
+        { "@type": "Offer", "name": "Business", "price": "79.99", "priceCurrency": "EUR", "description": "Do 100 radnika, neograničeno lokacija. Dodaje prioritetnu podršku i naprednu analitiku." }
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "hr",
+    "mainEntity": [
+      { "@type": "Question", "name": "Koja je najbolja aplikacija za raspored smjena za mali biznis?", "acceptedAnswer": { "@type": "Answer", "text": "Najbolja aplikacija za raspored smjena za mali biznis automatski slaže raspored, ostaje pristupačna i ne zahtijeva nikakvu edukaciju. Wrok u nekoliko sekundi složi cijeli tjedni raspored, rješava zamjene smjena, godišnje odmore i evidenciju radnog vremena, a besplatan je za timove do 6 radnika. Napravljen je upravo za male poslove sa smjenama, poput kafića, restorana, trgovina i skladišta." } },
+      { "@type": "Question", "name": "Postoji li besplatna aplikacija za raspored smjena?", "acceptedAnswer": { "@type": "Answer", "text": "Da. Wrok je besplatan zauvijek za do 6 radnika i jednu lokaciju, bez kreditne kartice. Besplatni paket uključuje automatsko slaganje rasporeda uz pomoć umjetne inteligencije, zamjene smjena, evidenciju godišnjih odmora i timski chat. Plaćeni paketi počinju od 14,99 EUR mjesečno kada vam zatreba više radnika ili izvještaji." } },
+      { "@type": "Question", "name": "Kako napraviti raspored smjena za radnike?", "acceptedAnswer": { "@type": "Answer", "text": "Dodajte svoje radnike i njihovu dostupnost, odredite vrste smjena i koliko ljudi svaka smjena treba, a onda pustite Wrok da automatski složi raspored. Wrok poštuje godišnje odmore, bolovanja i obavezne sate odmora, a svaku smjenu možete ručno prilagoditi prije nego što raspored objavite timu. Cijeli postupak traje nekoliko minuta umjesto sati u tablicama." } },
+      { "@type": "Question", "name": "Koliko košta Wrok?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok je besplatan zauvijek za do 6 radnika, bez kreditne kartice. Plaćeni paketi počinju od 14,99 EUR mjesečno za do 15 radnika i otključavaju izvještaje, analitiku i još mnogo toga. Uz godišnju naplatu ostvarujete 20% popusta, a svaki novi korisnik dobiva 90 dana besplatnog probnog razdoblja." } },
+      { "@type": "Question", "name": "Na kojim uređajima radi Wrok?", "acceptedAnswer": { "@type": "Answer", "text": "Wrok je dostupan kao web aplikacija koja radi u svakom pregledniku, na računalu, tabletu ili mobitelu, bez ikakve instalacije. Aplikacije za Android i iOS su u izradi i uskoro stižu. Svi članovi tima vide iste podatke u stvarnom vremenu, bez obzira na uređaj." } }
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Reusable SVG symbols -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-check" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+    </symbol>
+  </svg>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <img src="/wrok_logo.png" alt="Wrok logo" class="nav-logo" width="1024" height="1024" fetchpriority="high" decoding="async">
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Otvori navigaciju">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features" data-nav>Značajke</a></li>
+        <li><a href="#how-it-works" data-nav>Kako radi</a></li>
+        <li><a href="#pricing" data-nav>Cijene</a></li>
+        <li><a href="#faq" data-nav>FAQ</a></li>
+        <li><a href="/" class="nav-lang">EN</a></li>
+        <li><a href="https://app.wrokapp.com" class="nav-cta" target="_blank" rel="noopener">Započni besplatno</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">Raspoređivanje smjena uz umjetnu inteligenciju</div>
+        <h1 class="hero-title">
+          <span class="hero-title-line">Upravljajte timom,</span>
+          <span class="hero-title-line hero-title-accent">ne tablicama.</span>
+        </h1>
+        <p class="hero-subtitle">Prestanite gubiti nedjelje na slaganje rasporeda. Wrok uz pomoć umjetne inteligencije složi raspored smjena u nekoliko sekundi i drži poruke, zamjene i evidenciju radnog vremena vašeg tima na jednom mjestu.</p>
+        <div class="hero-actions">
+          <a href="https://app.wrokapp.com" class="btn btn-hero-primary" target="_blank" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+            Započni besplatno
+          </a>
+          <a href="#features" class="btn btn-hero-secondary">
+            Pogledaj značajke
+            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+        <div class="hero-note">Dostupno odmah na webu &middot; Mobilne aplikacije uskoro</div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-float">
+          <div class="phone-mockup hero-phone">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="wrok-screen">
+                  <div class="ws-header">
+                    <div class="ws-header-top">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                      <span class="ws-title">Moj raspored</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    </div>
+                    <div class="ws-week">
+                      <span class="ws-arrow">&lsaquo;</span>
+                      <span class="ws-week-text">24. &ndash; 30. ožu.</span>
+                      <span class="ws-arrow">&rsaquo;</span>
+                    </div>
+                  </div>
+                  <div class="ws-schedule">
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Pon</span><span class="ws-day-num">24</span></div><div class="ws-shift ws-morning"><span>Jutarnja</span><span>06:00 – 14:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Uto</span><span class="ws-day-num">25</span></div><div class="ws-shift ws-morning"><span>Jutarnja</span><span>06:00 – 14:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Sri</span><span class="ws-day-num">26</span></div><div class="ws-shift ws-afternoon"><span>Popodnevna</span><span>14:00 – 22:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Čet</span><span class="ws-day-num">27</span></div><div class="ws-shift ws-night"><span>Noćna</span><span>22:00 – 06:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Pet</span><span class="ws-day-num">28</span></div><div class="ws-shift ws-afternoon"><span>Popodnevna</span><span>14:00 – 22:00</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Sub</span><span class="ws-day-num">29</span></div><div class="ws-shift ws-off"><span>Slobodan dan</span></div></div>
+                    <div class="ws-day"><div class="ws-day-info"><span class="ws-day-name">Ned</span><span class="ws-day-num">30</span></div><div class="ws-shift ws-off"><span>Slobodan dan</span></div></div>
+                  </div>
+                  <div class="ws-nav">
+                    <div class="ws-nav-item ws-active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Raspored</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Tim</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Chat</span></div>
+                    <div class="ws-nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 4l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 01-1.51-1.5"/></svg><span>Više</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path d="M0,64 C360,120 720,0 1080,64 C1260,96 1380,80 1440,64 L1440,120 L0,120 Z" fill="#1a1a1a"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ========== SLOGAN BAR ========== -->
+  <section class="slogan-bar">
+    <div class="container">
+      <div class="slogan-content fade-in">
+        <h2 class="slogan-text">Raspoređivanje smjena koje stvarno <span class="slogan-highlight">Wroka</span><span class="slogan-dot">.</span></h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="features" id="features">
+    <div class="section-bg-shapes">
+      <div class="shape sh-1"></div>
+      <div class="shape sh-2"></div>
+      <div class="shape sh-3"></div>
+      <div class="shape sh-4"></div>
+      <div class="shape sh-5"></div>
+      <div class="shape sh-6"></div>
+    </div>
+    <div class="container">
+      <div class="section-header light fade-in">
+        <span class="section-label light">Značajke</span>
+        <h2 class="section-title">Sve što vam treba za vođenje tima</h2>
+        <p class="section-subtitle">Alati osmišljeni za poslove sa smjenama. Od automatskog slaganja rasporeda do komunikacije s timom, Wrok pokriva sve.</p>
+      </div>
+
+      <div class="use-cases-grid">
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h4l3 14h12l3-10H10"/><circle cx="12" cy="9" r="2"/><path d="M20 4l2 3 3 1-3 1-2 3-2-3-3-1 3-1z"/></svg></div>
+          <h4>Automatsko slaganje rasporeda</h4>
+          <p>Umjetna inteligencija u nekoliko sekundi složi uravnotežen raspored smjena. Poštuje dostupnost radnika, godišnje odmore, bolovanja i obavezne sate odmora, pa raspored više ne morate slagati ručno.</p>
+        </div>
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10h16l-4-4M26 22H10l4 4"/></svg></div>
+          <h4>Zamjene smjena</h4>
+          <p>Radnici mogu izravno predložiti zamjenu smjene s kolegom. Obje strane potvrde zamjenu, a voditelj daje konačno odobrenje, tako da su svi u toku bez ikakve zabune.</p>
+        </div>
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="22" height="20" rx="2"/><path d="M5 12h22M11 4v6M21 4v6"/><path d="M12 19l3 3 5-5"/></svg></div>
+          <h4>Godišnji odmori i bolovanja</h4>
+          <p>Radnici u nekoliko dodira predaju zahtjev za godišnji ili bolovanje. Voditelj ga odmah vidi te ga odobrava ili odbija, a raspored se automatski prilagođava odobrenim odsutnostima.</p>
+        </div>
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M16 9v7l5 3"/></svg></div>
+          <h4>Evidencija radnog vremena</h4>
+          <p>Bilježite tko je došao na posao i pratite odrađene sate po danu, tjednu ili mjesecu. Uočite prekovremene sate na vrijeme i gradite pouzdanu evidenciju za obračun plaća.</p>
+        </div>
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M27 20a2 2 0 01-2 2H10l-5 5V7a2 2 0 012-2h16a2 2 0 012 2z"/><path d="M11 12h10M11 16h6"/></svg></div>
+          <h4>Timski chat</h4>
+          <p>Ugrađene poruke između svih članova tima. Dogovarajte zamjene smjena u razgovoru, imate potvrde o čitanju i cijela radna komunikacija ostaje na jednom mjestu, bez razbacanih WhatsApp grupa.</p>
+        </div>
+        <div class="use-case-card fade-in">
+          <div class="use-case-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 11a8 8 0 00-16 0c0 9-4 12-4 12h24s-4-3-4-12"/><path d="M18.3 27a2.5 2.5 0 01-4.6 0"/></svg></div>
+          <h4>Obavijesti</h4>
+          <p>Radnici odmah dobiju obavijest kada se raspored promijeni, kada stigne zahtjev za zamjenu ili kada je odobren godišnji. Nitko ne propušta važne promjene i svi znaju svoju smjenu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-bg-shapes dark-shapes">
+      <div class="shape sh-a"></div>
+      <div class="shape sh-b"></div>
+    </div>
+    <div class="container">
+      <div class="section-header dark fade-in">
+        <span class="section-label dark">Kako radi</span>
+        <h2 class="section-title">Spremni za rad u nekoliko minuta</h2>
+        <p class="section-subtitle">Bez ikakve edukacije. Postavite jednom, a umjetna inteligencija radi teži dio posla od prvog dana.</p>
+      </div>
+      <div class="steps">
+        <div class="steps-line" aria-hidden="true"></div>
+        <div class="step fade-in" data-delay="0">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3 class="step-title">Postavite radno mjesto</h3>
+            <p class="step-desc">Kreirajte lokaciju, pozovite članove tima, odredite vrste smjena s vlastitim vremenima i bojama te postavite radne pozicije. Sve je spremno za manje od pet minuta.</p>
+            <ul class="step-details">
+              <li>Odredite vrste smjena (jutarnja, popodnevna, noćna ili vlastita)</li>
+              <li>Kreirajte pozicije i postavite minimalan broj radnika po smjeni</li>
+              <li>Odaberite radne dane za svakog radnika</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step fade-in" data-delay="1">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3 class="step-title">Pustite da AI složi raspored</h3>
+            <p class="step-desc">Pritisnite gumb za slaganje i umjetna inteligencija u nekoliko sekundi napravi pravedan i optimiziran raspored. Uzima u obzir sva ograničenja odjednom, a smjene možete i sami rasporediti točno kako želite.</p>
+            <ul class="step-details">
+              <li>Umjetna inteligencija automatski poštuje sva ograničenja</li>
+              <li>Svaku dodjelu smjene doradite jednim dodirom</li>
+              <li>Kopirajte raspored u buduće tjedne jednim klikom</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step fade-in" data-delay="2">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3 class="step-title">Upravljajte i komunicirajte</h3>
+            <p class="step-desc">Vaš tim odmah vidi svoj raspored. Rješavajte zahtjeve za zamjenu, pratite dolaske, izvozite izvještaje i dopisujte se, sve unutar aplikacije.</p>
+            <ul class="step-details">
+              <li>Radnici dobivaju obavijesti kod svake promjene rasporeda</li>
+              <li>Odobravajte zamjene i zahtjeve za godišnji u pokretu</li>
+              <li>Izvezite izvještaje u PDF i Excel za obračun plaća</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="gradient-divider">
+
+  <!-- ========== PRICING ========== -->
+  <section class="pricing" id="pricing">
+    <div class="section-bg-shapes">
+      <div class="shape sh-1"></div>
+      <div class="shape sh-2"></div>
+      <div class="shape sh-5"></div>
+    </div>
+    <div class="container">
+      <div class="section-header light fade-in">
+        <span class="section-label light">Cijene</span>
+        <h2 class="section-title">Jednostavni paketi koji rastu s vašim timom</h2>
+        <p class="section-subtitle">Započnite besplatno s do 6 radnika. Nadogradite se kako tim raste. Nema naplate po korisniku, nikada.</p>
+        <div class="pricing-free-trial-badge fade-in">90 dana besplatnog probnog razdoblja &middot; 20% popusta na godišnju naplatu</div>
+
+        <div class="pricing-trust-strip fade-in" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem;margin:1.5rem auto 0;max-width:760px;">
+          <span style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;color:#e8e8e8;font-size:0.85rem;font-weight:500;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#0D7C66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 8 15 16 6"/></svg>
+            Bez kreditne kartice
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;color:#e8e8e8;font-size:0.85rem;font-weight:500;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#0D7C66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 8 15 16 6"/></svg>
+            Otkažite bilo kada
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;color:#e8e8e8;font-size:0.85rem;font-weight:500;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#0D7C66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="12" height="9" rx="1"/><path d="M7 9 V6 a3 3 0 0 1 6 0 V9"/></svg>
+            Sigurni HTTPS &middot; poslužitelji u EU
+          </span>
+        </div>
+
+        <div class="pricing-toggle fade-in">
+          <button class="pricing-toggle-btn active" data-billing="monthly">Mjesečno</button>
+          <button class="pricing-toggle-btn" data-billing="annual">
+            Godišnje
+            <span class="pricing-toggle-save">20% popusta</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pricing-grid pricing-grid-5" data-billing="monthly">
+        <!-- Free -->
+        <div class="pricing-card pricing-card-free fade-in">
+          <div class="pricing-card-header">
+            <span class="pricing-tier-name">Free</span>
+            <div class="pricing-price">
+              <span class="pricing-amount" style="font-size:2.4rem">&euro;0</span>
+              <span class="pricing-period">/zauvijek</span>
+            </div>
+            <span class="pricing-worker-count">Do 6 radnika &middot; 1 lokacija</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul class="pricing-features">
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Automatsko slaganje rasporeda</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Timski chat</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Zadaci i zamjene smjena</li>
+            </ul>
+            <a href="https://app.wrokapp.com" class="pricing-cta" target="_blank" rel="noopener">Započni besplatno</a>
+            <p style="margin:0.5rem 0 0;font-size:0.75rem;color:#9ca3af;text-align:center;">Bez kreditne kartice</p>
+          </div>
+        </div>
+
+        <!-- Starter -->
+        <div class="pricing-card fade-in" data-monthly-whole="14" data-monthly-cents=".99" data-annual-whole="11" data-annual-cents=".99" data-annual-total="143.90">
+          <div class="pricing-card-header">
+            <span class="pricing-tier-name">Starter</span>
+            <div class="pricing-price">
+              <span class="pricing-currency">&euro;</span>
+              <span class="pricing-amount">14</span>
+              <span class="pricing-cents">.99</span>
+              <span class="pricing-period">/mj</span>
+            </div>
+            <span class="pricing-billed-annually">Naplaćuje se &euro;143,90 godišnje</span>
+            <span class="pricing-worker-count">Do 15 radnika &middot; 2 lokacije</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul class="pricing-features">
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Sve iz paketa Free</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Analitika i izvještaji</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Izvoz u PDF i Excel</li>
+            </ul>
+            <a href="https://app.wrokapp.com" class="pricing-cta" target="_blank" rel="noopener">Započni besplatno</a>
+          </div>
+        </div>
+
+        <!-- Growth (popular) -->
+        <div class="pricing-card popular fade-in" data-monthly-whole="34" data-monthly-cents=".99" data-annual-whole="27" data-annual-cents=".99" data-annual-total="335.90">
+          <div class="pricing-popular-badge">Najpopularnije</div>
+          <div class="pricing-card-header">
+            <span class="pricing-tier-name">Growth</span>
+            <div class="pricing-price">
+              <span class="pricing-currency">&euro;</span>
+              <span class="pricing-amount">34</span>
+              <span class="pricing-cents">.99</span>
+              <span class="pricing-period">/mj</span>
+            </div>
+            <span class="pricing-billed-annually">Naplaćuje se &euro;335,90 godišnje</span>
+            <span class="pricing-worker-count">Do 40 radnika &middot; 5 lokacija</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul class="pricing-features">
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Sve iz paketa Starter</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Voditelji smjena</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Prijava dolaska putem GPS-a</li>
+            </ul>
+            <a href="https://app.wrokapp.com" class="pricing-cta" target="_blank" rel="noopener">Započni besplatno</a>
+          </div>
+        </div>
+
+        <!-- Business -->
+        <div class="pricing-card fade-in" data-monthly-whole="79" data-monthly-cents=".99" data-annual-whole="63" data-annual-cents=".99" data-annual-total="767.90">
+          <div class="pricing-card-header">
+            <span class="pricing-tier-name">Business</span>
+            <div class="pricing-price">
+              <span class="pricing-currency">&euro;</span>
+              <span class="pricing-amount">79</span>
+              <span class="pricing-cents">.99</span>
+              <span class="pricing-period">/mj</span>
+            </div>
+            <span class="pricing-billed-annually">Naplaćuje se &euro;767,90 godišnje</span>
+            <span class="pricing-worker-count">Do 100 radnika &middot; neograničeno lokacija</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul class="pricing-features">
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Sve iz paketa Growth</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Prioritetna podrška</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Napredna analitika</li>
+            </ul>
+            <a href="https://app.wrokapp.com" class="pricing-cta" target="_blank" rel="noopener">Započni besplatno</a>
+          </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card pricing-card-enterprise fade-in">
+          <div class="pricing-card-header">
+            <span class="pricing-tier-name">Enterprise</span>
+            <div class="pricing-price">
+              <span class="pricing-amount" style="font-size:2.4rem">Po dogovoru</span>
+            </div>
+            <span class="pricing-worker-count">Više od 100 radnika &middot; neograničeno lokacija</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul class="pricing-features">
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Sve iz paketa Business</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Pristup putem API-ja</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Namjenska podrška</li>
+              <li><svg class="icon-check" aria-hidden="true"><use href="#icon-check"/></svg>Prilagođene integracije</li>
+            </ul>
+            <a href="mailto:support@wrokapp.com" class="pricing-cta">Kontaktirajte nas</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="pricing-note fade-in">Bez naplate po korisniku. Bez skrivenih troškova. <strong>Jedna pretplata pokriva sve vaše lokacije.</strong> Uz godišnju naplatu ostvarujete 20% popusta. Otkažite bilo kada, bez pitanja i bez naknada.<br>Podaci se čuvaju u EU, u skladu s GDPR-om. Prikazane cijene su bez PDV-a. Konačna cijena može ovisiti o vašoj regiji.</p>
+    </div>
+  </section>
+
+  <hr class="gradient-divider">
+
+  <!-- ========== FAQ ========== -->
+  <section class="faq" id="faq">
+    <div class="section-bg-shapes dark-shapes">
+      <div class="shape sh-a"></div>
+      <div class="shape sh-d"></div>
+    </div>
+    <div class="container">
+      <div class="section-header dark fade-in">
+        <span class="section-label dark">FAQ</span>
+        <h2 class="section-title">Često postavljana pitanja</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item fade-in"><button class="faq-question"><span>Koja je najbolja aplikacija za raspored smjena za mali biznis?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Najbolja aplikacija za raspored smjena za mali biznis automatski slaže raspored, ostaje pristupačna i ne zahtijeva nikakvu edukaciju. Wrok u nekoliko sekundi složi cijeli tjedni raspored, rješava zamjene smjena, godišnje odmore i evidenciju radnog vremena, a besplatan je za timove do 6 radnika. Napravljen je upravo za male poslove sa smjenama, poput kafića, restorana, trgovina i skladišta.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Postoji li besplatna aplikacija za raspored smjena?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Da. Wrok je besplatan zauvijek za do 6 radnika i jednu lokaciju, bez kreditne kartice. Besplatni paket uključuje automatsko slaganje rasporeda uz pomoć umjetne inteligencije, zamjene smjena, evidenciju godišnjih odmora i timski chat. Plaćeni paketi počinju od &euro;14,99 mjesečno kada vam zatreba više radnika ili izvještaji.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Kako napraviti raspored smjena za radnike?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Dodajte svoje radnike i njihovu dostupnost, odredite vrste smjena i koliko ljudi svaka smjena treba, a onda pustite Wrok da automatski složi raspored. Wrok poštuje godišnje odmore, bolovanja i obavezne sate odmora, a svaku smjenu možete ručno prilagoditi prije nego što raspored objavite timu. Cijeli postupak traje nekoliko minuta umjesto sati u tablicama.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Koliko košta Wrok?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok je besplatan zauvijek za do 6 radnika, bez kreditne kartice. Plaćeni paketi počinju od &euro;14,99 mjesečno za do 15 radnika i otključavaju izvještaje, analitiku i još mnogo toga. Uz godišnju naplatu ostvarujete 20% popusta, a svaki novi korisnik dobiva 90 dana besplatnog probnog razdoblja. <a href="#pricing" style="color:var(--primary-light)">Pogledajte cijene</a> za sve detalje.</p></div></div>
+        <div class="faq-item fade-in"><button class="faq-question"><span>Na kojim uređajima radi Wrok?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-answer"><p>Wrok je dostupan kao web aplikacija koja radi u svakom pregledniku, na računalu, tabletu ili mobitelu, bez ikakve instalacije. Aplikacije za Android i iOS su u izradi i uskoro stižu. Svi članovi tima vide iste podatke u stvarnom vremenu, bez obzira na uređaj.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DOWNLOAD CTA ========== -->
+  <section class="download" id="download">
+    <div class="download-bg-shapes">
+      <div class="shape shape-dl-1"></div>
+      <div class="shape shape-dl-2"></div>
+      <div class="shape shape-dl-3"></div>
+      <div class="shape shape-dl-4"></div>
+    </div>
+    <div class="container">
+      <div class="download-content fade-in">
+        <h2 class="download-title">Prestanite slagati raspored ručno</h2>
+        <p class="download-subtitle">Postavite radno mjesto u nekoliko minuta, dodajte tim i pustite da Wrok složi vaš prvi raspored. Radi izravno u pregledniku, bez instalacije. Započnite besplatno, bez kreditne kartice.</p>
+        <div class="download-actions">
+          <a href="https://app.wrokapp.com" class="btn btn-download" target="_blank" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+            Započni besplatno
+          </a>
+          <a href="#" class="btn btn-download" onclick="return false;" style="opacity:0.7;cursor:default;">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 18l-7-7 1.4-1.4 4.6 4.6V4h2v10.2l4.6-4.6L19 11z"/></svg>
+            Uskoro na Google Playu
+          </a>
+        </div>
+        <p class="download-note">Dostupno odmah na webu &middot; Android i iOS uskoro</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <a href="#" class="footer-brand"><img src="/wrok_logo.png" alt="Wrok" class="footer-logo" width="1024" height="1024" loading="lazy" decoding="async"></a>
+          <p class="footer-tagline">Raspoređivanje smjena uz umjetnu inteligenciju za moderne timove. Složite optimiziran raspored, komunicirajte bolje i držite poslovanje pod kontrolom.</p>
+        </div>
+        <div class="footer-links-col"><h4>Proizvod</h4><ul><li><a href="#features">Značajke</a></li><li><a href="#how-it-works">Kako radi</a></li><li><a href="#pricing">Cijene</a></li><li><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Otvori web aplikaciju</a></li></ul></div>
+        <div class="footer-links-col"><h4>Resursi</h4><ul><li><a href="#faq">FAQ</a></li><li><a href="mailto:support@wrokapp.com">Kontaktirajte podršku</a></li><li><a href="/">English</a></li></ul></div>
+        <div class="footer-links-col"><h4>Pravno</h4><ul><li><a href="/privacy">Pravila privatnosti</a></li><li><a href="/terms">Uvjeti korištenja</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2026 Wrok. Sva prava pridržana.</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Natrag na vrh">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script defer src="/script.js"></script>
+</body>
+</html>
