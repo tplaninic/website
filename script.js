@@ -1,5 +1,5 @@
 // ============================================================
-// WROK LANDING PAGE — script.js
+// WROK LANDING PAGE - script.js
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -283,13 +283,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== FAQ Accordion =====
   const faqItems = document.querySelectorAll('.faq-item');
 
-  faqItems.forEach(item => {
+  faqItems.forEach((item, index) => {
     const btn = item.querySelector('.faq-question');
+    const answer = item.querySelector('.faq-answer');
+    const answerId = `faq-answer-${index + 1}`;
+    answer.id = answerId;
+    btn.setAttribute('aria-controls', answerId);
+    btn.setAttribute('aria-expanded', 'false');
     btn.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
-      faqItems.forEach(other => other.classList.remove('open'));
+      faqItems.forEach(other => {
+        other.classList.remove('open');
+        other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
       if (!isOpen) {
         item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
@@ -586,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// THREE.JS 3D PHONE — WebGL body + CSS3D screen
+// THREE.JS 3D PHONE - WebGL body + CSS3D screen
 // ============================================================
 (function() {
   if (window.innerWidth <= 768) return;
@@ -600,7 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var phoneScreen = document.querySelector('.phone-mockup.hero-phone .phone-screen');
   if (!container || !webglCanvas || !cssContainer || !heroVisual || !phoneMockup || !phoneScreen) return;
 
-  // Only render the front face of the CSS3D screen — the back face is invisible
+  // Only render the front face of the CSS3D screen - the back face is invisible
   // so the screen vanishes cleanly when the phone is rotated past 90°.
   phoneScreen.style.backfaceVisibility = 'hidden';
   phoneScreen.style.webkitBackfaceVisibility = 'hidden';
@@ -651,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cssContainer.appendChild(cssRenderer.domElement);
 
   // ===== Phone Body (WebGL) =====
-  // Phone body — screen must fit inside this
+  // Phone body - screen must fit inside this
   var PW = 280, PH = 500, PD = 18;
 
   function makeRoundedRect(w, h, r) {
@@ -674,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   bodyGeo.center();
 
-  // Lighter grey body — clearly visible
+  // Lighter grey body - clearly visible
   var bodyMat = new THREE.MeshPhysicalMaterial({
     color: 0x3a3a52, metalness: 0.6, roughness: 0.35,
     clearcoat: 0.3, clearcoatRoughness: 0.4
@@ -682,9 +691,9 @@ document.addEventListener('DOMContentLoaded', () => {
   var phoneMesh = new THREE.Mesh(bodyGeo, bodyMat);
   glScene.add(phoneMesh);
 
-  // No separate back plane — the extruded body already has a back face
+  // No separate back plane - the extruded body already has a back face
 
-  // Camera module on back — raised square island (top-left of back)
+  // Camera module on back - raised square island (top-left of back)
   var camIslandGeo = new THREE.PlaneGeometry(75, 75);
   var camIslandMat = new THREE.MeshBasicMaterial({ color: 0x1e1e34, side: THREE.DoubleSide });
   // 3D Camera module on back
@@ -692,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var glassMat = new THREE.MeshPhysicalMaterial({ color: 0x15152a, metalness: 0.8, roughness: 0.1, clearcoat: 0.8 });
   var ringMat = new THREE.MeshPhysicalMaterial({ color: 0x444466, metalness: 0.7, roughness: 0.3 });
 
-  // Camera island — beveled extruded shape
+  // Camera island - beveled extruded shape
   var islandShape = new THREE.Shape();
   var iw = 80, ih = 80, ir = 12;
   islandShape.moveTo(-iw/2+ir, -ih/2);
@@ -720,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
   glass1.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.6);
   phoneMesh.add(glass1);
 
-  // Second lens (top-right) — outer ring + inner glass, offset in Z to avoid overlap
+  // Second lens (top-right) - outer ring + inner glass, offset in Z to avoid overlap
   var lens2RingGeo = new THREE.CylinderGeometry(13, 13, 4, 32);
   lens2RingGeo.rotateX(Math.PI / 2);
   var lens2Ring = new THREE.Mesh(lens2RingGeo, ringMat);
@@ -751,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
   flashMesh.position.set(-PW/2 + 80, PH/2 - 80, -PD/2 - 5);
   phoneMesh.add(flashMesh);
 
-  // Wrok logo on back — load PNG via Image, fallback to canvas text for local dev
+  // Wrok logo on back - load PNG via Image, fallback to canvas text for local dev
   function addLogoToPhone(tex, w, h) {
     var geo = new THREE.PlaneGeometry(w, h);
     var mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false, opacity: 0.6 });
@@ -787,9 +796,9 @@ document.addEventListener('DOMContentLoaded', () => {
   lensHighlight.position.set(-PW/2 + 40, PH/2 - 40, -PD/2 - 8.65);
   phoneMesh.add(lensHighlight);
 
-  // No separate dots — the inner cylinders provide the dark glass look
+  // No separate dots - the inner cylinders provide the dark glass look
 
-  // Lighting — bright enough to see the phone body clearly
+  // Lighting - bright enough to see the phone body clearly
   glScene.add(new THREE.AmbientLight(0xffffff, 0.8));
   var mainLight = new THREE.DirectionalLight(0xffffff, 1.0);
   mainLight.position.set(400, 300, 600);
@@ -905,13 +914,13 @@ document.addEventListener('DOMContentLoaded', () => {
     var featuresEnd = featuresTop + featuresH;
 
     if (scrollY < 20) {
-      // At top — original position, allow phone interaction
+      // At top - original position, allow phone interaction
       targetPhoneX = heroStartX;
       targetPhoneScale = 1;
       phoneVisible = true;
       container.style.pointerEvents = 'auto';
     } else if (scrollY < featuresTop) {
-      // Fly to sidebar — fast at first, then ease (power curve)
+      // Fly to sidebar - fast at first, then ease (power curve)
       var p = scrollY / featuresTop;
       p = Math.max(0, Math.min(1, p));
       // Apply ease-out power curve: p^0.3 means 90% done at ~30% scroll
@@ -921,13 +930,13 @@ document.addEventListener('DOMContentLoaded', () => {
       phoneVisible = true;
       container.style.pointerEvents = 'none';
     } else if (scrollY < featuresEnd) {
-      // In features — pinned at sidebar, disable phone interaction so buttons work
+      // In features - pinned at sidebar, disable phone interaction so buttons work
       targetPhoneX = sidebarX;
       targetPhoneScale = 0.7;
       phoneVisible = true;
       container.style.pointerEvents = 'none';
     } else {
-      // Past features — hide
+      // Past features - hide
       phoneVisible = false;
     }
   }, { passive: true });
@@ -952,7 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
     7: { title: 'Roles', type: 'schedule' },          // Roles
   };
 
-  // Lock the schedule container to a fixed height (don't measure — it's unreliable in 3D context)
+  // Lock the schedule container to a fixed height (don't measure - it's unreliable in 3D context)
   if (wsSchedule) {
     wsSchedule.style.minHeight = '320px';
     wsSchedule.style.maxHeight = '320px';
@@ -1103,5 +1112,354 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('trialInviteCta').addEventListener('click', () => {
     persist({ accepted: true, acceptedAt: now });
     // Let the mailto: navigation happen naturally.
+  });
+})();
+
+// Wrok workstation hero: opens on arrival, then settles as the page scrolls.
+(function () {
+  var scene = document.getElementById('wrokWorkstation');
+  var hero = document.getElementById('hero');
+  if (!scene || !hero) return;
+  var laptop = scene.querySelector('.wrok-laptop');
+  var cards = scene.querySelectorAll('.floating-shift');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  requestAnimationFrame(function () { setTimeout(function () { scene.classList.add('ready'); }, reduced ? 0 : 120); });
+  if (reduced) return;
+  var ticking = false;
+  function renderHeroMotion() {
+    ticking = false;
+    var p = Math.max(0, Math.min(1, -hero.getBoundingClientRect().top / (hero.offsetHeight * .72)));
+    laptop.style.marginTop = (p * 55) + 'px';
+    laptop.style.opacity = 1 - p * .34;
+    laptop.style.filter = 'blur(' + (p * 1.8) + 'px)';
+    cards.forEach(function (card, i) {
+      var direction = i === 1 ? 1 : -1;
+      card.style.marginLeft = (direction * p * (90 + i * 24)) + 'px';
+      card.style.marginTop = ((i - 1) * p * 55) + 'px';
+      card.style.opacity = 1 - p * .82;
+    });
+  }
+  function requestHeroMotion() { if (!ticking) { ticking = true; requestAnimationFrame(renderHeroMotion); } }
+  window.addEventListener('scroll', requestHeroMotion, { passive: true });
+  renderHeroMotion();
+})();
+
+// Scroll-driven café scheduling story
+(function initCafeStory() {
+  var story = document.querySelector('.cafe-story');
+  if (!story) return;
+
+  var sticky = story.querySelector('.cafe-story-sticky');
+  var intro = story.querySelector('.cafe-intro');
+  var panel = story.querySelector('.schedule-glass');
+  var finale = story.querySelector('.cafe-finale');
+  var light = story.querySelector('.cafe-opening-light');
+  var progressBar = story.querySelector('.schedule-progress span');
+  var status = story.querySelector('.schedule-status');
+  var statusText = status && status.querySelector('span');
+  var coverage = story.querySelector('.coverage-count');
+  var generateButton = story.querySelector('.schedule-generate');
+  var generateText = story.querySelector('.generate-text');
+  var workers = Array.prototype.slice.call(story.querySelectorAll('.schedule-worker'));
+  var clipOne = story.querySelector('.cafe-clip-one');
+  var clipTwo = story.querySelector('.cafe-clip-two');
+  var staffed = story.querySelector('.cafe-staffed');
+  var openStill = story.querySelector('.cafe-open-still');
+  var clipThree = story.querySelector('.cafe-clip-three');
+  var videos = [clipOne, clipTwo, clipThree];
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var ticking = false;
+  var previousCount = -1;
+  var displayedProgress = 0;
+  var hasRenderedProgress = false;
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function range(value, start, end) {
+    return clamp((value - start) / (end - start), 0, 1);
+  }
+
+  function smooth(value) {
+    return value * value * (3 - 2 * value);
+  }
+
+  function setOpacity(element, value) {
+    if (element) element.style.opacity = String(clamp(value, 0, 1));
+  }
+
+  function scrub(video, progress, start, end) {
+    if (!video || !Number.isFinite(video.duration) || !video.duration) return;
+    var local = range(progress, start, end);
+    var target = clamp(local * video.duration, 0.01, Math.max(0.01, video.duration - 0.025));
+    video.__wrokTargetTime = target;
+    if (video.seeking) return;
+    if (Math.abs(video.currentTime - target) > 0.01) {
+      try { video.currentTime = target; } catch (error) { /* Metadata can race on iOS. */ }
+    }
+  }
+
+  function setWorkerState(count) {
+    workers.forEach(function(worker, index) {
+      var assigned = index < count;
+      worker.classList.toggle('is-assigned', assigned);
+      worker.querySelectorAll('.worker-week span').forEach(function(day) {
+        day.textContent = assigned ? (day.getAttribute('data-shift') || '') : '+';
+      });
+      if (count !== previousCount && index === count - 1) {
+        worker.classList.add('is-just-assigned');
+        window.setTimeout(function() {
+          worker.classList.remove('is-just-assigned');
+        }, 260);
+      }
+    });
+    previousCount = count;
+  }
+
+  function render() {
+    ticking = false;
+    if (reducedMotion.matches) {
+      setWorkerState(3);
+      if (coverage) coverage.textContent = '3/3';
+      if (statusText) statusText.textContent = 'Schedule ready';
+      if (status) status.classList.add('is-ready');
+      if (generateButton) generateButton.classList.add('is-complete');
+      if (generateText) generateText.textContent = 'Schedule ready';
+      return;
+    }
+
+    var rect = story.getBoundingClientRect();
+    var travel = Math.max(1, story.offsetHeight - window.innerHeight);
+    var targetProgress = clamp(-rect.top / travel, 0, 1);
+    if (!hasRenderedProgress) {
+      displayedProgress = targetProgress;
+      hasRenderedProgress = true;
+    } else {
+      displayedProgress += (targetProgress - displayedProgress) * 0.16;
+    }
+    if (Math.abs(targetProgress - displayedProgress) < 0.00035) {
+      displayedProgress = targetProgress;
+    }
+    var p = displayedProgress;
+    sticky.style.setProperty('--story-progress', p.toFixed(4));
+    var compactStory = window.innerWidth <= 900;
+    if (compactStory) {
+      var sceneX = 30 + smooth(range(p, 0.08, 0.62)) * 31;
+      sticky.style.setProperty('--scene-x', sceneX.toFixed(2) + '%');
+    } else {
+      sticky.style.removeProperty('--scene-x');
+    }
+
+    scrub(clipOne, p, 0.015, 0.305);
+    scrub(clipTwo, p, 0.305, 0.565);
+    scrub(clipThree, p, 0.715, 0.91);
+
+    setOpacity(clipOne, 1 - smooth(range(p, 0.295, 0.345)));
+    setOpacity(clipTwo, smooth(range(p, 0.305, 0.35)) * (1 - smooth(range(p, 0.555, 0.605))));
+    setOpacity(staffed, smooth(range(p, 0.555, 0.60)) * (1 - smooth(range(p, 0.665, 0.715))));
+    setOpacity(openStill, smooth(range(p, 0.645, 0.69)) * (1 - smooth(range(p, 0.71, 0.765))));
+    setOpacity(clipThree, smooth(range(p, 0.71, 0.765)));
+
+    var lightIn = smooth(range(p, 0.62, 0.675));
+    var lightOut = 1 - smooth(range(p, 0.685, 0.735));
+    var lightAmount = lightIn * lightOut;
+    setOpacity(light, lightAmount * 0.94);
+    light.style.transform = 'translateX(' + (-18 + lightIn * 20) + '%) scaleX(' + (0.72 + lightAmount * 0.55) + ')';
+    light.style.filter = 'blur(' + (24 - lightAmount * 10) + 'px)';
+
+    var introExit = smooth(range(p, 0.10, 0.205));
+    setOpacity(intro, 1 - introExit);
+    intro.style.transform = compactStory ? 'translateY(0)' : 'translateY(' + (-48 - introExit * 5) + '%)';
+    intro.style.filter = 'blur(' + (introExit * 4) + 'px)';
+
+    var panelIn = smooth(range(p, 0.115, 0.205));
+    var panelOut = smooth(range(p, 0.79, 0.875));
+    setOpacity(panel, panelIn * (1 - panelOut));
+    panel.style.transform = compactStory
+      ? 'translateY(' + (24 * (1 - panelIn)) + 'px) scale(' + (0.98 + panelIn * 0.02) + ')'
+      : 'translate(' + (28 * (1 - panelIn)) + 'px,-46%) scale(' + (0.96 + panelIn * 0.04) + ')';
+    panel.style.filter = 'blur(' + ((1 - panelIn) * 4 + panelOut * 4) + 'px)';
+
+    // Lead each on-screen worker appearance by roughly 0.4 seconds so the
+    // schedule assignment reads as the cause and the arrival as the result.
+    var assignedCount = p >= 0.480 ? 3 : p >= 0.370 ? 2 : p >= 0.206 ? 1 : 0;
+    setWorkerState(assignedCount);
+    if (coverage) coverage.textContent = assignedCount + '/3';
+    if (progressBar) progressBar.style.transform = 'scaleX(' + range(p, 0.18, 0.55).toFixed(3) + ')';
+
+    if (statusText && status) {
+      var label = 'Ready to generate';
+      if (p >= 0.18 && p < 0.206) label = 'Generating…';
+      if (assignedCount === 1) label = '1 of 3 assigned';
+      if (assignedCount === 2) label = '2 of 3 assigned';
+      if (assignedCount === 3 && p < 0.65) label = 'Schedule ready';
+      if (p >= 0.65) label = 'Open for business';
+      statusText.textContent = label;
+      status.classList.toggle('is-ready', assignedCount === 3);
+    }
+
+    if (generateButton && generateText) {
+      generateButton.classList.toggle('is-complete', assignedCount === 3);
+      generateText.textContent = assignedCount === 3 ? 'Schedule ready' : (p >= 0.18 ? 'Generating…' : 'Generate schedule');
+    }
+
+    var finaleIn = smooth(range(p, 0.835, 0.915));
+    setOpacity(finale, finaleIn);
+    finale.style.transform = 'translateY(' + (12 * (1 - finaleIn)) + 'px)';
+    finale.style.filter = 'blur(' + (4 * (1 - finaleIn)) + 'px)';
+
+    if (Math.abs(targetProgress - displayedProgress) >= 0.00035) {
+      requestRender();
+    }
+  }
+
+  function requestRender() {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(render);
+    }
+  }
+
+  videos.forEach(function(video) {
+    if (!video) return;
+    video.pause();
+    video.addEventListener('loadedmetadata', requestRender, { once: true });
+    video.addEventListener('seeked', function() {
+      if (!Number.isFinite(video.__wrokTargetTime)) return;
+      if (Math.abs(video.currentTime - video.__wrokTargetTime) > 0.01) {
+        requestRender();
+      }
+    });
+    video.load();
+  });
+
+  window.addEventListener('scroll', requestRender, { passive: true });
+  window.addEventListener('resize', requestRender);
+  reducedMotion.addEventListener && reducedMotion.addEventListener('change', requestRender);
+  render();
+})();
+// Inertial wheel glide for the pinned café story.
+// Touch, keyboard, scrollbar dragging, and reduced-motion remain browser-native.
+(function initCafeStoryGlide() {
+  var story = document.querySelector('.cafe-story');
+  if (!story) return;
+
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var finePointer = window.matchMedia('(pointer: fine)');
+  var targetY = window.scrollY;
+  var renderedY = window.scrollY;
+  var running = false;
+  var internalScroll = false;
+  var glideFrame = 0;
+  var glideStrength = 0.14;
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function documentMaxScroll() {
+    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  }
+
+  function storyBounds() {
+    var top = story.offsetTop;
+    return {
+      top: top,
+      bottom: top + story.offsetHeight - window.innerHeight
+    };
+  }
+
+  function animateGlide() {
+    var distance = targetY - renderedY;
+    var distanceRatio = Math.min(1, Math.abs(distance) / 520);
+    var adaptiveStrength = 0.095 + distanceRatio * 0.205;
+    var frameStrength = Math.min(glideStrength, adaptiveStrength);
+    renderedY += distance * frameStrength;
+
+    if (Math.abs(distance) < 0.22) {
+      renderedY = targetY;
+      internalScroll = true;
+      window.scrollTo(0, renderedY);
+      internalScroll = false;
+      running = false;
+      document.documentElement.classList.remove('cafe-gliding');
+      glideFrame = 0;
+      return;
+    }
+
+    internalScroll = true;
+    window.scrollTo(0, renderedY);
+    internalScroll = false;
+    glideFrame = window.requestAnimationFrame(animateGlide);
+  }
+
+  function releaseGlide(position) {
+    if (glideFrame) window.cancelAnimationFrame(glideFrame);
+    glideFrame = 0;
+    running = false;
+    renderedY = position;
+    targetY = position;
+    document.documentElement.classList.remove('cafe-gliding');
+  }
+
+  function onWheel(event) {
+    if (reducedMotion.matches || !finePointer.matches || event.ctrlKey) return;
+
+    var bounds = storyBounds();
+    var y = window.scrollY;
+    var withinStory = y >= bounds.top - 2 && y <= bounds.bottom + 2;
+    var headingIntoStory =
+      (y < bounds.top && event.deltaY > 0 && bounds.top - y < window.innerHeight * 0.18) ||
+      (y > bounds.bottom && event.deltaY < 0 && y - bounds.bottom < window.innerHeight * 0.18);
+
+    if (!withinStory && !headingIntoStory) return;
+
+    // At either edge, hand the next outward wheel event straight back to the browser.
+    // This prevents the story's long ease-out from delaying the following section.
+    if ((event.deltaY > 0 && targetY >= bounds.bottom - 1) ||
+        (event.deltaY < 0 && targetY <= bounds.top + 1)) {
+      releaseGlide(event.deltaY > 0 ? bounds.bottom : bounds.top);
+      document.documentElement.classList.add('cafe-gliding');
+      internalScroll = true;
+      window.scrollTo(0, event.deltaY > 0 ? bounds.bottom : bounds.top);
+      internalScroll = false;
+      window.setTimeout(function() {
+        if (!running) document.documentElement.classList.remove('cafe-gliding');
+      }, 160);
+      return;
+    }
+
+    event.preventDefault();
+
+    var multiplier = event.deltaMode === 1 ? 18 : event.deltaMode === 2 ? window.innerHeight : 1;
+    var delta = event.deltaY * multiplier;
+    glideStrength = Math.abs(delta) < 42 ? 0.26 : 0.30;
+
+    if (!running) {
+      renderedY = window.scrollY;
+      targetY = renderedY;
+    }
+
+    targetY = clamp(targetY + delta, bounds.top, bounds.bottom);
+
+    if (!running) {
+      running = true;
+      document.documentElement.classList.add('cafe-gliding');
+      glideFrame = window.requestAnimationFrame(animateGlide);
+    }
+  }
+
+  function syncNativePosition() {
+    if (internalScroll || running) return;
+    renderedY = window.scrollY;
+    targetY = renderedY;
+  }
+
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('scroll', syncNativePosition, { passive: true });
+  window.addEventListener('resize', function() {
+    targetY = clamp(targetY, 0, documentMaxScroll());
+    if (!running) renderedY = window.scrollY;
   });
 })();

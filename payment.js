@@ -1,4 +1,4 @@
-// payment.js — Subscription is now handled via in-app purchases (Google Play)
+// payment.js - Subscription is now handled via in-app purchases (Google Play)
 // This page is no longer used for Stripe checkout.
 'use strict';
 
