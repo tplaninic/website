@@ -1321,6 +1321,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function prepareSeekableVideo(video) {
+    if (!video) return Promise.resolve();
+    var source = window.innerWidth > 900
+      ? video.getAttribute('data-src-1080')
+      : video.getAttribute('data-src-720');
+    if (!source) return Promise.resolve();
+
+    return fetch(source, { cache: 'force-cache' })
+      .then(function(response) {
+        if (!response.ok) throw new Error('Video request failed: ' + response.status);
+        return response.blob();
+      })
+      .then(function(blob) {
+        video.__wrokBlobUrl = URL.createObjectURL(blob);
+        video.src = video.__wrokBlobUrl;
+        video.preload = 'auto';
+        video.load();
+      })
+      .catch(function() {
+        // A direct URL still provides a visible fallback if Blob creation fails.
+        video.src = source;
+        video.preload = 'auto';
+        video.load();
+      });
+  }
+
   videos.forEach(function(video) {
     if (!video) return;
     video.pause();
@@ -1331,7 +1357,18 @@ document.addEventListener('DOMContentLoaded', () => {
         requestRender();
       }
     });
-    video.load();
+  });
+
+  Promise.all(videos.map(prepareSeekableVideo)).then(function() {
+    story.classList.add('is-media-ready');
+    requestRender();
+  });
+
+  window.addEventListener('pagehide', function(event) {
+    if (event.persisted) return;
+    videos.forEach(function(video) {
+      if (video && video.__wrokBlobUrl) URL.revokeObjectURL(video.__wrokBlobUrl);
+    });
   });
 
   window.addEventListener('scroll', requestRender, { passive: true });
