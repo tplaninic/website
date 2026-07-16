@@ -1376,20 +1376,24 @@ document.addEventListener('DOMContentLoaded', () => {
   reducedMotion.addEventListener && reducedMotion.addEventListener('change', requestRender);
   render();
 })();
-// Inertial wheel glide for the pinned café story.
-// Touch, keyboard, scrollbar dragging, and reduced-motion remain browser-native.
+// Cinematic wheel steps for the pinned café story.
+// A wheel gesture completes one narrative beat instead of exposing arbitrary
+// in-between AI frames during very slow scrolling. Touch, keyboard, scrollbar
+// dragging, and reduced-motion remain browser-native.
 (function initCafeStoryGlide() {
   var story = document.querySelector('.cafe-story');
   if (!story) return;
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var finePointer = window.matchMedia('(pointer: fine)');
-  var targetY = window.scrollY;
-  var renderedY = window.scrollY;
+  var checkpoints = [0, 0.305, 0.565, 0.715, 0.91, 1];
   var running = false;
   var internalScroll = false;
   var glideFrame = 0;
-  var glideStrength = 0.14;
+  var startY = window.scrollY;
+  var targetY = window.scrollY;
+  var startedAt = 0;
+  var duration = 860;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -1407,27 +1411,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  function animateGlide() {
-    var distance = targetY - renderedY;
-    var distanceRatio = Math.min(1, Math.abs(distance) / 520);
-    var adaptiveStrength = 0.095 + distanceRatio * 0.205;
-    var frameStrength = Math.min(glideStrength, adaptiveStrength);
-    renderedY += distance * frameStrength;
+  function easeInOutCubic(value) {
+    return value < 0.5
+      ? 4 * value * value * value
+      : 1 - Math.pow(-2 * value + 2, 3) / 2;
+  }
 
-    if (Math.abs(distance) < 0.22) {
-      renderedY = targetY;
-      internalScroll = true;
-      window.scrollTo(0, renderedY);
-      internalScroll = false;
+  function animateGlide(now) {
+    var elapsed = Math.min(1, (now - startedAt) / duration);
+    var renderedY = startY + (targetY - startY) * easeInOutCubic(elapsed);
+    internalScroll = true;
+    window.scrollTo(0, renderedY);
+    internalScroll = false;
+
+    if (elapsed >= 1) {
       running = false;
       document.documentElement.classList.remove('cafe-gliding');
       glideFrame = 0;
       return;
     }
-
-    internalScroll = true;
-    window.scrollTo(0, renderedY);
-    internalScroll = false;
     glideFrame = window.requestAnimationFrame(animateGlide);
   }
 
@@ -1435,9 +1437,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (glideFrame) window.cancelAnimationFrame(glideFrame);
     glideFrame = 0;
     running = false;
-    renderedY = position;
+    startY = position;
     targetY = position;
     document.documentElement.classList.remove('cafe-gliding');
+  }
+
+  function nearestCheckpoint(progress, direction) {
+    var tolerance = 0.018;
+    if (direction > 0) {
+      for (var i = 0; i < checkpoints.length; i += 1) {
+        if (checkpoints[i] > progress + tolerance) return checkpoints[i];
+      }
+      return 1;
+    }
+    for (var j = checkpoints.length - 1; j >= 0; j -= 1) {
+      if (checkpoints[j] < progress - tolerance) return checkpoints[j];
+    }
+    return 0;
   }
 
   function onWheel(event) {
@@ -1445,6 +1461,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var bounds = storyBounds();
     var y = window.scrollY;
+    var direction = Math.sign(event.deltaY);
+    if (!direction || Math.abs(event.deltaY) < 0.5) return;
     var withinStory = y >= bounds.top - 2 && y <= bounds.bottom + 2;
     var headingIntoStory =
       (y < bounds.top && event.deltaY > 0 && bounds.top - y < window.innerHeight * 0.18) ||
@@ -1454,12 +1472,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // At either edge, hand the next outward wheel event straight back to the browser.
     // This prevents the story's long ease-out from delaying the following section.
-    if ((event.deltaY > 0 && targetY >= bounds.bottom - 1) ||
-        (event.deltaY < 0 && targetY <= bounds.top + 1)) {
-      releaseGlide(event.deltaY > 0 ? bounds.bottom : bounds.top);
+    if (!running && ((direction > 0 && y >= bounds.bottom - 1) ||
+        (direction < 0 && y <= bounds.top + 1))) {
+      releaseGlide(direction > 0 ? bounds.bottom : bounds.top);
       document.documentElement.classList.add('cafe-gliding');
       internalScroll = true;
-      window.scrollTo(0, event.deltaY > 0 ? bounds.bottom : bounds.top);
+      window.scrollTo(0, direction > 0 ? bounds.bottom : bounds.top);
       internalScroll = false;
       window.setTimeout(function() {
         if (!running) document.documentElement.classList.remove('cafe-gliding');
@@ -1468,35 +1486,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     event.preventDefault();
+    // Trackpads emit a stream of wheel events for one physical gesture. Keep
+    // that stream attached to the active beat so it cannot skip several scenes.
+    if (running) return;
 
-    var multiplier = event.deltaMode === 1 ? 18 : event.deltaMode === 2 ? window.innerHeight : 1;
-    var delta = event.deltaY * multiplier;
-    glideStrength = Math.abs(delta) < 42 ? 0.26 : 0.30;
-
-    if (!running) {
-      renderedY = window.scrollY;
-      targetY = renderedY;
-    }
-
-    targetY = clamp(targetY + delta, bounds.top, bounds.bottom);
-
-    if (!running) {
-      running = true;
-      document.documentElement.classList.add('cafe-gliding');
-      glideFrame = window.requestAnimationFrame(animateGlide);
-    }
+    var progress = clamp((y - bounds.top) / Math.max(1, bounds.bottom - bounds.top), 0, 1);
+    var nextProgress = nearestCheckpoint(progress, direction);
+    startY = y;
+    targetY = bounds.top + (bounds.bottom - bounds.top) * nextProgress;
+    duration = Math.max(620, Math.min(980, 680 + Math.abs(targetY - startY) * 0.12));
+    startedAt = performance.now();
+    running = true;
+    document.documentElement.classList.add('cafe-gliding');
+    glideFrame = window.requestAnimationFrame(animateGlide);
   }
 
   function syncNativePosition() {
     if (internalScroll || running) return;
-    renderedY = window.scrollY;
-    targetY = renderedY;
+    startY = window.scrollY;
+    targetY = startY;
   }
 
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('scroll', syncNativePosition, { passive: true });
   window.addEventListener('resize', function() {
     targetY = clamp(targetY, 0, documentMaxScroll());
-    if (!running) renderedY = window.scrollY;
+    if (!running) startY = window.scrollY;
   });
 })();
