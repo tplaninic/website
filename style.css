@@ -2845,6 +2845,7 @@ body {
   will-change: opacity, filter;
 }
 .cafe-clip-one { opacity: 1; }
+.cafe-autoplay { opacity: 1; }
 .cafe-grade {
   z-index: 6;
   pointer-events: none;
@@ -3941,8 +3942,66 @@ html { -webkit-font-smoothing: antialiased; }
 }
 
 /* Final responsive hero rules are intentionally last in the cascade. */
+.cafe-story { height: 100svh; }
+.cafe-story-sticky { position: relative; height: 100svh; min-height: 640px; }
+.cafe-next-cue {
+  position: absolute;
+  z-index: 12;
+  bottom: 18px;
+  left: 50%;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%,8px);
+  transition-property: opacity, transform;
+  transition-duration: 320ms;
+  transition-timing-function: cubic-bezier(.2,0,0,1);
+}
+.cafe-next-cue svg { width: 30px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
+.cafe-story.is-finished .cafe-next-cue { opacity: .9; pointer-events: auto; transform: translate(-50%,0); animation: cafe-next-pulse 1.35s ease-in-out infinite; }
+.cafe-next-cue:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 50%; }
+@keyframes cafe-next-pulse {
+  0%,100% { transform: translate(-50%,0); opacity: .55; }
+  50% { transform: translate(-50%,7px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cafe-story.is-finished .cafe-next-cue { animation: none; }
+}
+
+/* Keep secondary copy comfortably readable across alternating light and dark sections. */
+.how-it-works .section-title,
+.for-teams .section-title,
+.pricing .section-title { color: #f8fcfa; }
+.how-it-works .section-subtitle,
+.for-teams .section-subtitle,
+.pricing .section-subtitle { color: rgba(242,249,246,.82); }
+.how-it-works .section-label,
+.for-teams .section-label,
+.pricing .section-label { color: #79ddc9; }
+.how-it-works .step-desc,
+.how-it-works .step-details li,
+.for-teams .team-intro,
+.for-teams .team-col li span,
+.pricing .pricing-features li,
+.pricing .pricing-worker-count,
+.pricing .pricing-period,
+.pricing .pricing-billed-annually,
+.pricing .pricing-note { color: rgba(239,247,244,.76); }
+.features,
+.spotlight,
+.use-cases,
+.faq { color: #17231f; }
+.features .section-subtitle,
+.spotlight .section-subtitle,
+.use-cases .section-subtitle,
+.faq .section-subtitle { color: #52635e; }
+
 @media (max-width: 900px) {
-  .cafe-story { height: 300vh; }
+  .cafe-story { height: 100svh; }
   .cafe-story-sticky { height: 100svh; min-height: 100svh; }
   .cafe-layer { object-position: var(--scene-x,50%) center; }
   .cafe-intro {
@@ -3964,7 +4023,7 @@ html { -webkit-font-smoothing: antialiased; }
 }
 
 @media (max-width: 700px) {
-  .cafe-story { height: 280vh; }
+  .cafe-story { height: 100svh; }
   .cafe-story-sticky { min-height: 640px; }
   .cafe-intro { top: 132px; left: 20px; width: calc(100% - 40px); }
   .cafe-intro h1 { font-size: clamp(2.3rem,9.8vw,2.9rem); line-height: .98; letter-spacing: -.055em; }

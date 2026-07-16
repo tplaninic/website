@@ -1146,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHeroMotion();
 })();
 
-// Scroll-driven café scheduling story
+// Self-running café scheduling story
 (function initCafeStory() {
   var story = document.querySelector('.cafe-story');
   if (!story) return;
@@ -1163,12 +1163,8 @@ document.addEventListener('DOMContentLoaded', () => {
   var generateButton = story.querySelector('.schedule-generate');
   var generateText = story.querySelector('.generate-text');
   var workers = Array.prototype.slice.call(story.querySelectorAll('.schedule-worker'));
-  var clipOne = story.querySelector('.cafe-clip-one');
-  var clipTwo = story.querySelector('.cafe-clip-two');
-  var staffed = story.querySelector('.cafe-staffed');
-  var openStill = story.querySelector('.cafe-open-still');
-  var clipThree = story.querySelector('.cafe-clip-three');
-  var videos = [clipOne, clipTwo, clipThree];
+  var autoplayVideo = story.querySelector('.cafe-autoplay');
+  var videos = [autoplayVideo];
   var storyCopy = document.documentElement.lang === 'hr' ? {
     ready: 'Spremno za generiranje',
     generating: 'Generiranje…',
@@ -1188,7 +1184,10 @@ document.addEventListener('DOMContentLoaded', () => {
   var ticking = false;
   var previousCount = -1;
   var displayedProgress = 0;
-  var hasRenderedProgress = false;
+  var animationFrame = 0;
+  var mediaReady = false;
+  var storyVisible = false;
+  var hasStarted = false;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -1237,6 +1236,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function render() {
     ticking = false;
     if (reducedMotion.matches) {
+      story.classList.add('is-finished');
       setWorkerState(3);
       if (coverage) coverage.textContent = '3/3';
       if (statusText) statusText.textContent = storyCopy.complete;
@@ -1246,19 +1246,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    var rect = story.getBoundingClientRect();
-    var travel = Math.max(1, story.offsetHeight - window.innerHeight);
-    var targetProgress = clamp(-rect.top / travel, 0, 1);
-    if (!hasRenderedProgress) {
-      displayedProgress = targetProgress;
-      hasRenderedProgress = true;
-    } else {
-      displayedProgress += (targetProgress - displayedProgress) * 0.16;
-    }
-    if (Math.abs(targetProgress - displayedProgress) < 0.00035) {
-      displayedProgress = targetProgress;
-    }
     var p = displayedProgress;
+    story.classList.toggle('is-finished', p >= 0.995);
     sticky.style.setProperty('--story-progress', p.toFixed(4));
     var compactStory = window.innerWidth <= 900;
     if (compactStory) {
@@ -1268,18 +1257,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sticky.style.removeProperty('--scene-x');
     }
 
-    scrub(clipOne, p, 0.015, 0.305);
-    scrub(clipTwo, p, 0.305, 0.565);
-    scrub(clipThree, p, 0.715, 0.91);
-
-    setOpacity(clipOne, 1 - smooth(range(p, 0.295, 0.345)));
-    setOpacity(clipTwo, smooth(range(p, 0.305, 0.35)) * (1 - smooth(range(p, 0.555, 0.605))));
-    setOpacity(staffed, smooth(range(p, 0.555, 0.60)) * (1 - smooth(range(p, 0.665, 0.715))));
-    setOpacity(openStill, smooth(range(p, 0.645, 0.69)) * (1 - smooth(range(p, 0.71, 0.765))));
-    setOpacity(clipThree, smooth(range(p, 0.71, 0.765)));
-
-    var lightIn = smooth(range(p, 0.62, 0.675));
-    var lightOut = 1 - smooth(range(p, 0.685, 0.735));
+    var lightIn = smooth(range(p, 0.605, 0.63));
+    var lightOut = 1 - smooth(range(p, 0.64, 0.675));
     var lightAmount = lightIn * lightOut;
     setOpacity(light, lightAmount * 0.94);
     light.style.transform = 'translateX(' + (-18 + lightIn * 20) + '%) scaleX(' + (0.72 + lightAmount * 0.55) + ')';
@@ -1326,9 +1305,6 @@ document.addEventListener('DOMContentLoaded', () => {
     finale.style.transform = 'translateY(' + (12 * (1 - finaleIn)) + 'px)';
     finale.style.filter = 'blur(' + (4 * (1 - finaleIn)) + 'px)';
 
-    if (Math.abs(targetProgress - displayedProgress) >= 0.00035) {
-      requestRender();
-    }
   }
 
   function requestRender() {
@@ -1340,28 +1316,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function prepareSeekableVideo(video) {
     if (!video) return Promise.resolve();
-    // Keep the cinematic hero at its full source resolution on every viewport.
-    // The Blob is fetched once and remains locally seekable while scrolling.
+    // Autoplay uses the browser's native streaming decoder instead of frame-by-frame seeking.
     var source = video.getAttribute('data-src-1080') || video.getAttribute('data-src-720');
     if (!source) return Promise.resolve();
+    video.src = source;
+    video.preload = 'auto';
+    video.load();
+    return Promise.resolve();
+  }
 
-    return fetch(source, { cache: 'force-cache' })
-      .then(function(response) {
-        if (!response.ok) throw new Error('Video request failed: ' + response.status);
-        return response.blob();
-      })
-      .then(function(blob) {
-        video.__wrokBlobUrl = URL.createObjectURL(blob);
-        video.src = video.__wrokBlobUrl;
-        video.preload = 'auto';
-        video.load();
-      })
-      .catch(function() {
-        // A direct URL still provides a visible fallback if Blob creation fails.
-        video.src = source;
-        video.preload = 'auto';
-        video.load();
-      });
+  function animateStory(now) {
+    if (!storyVisible || displayedProgress >= 1) {
+      animationFrame = 0;
+      return;
+    }
+    if (autoplayVideo && Number.isFinite(autoplayVideo.duration) && autoplayVideo.duration) {
+      displayedProgress = clamp(autoplayVideo.currentTime / autoplayVideo.duration, 0, 1);
+    }
+    render();
+    if (displayedProgress < 1) animationFrame = window.requestAnimationFrame(animateStory);
+    else animationFrame = 0;
+  }
+
+  function startStory() {
+    if (!mediaReady || !storyVisible || animationFrame || displayedProgress >= 1) return;
+    hasStarted = true;
+    if (autoplayVideo) {
+      autoplayVideo.playbackRate = 0.95;
+      autoplayVideo.play().catch(function() { /* Muted autoplay may still be deferred. */ });
+    }
+    animationFrame = window.requestAnimationFrame(animateStory);
+  }
+
+  function pauseStory() {
+    if (!hasStarted || displayedProgress >= 1) return;
+    if (autoplayVideo) autoplayVideo.pause();
+    if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
   }
 
   videos.forEach(function(video) {
@@ -1378,8 +1369,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all(videos.map(prepareSeekableVideo)).then(function() {
     story.classList.add('is-media-ready');
+    mediaReady = true;
     requestRender();
+    startStory();
   });
+
+  var observer = new IntersectionObserver(function(entries) {
+    storyVisible = entries[0].isIntersecting;
+    if (storyVisible) startStory();
+    else pauseStory();
+  }, { threshold: 0.2 });
+  observer.observe(story);
 
   window.addEventListener('pagehide', function(event) {
     if (event.persisted) return;
@@ -1388,7 +1388,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  window.addEventListener('scroll', requestRender, { passive: true });
   window.addEventListener('resize', requestRender);
   reducedMotion.addEventListener && reducedMotion.addEventListener('change', requestRender);
   render();
@@ -1396,8 +1395,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Inertial wheel glide for the pinned café story.
 // Touch, keyboard, scrollbar dragging, and reduced-motion remain browser-native.
 (function initCafeStoryGlide() {
-  var story = document.querySelector('.cafe-story');
-  if (!story) return;
+  // The story now runs on its own timeline. Keep wheel and trackpad scrolling native.
+  return;
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var finePointer = window.matchMedia('(pointer: fine)');

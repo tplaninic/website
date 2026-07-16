@@ -230,11 +230,7 @@
   <section class="cafe-story" id="hero" aria-label="See Wrok generate a café schedule">
     <div class="cafe-story-sticky">
       <div class="cafe-media" aria-hidden="true">
-        <video class="cafe-layer cafe-video cafe-clip-one" muted playsinline preload="none" poster="/assets/cafe-story/opening-frame.webp" data-src-1080="/assets/cafe-story/clip-1-first-worker.glide1080.mp4" data-src-720="/assets/cafe-story/clip-1-first-worker.glide720.mp4"></video>
-        <video class="cafe-layer cafe-video cafe-clip-two" muted playsinline preload="none" data-src-1080="/assets/cafe-story/clip-2-team.glide1080.mp4" data-src-720="/assets/cafe-story/clip-2-team.glide720.mp4"></video>
-        <img class="cafe-layer cafe-staffed" src="/assets/cafe-story/staffed-cafe.png" alt="" decoding="async">
-        <img class="cafe-layer cafe-open-still" src="/assets/cafe-story/open-cafe.png" alt="" decoding="async">
-        <video class="cafe-layer cafe-video cafe-clip-three" muted playsinline preload="none" poster="/assets/cafe-story/open-cafe.png" data-src-1080="/assets/cafe-story/clip-3-open-cafe.glide1080.mp4" data-src-720="/assets/cafe-story/clip-3-open-cafe.glide720.mp4"></video>
+        <video class="cafe-layer cafe-video cafe-autoplay" muted autoplay playsinline preload="auto" poster="/assets/cafe-story/opening-frame.webp" data-src-1080="/assets/cafe-story/cafe-story-autoplay-trimmed1080.mp4"></video>
         <div class="cafe-grade"></div>
         <div class="cafe-opening-light"></div>
       </div>
@@ -248,7 +244,6 @@
         <p class="cafe-kicker">Raspored za timove iz stvarnog svijeta</p>
         <h1>Shift happens.<br><span>Wrok to rješava.</span></h1>
         <p class="cafe-intro-copy">Rasporedi, zamjene smjena, godišnji odmori, bolovanja i obavijesti za tim. Sve na jednom mjestu.</p>
-        <div class="cafe-scroll-cue"><span></span>Pomaknite se za generiranje</div>
       </div>
 
       <aside class="schedule-glass" aria-label="Generated weekly schedule">
@@ -280,18 +275,20 @@
 
       <div class="cafe-finale">
         <p>Raspored je generiran. Vrata otvorena.</p>
-        <h2>Jednostavno<span>Wroka.</span></h2>
+        <h2>Jednostavno <span>Wroka.</span></h2>
         <div class="cafe-finale-actions">
           <a href="https://app.wrokapp.com" class="btn cafe-final-primary" target="_blank" rel="noopener">Izgradite svoj raspored<span aria-hidden="true">↗</span></a>
           <a href="#how-it-works" class="cafe-final-link">Pogledajte sve što Wrok obrađuje</a>
         </div>
       </div>
 
-      <div class="cafe-stage" aria-hidden="true"><span>01</span><i></i><span>04</span></div>
+      <a class="cafe-next-cue" href="#after-hero" aria-label="Nastavite na ostatak stranice">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </a>
     </div>
   </section>
   <!-- ========== SLOGAN BAR ========== -->
-  <section class="slogan-bar">
+  <section class="slogan-bar" id="after-hero">
     <div class="container">
       <div class="slogan-content fade-in">
         <h2 class="slogan-text">Jedno mjesto za raspored, smjenu i ljude koji rade.</h2>
