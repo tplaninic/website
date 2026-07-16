@@ -515,7 +515,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---- 3. Time Off Card: Badge Toggle ----
   const BADGE_CYCLE = ['approved', 'pending', 'denied'];
-  const BADGE_LABELS = { approved: 'Approved', pending: 'Pending', denied: 'Denied' };
+  const BADGE_LABELS = document.documentElement.lang === 'hr'
+    ? { approved: 'Odobreno', pending: 'Na čekanju', denied: 'Odbijeno' }
+    : { approved: 'Approved', pending: 'Pending', denied: 'Denied' };
 
   document.querySelectorAll('.sc-timeoff-badge').forEach(badge => {
     badge.addEventListener('click', () => {
@@ -1167,6 +1169,21 @@ document.addEventListener('DOMContentLoaded', () => {
   var openStill = story.querySelector('.cafe-open-still');
   var clipThree = story.querySelector('.cafe-clip-three');
   var videos = [clipOne, clipTwo, clipThree];
+  var storyCopy = document.documentElement.lang === 'hr' ? {
+    ready: 'Spremno za generiranje',
+    generating: 'Generiranje…',
+    one: 'Dodijeljen 1 od 3',
+    two: 'Dodijeljeno 2 od 3',
+    complete: 'Raspored je spreman',
+    open: 'Spremni za rad'
+  } : {
+    ready: 'Ready to generate',
+    generating: 'Generating…',
+    one: '1 of 3 assigned',
+    two: '2 of 3 assigned',
+    complete: 'Schedule ready',
+    open: 'Open for business'
+  };
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var ticking = false;
   var previousCount = -1;
@@ -1222,10 +1239,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reducedMotion.matches) {
       setWorkerState(3);
       if (coverage) coverage.textContent = '3/3';
-      if (statusText) statusText.textContent = 'Schedule ready';
+      if (statusText) statusText.textContent = storyCopy.complete;
       if (status) status.classList.add('is-ready');
       if (generateButton) generateButton.classList.add('is-complete');
-      if (generateText) generateText.textContent = 'Schedule ready';
+      if (generateText) generateText.textContent = storyCopy.complete;
       return;
     }
 
@@ -1289,19 +1306,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (progressBar) progressBar.style.transform = 'scaleX(' + range(p, 0.18, 0.55).toFixed(3) + ')';
 
     if (statusText && status) {
-      var label = 'Ready to generate';
-      if (p >= 0.18 && p < 0.206) label = 'Generating…';
-      if (assignedCount === 1) label = '1 of 3 assigned';
-      if (assignedCount === 2) label = '2 of 3 assigned';
-      if (assignedCount === 3 && p < 0.65) label = 'Schedule ready';
-      if (p >= 0.65) label = 'Open for business';
+      var label = storyCopy.ready;
+      if (p >= 0.18 && p < 0.206) label = storyCopy.generating;
+      if (assignedCount === 1) label = storyCopy.one;
+      if (assignedCount === 2) label = storyCopy.two;
+      if (assignedCount === 3 && p < 0.65) label = storyCopy.complete;
+      if (p >= 0.65) label = storyCopy.open;
       statusText.textContent = label;
       status.classList.toggle('is-ready', assignedCount === 3);
     }
 
     if (generateButton && generateText) {
       generateButton.classList.toggle('is-complete', assignedCount === 3);
-      generateText.textContent = assignedCount === 3 ? 'Schedule ready' : (p >= 0.18 ? 'Generating…' : 'Generate schedule');
+      generateText.textContent = assignedCount === 3 ? storyCopy.complete : (p >= 0.18 ? storyCopy.generating : storyCopy.ready);
     }
 
     var finaleIn = smooth(range(p, 0.835, 0.915));
@@ -1323,9 +1340,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function prepareSeekableVideo(video) {
     if (!video) return Promise.resolve();
-    var source = window.innerWidth > 900
-      ? video.getAttribute('data-src-1080')
-      : video.getAttribute('data-src-720');
+    // Keep the cinematic hero at its full source resolution on every viewport.
+    // The Blob is fetched once and remains locally seekable while scrolling.
+    var source = video.getAttribute('data-src-1080') || video.getAttribute('data-src-720');
     if (!source) return Promise.resolve();
 
     return fetch(source, { cache: 'force-cache' })
@@ -1376,24 +1393,20 @@ document.addEventListener('DOMContentLoaded', () => {
   reducedMotion.addEventListener && reducedMotion.addEventListener('change', requestRender);
   render();
 })();
-// Cinematic wheel steps for the pinned café story.
-// A wheel gesture completes one narrative beat instead of exposing arbitrary
-// in-between AI frames during very slow scrolling. Touch, keyboard, scrollbar
-// dragging, and reduced-motion remain browser-native.
+// Inertial wheel glide for the pinned café story.
+// Touch, keyboard, scrollbar dragging, and reduced-motion remain browser-native.
 (function initCafeStoryGlide() {
   var story = document.querySelector('.cafe-story');
   if (!story) return;
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var finePointer = window.matchMedia('(pointer: fine)');
-  var checkpoints = [0, 0.305, 0.565, 0.715, 0.91, 1];
+  var targetY = window.scrollY;
+  var renderedY = window.scrollY;
   var running = false;
   var internalScroll = false;
   var glideFrame = 0;
-  var startY = window.scrollY;
-  var targetY = window.scrollY;
-  var startedAt = 0;
-  var duration = 860;
+  var glideStrength = 0.18;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -1411,25 +1424,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  function easeInOutCubic(value) {
-    return value < 0.5
-      ? 4 * value * value * value
-      : 1 - Math.pow(-2 * value + 2, 3) / 2;
-  }
+  function animateGlide() {
+    var distance = targetY - renderedY;
+    var distanceRatio = Math.min(1, Math.abs(distance) / 520);
+    // Move decisively while far away, then preserve a visible inertial tail.
+    var adaptiveStrength = 0.065 + distanceRatio * 0.285;
+    var frameStrength = Math.min(glideStrength, adaptiveStrength);
+    renderedY += distance * frameStrength;
 
-  function animateGlide(now) {
-    var elapsed = Math.min(1, (now - startedAt) / duration);
-    var renderedY = startY + (targetY - startY) * easeInOutCubic(elapsed);
-    internalScroll = true;
-    window.scrollTo(0, renderedY);
-    internalScroll = false;
-
-    if (elapsed >= 1) {
+    if (Math.abs(distance) < 0.22) {
+      renderedY = targetY;
+      internalScroll = true;
+      window.scrollTo(0, renderedY);
+      internalScroll = false;
       running = false;
       document.documentElement.classList.remove('cafe-gliding');
       glideFrame = 0;
       return;
     }
+
+    internalScroll = true;
+    window.scrollTo(0, renderedY);
+    internalScroll = false;
     glideFrame = window.requestAnimationFrame(animateGlide);
   }
 
@@ -1437,23 +1453,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (glideFrame) window.cancelAnimationFrame(glideFrame);
     glideFrame = 0;
     running = false;
-    startY = position;
+    renderedY = position;
     targetY = position;
     document.documentElement.classList.remove('cafe-gliding');
-  }
-
-  function nearestCheckpoint(progress, direction) {
-    var tolerance = 0.018;
-    if (direction > 0) {
-      for (var i = 0; i < checkpoints.length; i += 1) {
-        if (checkpoints[i] > progress + tolerance) return checkpoints[i];
-      }
-      return 1;
-    }
-    for (var j = checkpoints.length - 1; j >= 0; j -= 1) {
-      if (checkpoints[j] < progress - tolerance) return checkpoints[j];
-    }
-    return 0;
   }
 
   function onWheel(event) {
@@ -1461,8 +1463,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var bounds = storyBounds();
     var y = window.scrollY;
-    var direction = Math.sign(event.deltaY);
-    if (!direction || Math.abs(event.deltaY) < 0.5) return;
     var withinStory = y >= bounds.top - 2 && y <= bounds.bottom + 2;
     var headingIntoStory =
       (y < bounds.top && event.deltaY > 0 && bounds.top - y < window.innerHeight * 0.18) ||
@@ -1472,12 +1472,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // At either edge, hand the next outward wheel event straight back to the browser.
     // This prevents the story's long ease-out from delaying the following section.
-    if (!running && ((direction > 0 && y >= bounds.bottom - 1) ||
-        (direction < 0 && y <= bounds.top + 1))) {
-      releaseGlide(direction > 0 ? bounds.bottom : bounds.top);
+    if ((event.deltaY > 0 && targetY >= bounds.bottom - 1) ||
+        (event.deltaY < 0 && targetY <= bounds.top + 1)) {
+      releaseGlide(event.deltaY > 0 ? bounds.bottom : bounds.top);
       document.documentElement.classList.add('cafe-gliding');
       internalScroll = true;
-      window.scrollTo(0, direction > 0 ? bounds.bottom : bounds.top);
+      window.scrollTo(0, event.deltaY > 0 ? bounds.bottom : bounds.top);
       internalScroll = false;
       window.setTimeout(function() {
         if (!running) document.documentElement.classList.remove('cafe-gliding');
@@ -1486,31 +1486,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     event.preventDefault();
-    // Trackpads emit a stream of wheel events for one physical gesture. Keep
-    // that stream attached to the active beat so it cannot skip several scenes.
-    if (running) return;
 
-    var progress = clamp((y - bounds.top) / Math.max(1, bounds.bottom - bounds.top), 0, 1);
-    var nextProgress = nearestCheckpoint(progress, direction);
-    startY = y;
-    targetY = bounds.top + (bounds.bottom - bounds.top) * nextProgress;
-    duration = Math.max(620, Math.min(980, 680 + Math.abs(targetY - startY) * 0.12));
-    startedAt = performance.now();
-    running = true;
-    document.documentElement.classList.add('cafe-gliding');
-    glideFrame = window.requestAnimationFrame(animateGlide);
+    var multiplier = event.deltaMode === 1 ? 18 : event.deltaMode === 2 ? window.innerHeight : 1;
+    var delta = event.deltaY * multiplier * 1.18;
+    glideStrength = Math.abs(delta) < 50 ? 0.32 : 0.36;
+
+    if (!running) {
+      renderedY = window.scrollY;
+      targetY = renderedY;
+    }
+
+    targetY = clamp(targetY + delta, bounds.top, bounds.bottom);
+
+    if (!running) {
+      running = true;
+      document.documentElement.classList.add('cafe-gliding');
+      glideFrame = window.requestAnimationFrame(animateGlide);
+    }
   }
 
   function syncNativePosition() {
     if (internalScroll || running) return;
-    startY = window.scrollY;
-    targetY = startY;
+    renderedY = window.scrollY;
+    targetY = renderedY;
   }
 
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('scroll', syncNativePosition, { passive: true });
   window.addEventListener('resize', function() {
     targetY = clamp(targetY, 0, documentMaxScroll());
-    if (!running) startY = window.scrollY;
+    if (!running) renderedY = window.scrollY;
   });
 })();
