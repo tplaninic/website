@@ -4055,3 +4055,134 @@ html { -webkit-font-smoothing: antialiased; }
   .cafe-scroll-cue { margin-top: 16px; }
   .schedule-glass { bottom: 10px; }
 }
+
+/* ============================================================
+   AT A GLANCE: what Wrok is and what it does, straight after the hero.
+   Visitors used to scroll through the whole story before finding this.
+   ============================================================ */
+.at-glance {
+  position: relative;
+  padding: clamp(56px, 7vw, 96px) 0;
+  color: var(--wrok-ink-premium);
+  background: var(--wrok-canvas-warm);
+  border-bottom: 1px solid var(--wrok-line);
+}
+
+.glance-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+.glance-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--wrok-muted-premium);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.glance-title {
+  margin: 0;
+  color: var(--wrok-ink-premium);
+  font-size: clamp(1.75rem, 3vw, 2.7rem);
+  font-weight: 640;
+  letter-spacing: -.035em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.glance-copy {
+  margin: 20px 0 0;
+  max-width: 46ch;
+  color: #52635e;
+  font-size: 1.02rem;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.glance-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.glance-cta {
+  padding: 13px 28px;
+  color: #fff;
+  font-size: .96rem;
+  background: linear-gradient(135deg, #128a76, #0d6b5c);
+  box-shadow: 0 10px 26px rgba(9, 92, 78, .22);
+}
+.glance-cta:hover { box-shadow: 0 14px 32px rgba(9, 92, 78, .28); }
+
+.glance-link {
+  color: #14625a;
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(20, 98, 90, .3);
+  transition: border-color var(--transition), color var(--transition);
+}
+.glance-link:hover { color: #0d4a44; border-bottom-color: rgba(20, 98, 90, .7); }
+
+.glance-note {
+  margin: 16px 0 0;
+  color: var(--wrok-muted-premium);
+  font-size: .84rem;
+}
+
+.glance-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.glance-list li {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--wrok-surface);
+  box-shadow: inset 0 0 0 1px var(--wrok-line), 0 2px 10px rgba(20, 32, 29, .04);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.glance-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(20, 32, 29, .16), 0 10px 26px rgba(20, 32, 29, .07);
+}
+
+.glance-list strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--wrok-ink-premium);
+  font-size: 1rem;
+  font-weight: 640;
+  letter-spacing: -.01em;
+}
+
+.glance-list span {
+  display: block;
+  color: #5b6a65;
+  font-size: .89rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 1000px) {
+  .glance-grid { grid-template-columns: 1fr; gap: 36px; }
+  .glance-copy { max-width: none; }
+}
+
+@media (max-width: 640px) {
+  .at-glance { padding: 48px 0; }
+  .glance-list { grid-template-columns: 1fr; gap: 12px; }
+  .glance-list li { padding: 16px 18px; }
+  .glance-actions { gap: 14px; }
+  .glance-cta { flex: 1 1 auto; }
+}
