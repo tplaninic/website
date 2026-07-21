@@ -10,6 +10,62 @@
        canonical on the .html form would point at a redirect back to this page
        and Google would refuse to index either. -->
   <link rel="canonical" href="https://wrokapp.com/privacy">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://wrokapp.com/#organization",
+        "name": "Wrok",
+        "url": "https://wrokapp.com",
+        "logo": "https://wrokapp.com/wrok_logo.png",
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "support@wrokapp.com"
+          },
+          {
+            "@type": "ContactPoint",
+            "contactType": "privacy",
+            "email": "privacy@wrokapp.com"
+          }
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://wrokapp.com/#website",
+        "name": "Wrok",
+        "url": "https://wrokapp.com",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://wrokapp.com/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://wrokapp.com/privacy",
+        "name": "Privacy Policy",
+        "url": "https://wrokapp.com/privacy",
+        "description": "Wrok privacy policy. How we collect, use, and protect your data.",
+        "inLanguage": "en",
+        "datePublished": "2026-06-29",
+        "dateModified": "2026-06-29",
+        "isPartOf": { "@id": "https://wrokapp.com/#website" },
+        "about": { "@id": "https://wrokapp.com/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wrokapp.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": "https://wrokapp.com/privacy" }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

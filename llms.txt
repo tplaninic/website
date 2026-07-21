@@ -1,0 +1,22 @@
+# Wrok
+
+> Wrok is a shift scheduling and team management app for shift-based businesses such as cafes, restaurants, retail shops, hotels, warehouses, and clinics. Managers add their team, define shift types and staffing rules, and Wrok generates a full weekly schedule automatically using a constraint-based scheduling algorithm (not a language model). It also handles shift swaps, time-off and sick-day requests, hours and attendance tracking, GPS clock-in, team chat, and PDF/Excel export. The interface is available in English and Croatian, prices are in euros, and workplace data is hosted in the European Union in line with GDPR. Wrok runs as a web app at app.wrokapp.com on desktop, tablet, and mobile; the Android app is in Google Play testing, with iOS planned.
+
+Pricing is flat with no per-user fees: free forever for up to 6 workers and 1 workplace (no credit card required), then Starter at EUR 14.99/month (up to 15 workers, 2 workplaces), Growth at EUR 34.99/month (up to 40 workers, 5 workplaces), Business at EUR 79.99/month (up to 100 workers, unlimited workplaces), and a custom Enterprise plan for teams over 100. Annual billing saves 20%, and new accounts get a 90-day free trial of paid features.
+
+## Key pages
+
+- [Homepage](https://wrokapp.com/): Product overview, feature list, how it works, pricing, and FAQ (English).
+- [Croatian homepage](https://wrokapp.com/hr/): The same product overview in Croatian.
+- [Wrok vs When I Work vs Deputy](https://wrokapp.com/wrok-vs-when-i-work-vs-deputy): Comparison of Wrok with When I Work and Deputy for small and mid-sized shift teams.
+- [Web app](https://app.wrokapp.com): The Wrok application itself; sign up and build a schedule in the browser.
+
+## Legal
+
+- [Privacy Policy](https://wrokapp.com/privacy): What personal data Wrok collects, lawful bases, processors, retention, and GDPR rights.
+- [Terms of Service](https://wrokapp.com/terms): Rules and conditions for using Wrok, including accounts, subscriptions, and data ownership.
+
+## Contact
+
+- Support: support@wrokapp.com
+- Privacy: privacy@wrokapp.com
