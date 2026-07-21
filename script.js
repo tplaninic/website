@@ -1257,12 +1257,10 @@ document.addEventListener('DOMContentLoaded', () => {
       sticky.style.removeProperty('--scene-x');
     }
 
-    var lightIn = smooth(range(p, 0.605, 0.63));
-    var lightOut = 1 - smooth(range(p, 0.64, 0.675));
-    var lightAmount = lightIn * lightOut;
-    setOpacity(light, lightAmount * 0.94);
-    light.style.transform = 'translateX(' + (-18 + lightIn * 20) + '%) scaleX(' + (0.72 + lightAmount * 0.55) + ')';
-    light.style.filter = 'blur(' + (24 - lightAmount * 10) + 'px)';
+    // The opening light flash no longer plays mid-story (it used to run at
+    // p 0.605-0.675). It is now a pure-CSS finale flourish: when the story
+    // ends the `is-finished` class starts the `cafe-open-flash` keyframes
+    // with a 2s animation-delay (see .cafe-opening-light in style.css).
 
     var introExit = smooth(range(p, 0.10, 0.205));
     setOpacity(intro, 1 - introExit);

@@ -2868,6 +2868,21 @@ body {
   will-change: transform, opacity, filter;
 }
 
+/* Finale flourish: the warm opening-light sweep waits for the cafe story
+   (autoplay video + finale text) to fully finish, then flashes 2s later.
+   Triggered by script.js adding `is-finished` when story progress hits 1. */
+@media (prefers-reduced-motion: no-preference) {
+  .cafe-story.is-finished .cafe-opening-light {
+    animation: cafe-open-flash 0.9s ease-in-out 2s 1 both;
+  }
+}
+@keyframes cafe-open-flash {
+  0%   { opacity: 0; transform: translateX(-18%) scaleX(.72); filter: blur(24px); }
+  40%  { opacity: .94; transform: translateX(2%) scaleX(1.27); filter: blur(14px); }
+  58%  { opacity: .94; transform: translateX(2%) scaleX(1.27); filter: blur(14px); }
+  100% { opacity: 0; transform: translateX(2%) scaleX(.72); filter: blur(24px); }
+}
+
 .cafe-story .cafe-nav { display: none; }
 
 .cafe-intro {
