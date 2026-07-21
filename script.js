@@ -1188,6 +1188,11 @@ document.addEventListener('DOMContentLoaded', () => {
   var mediaReady = false;
   var storyVisible = false;
   var hasStarted = false;
+  // Hold the opening frame (poster + intro copy) for this long after the
+  // story scrolls into view before the clip starts, so the text is readable.
+  var OPENING_HOLD_MS = 5000;
+  var openingHoldTimer = 0;
+  var openingHoldDone = false;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -1338,6 +1343,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startStory() {
     if (!mediaReady || !storyVisible || animationFrame || displayedProgress >= 1) return;
+    // First start only: keep the opening frame on screen for 5 seconds after
+    // the story becomes visible, then begin the clip. Leaving the viewport
+    // cancels the hold (pauseStory), so re-entering restarts the full wait.
+    // Reduced motion skips the hold; its render path is unchanged.
+    if (!hasStarted && !openingHoldDone && !reducedMotion.matches) {
+      if (!openingHoldTimer) {
+        openingHoldTimer = window.setTimeout(function() {
+          openingHoldTimer = 0;
+          openingHoldDone = true;
+          startStory();
+        }, OPENING_HOLD_MS);
+      }
+      return;
+    }
     hasStarted = true;
     if (autoplayVideo) {
       autoplayVideo.playbackRate = 0.95;
@@ -1347,6 +1366,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function pauseStory() {
+    if (openingHoldTimer) {
+      window.clearTimeout(openingHoldTimer);
+      openingHoldTimer = 0;
+    }
     if (!hasStarted || displayedProgress >= 1) return;
     if (autoplayVideo) autoplayVideo.pause();
     if (animationFrame) window.cancelAnimationFrame(animationFrame);
