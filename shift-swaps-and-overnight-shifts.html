@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Swaps and Overnight Shifts: How Wrok Handles Both</title>
+  <meta name="description" content="How do shift swaps work in a scheduling app, and how should software handle overnight shifts that cross midnight? See Wrok's worker-proposes, worker-accepts, manager-approves swap chain, and how night shifts, rest rules, and 24/7 rotas are scheduled.">
+  <meta name="theme-color" content="#0D7C66">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://wrokapp.com/shift-swaps-and-overnight-shifts">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://wrokapp.com/shift-swaps-and-overnight-shifts">
+  <meta property="og:title" content="Shift Swaps and Overnight Shifts: How Wrok Handles Both">
+  <meta property="og:description" content="The full shift swap approval chain, swaps inside team chat, and how overnight shifts that cross midnight are defined, scheduled, and displayed in Wrok.">
+  <meta property="og:image" content="https://wrokapp.com/wrok_logo.png">
+  <meta property="og:site_name" content="Wrok">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shift Swaps and Overnight Shifts: How Wrok Handles Both">
+  <meta name="twitter:description" content="How shift swaps get approved, and how overnight shifts crossing midnight are scheduled with rest rules in Wrok.">
+  <meta name="twitter:image" content="https://wrokapp.com/wrok_logo.png">
+
+  <!-- Structured Data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How do shift swaps work in Wrok?", "acceptedAnswer": { "@type": "Answer", "text": "A swap in Wrok is a three-step chain. A worker proposes a swap directly with a coworker, in a couple of taps or as a swap request embedded in a chat conversation. The coworker accepts or declines. If both workers agree, the request goes to the manager for final confirmation. Once approved, the schedule updates automatically for everyone and the team is notified, so nobody shows up for a shift that was traded away." } },
+      { "@type": "Question", "name": "Does the manager always have the final say on a swap?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Both workers must approve a swap first, but it only takes effect after the manager confirms it. That keeps staff free to organize trades among themselves while the manager retains control over coverage, roles, and hours. The manager reviews swap and time-off requests with full context of who is working when, and approves or declines from the app." } },
+      { "@type": "Question", "name": "Can scheduling software handle shifts that cross midnight?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. In Wrok, an overnight shift is an ordinary shift type: you define a Night shift with exact start and end times, such as 22:00 to 06:00, give it its own color, and the scheduler treats it like any other shift. It appears on the schedule with its full time range, color-coded so night work is recognizable at a glance, and hours worked are tracked like any other shift." } },
+      { "@type": "Question", "name": "How do rest rules work with night shifts?", "acceptedAnswer": { "@type": "Answer", "text": "Overnight work is where rest rules matter most, because a worker finishing at 06:00 must not be scheduled to open the same morning. Wrok's automatic scheduler treats mandatory rest hours as a hard constraint alongside availability, approved time off, and contracted hours: it only returns arrangements that satisfy every rule at once. That makes 24/7 rotas for hotels, warehouses, and clinics safe to generate with one tap." } }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wrokapp.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://wrokapp.com/shift-swaps-and-overnight-shifts" },
+      { "@type": "ListItem", "position": 3, "name": "Shift Swaps and Overnight Shifts", "item": "https://wrokapp.com/shift-swaps-and-overnight-shifts" }
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* Page-specific styles, built on the shared design tokens. */
+    .cmp-main { background: #ffffff; }
+    .cmp-hero {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 9rem 0 4rem;
+      position: relative;
+    }
+    .cmp-hero .container { position: relative; z-index: 2; }
+    .cmp-breadcrumb {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 1.25rem;
+    }
+    .cmp-breadcrumb a { color: #9ca3af; text-decoration: none; }
+    .cmp-breadcrumb a:hover { color: #fff; }
+    .cmp-breadcrumb span { color: #0fae90; }
+    .cmp-hero h1 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.12;
+      font-weight: 800;
+      margin: 0 0 1.25rem;
+      max-width: 22ch;
+    }
+    .cmp-hero p.cmp-lead {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      max-width: 62ch;
+      margin: 0 0 2rem;
+    }
+    .cmp-hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+    .cmp-section { padding: 4rem 0; }
+    .cmp-section.alt { background: #f7f9f9; }
+    .cmp-section h2 {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0 0 1rem;
+    }
+    .cmp-section h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 1.75rem 0 0.75rem;
+    }
+    .cmp-section p { font-size: 1.05rem; line-height: 1.7; color: #374151; max-width: 72ch; }
+    .cmp-section ul.cmp-list { margin: 1rem 0 0; padding: 0; list-style: none; max-width: 72ch; }
+    .cmp-section ul.cmp-list li {
+      position: relative;
+      padding: 0.35rem 0 0.35rem 1.9rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+    .cmp-section ul.cmp-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0.7rem;
+      width: 1.1rem; height: 1.1rem;
+      background: #0D7C66;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+
+    .cmp-note {
+      margin-top: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: #fff8e1;
+      border: 1px solid #f0e0a8;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: #5c4b1a;
+      max-width: 72ch;
+    }
+
+    .cmp-cta-band {
+      background: #0D7C66;
+      color: #fff;
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .cmp-cta-band h2 { color: #fff; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; margin: 0 0 1rem; }
+    .cmp-cta-band p { color: rgba(255,255,255,0.9); max-width: 60ch; margin: 0 auto 2rem; font-size: 1.1rem; }
+    .cmp-cta-band .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #fff;
+      color: #0D7C66;
+      font-weight: 700;
+      padding: 0.95rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cmp-cta-band .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.2); }
+
+    @media (max-width: 640px) {
+      .cmp-hero { padding: 7.5rem 0 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">
+        <img src="/wrok_logo.png" alt="Wrok logo" class="nav-logo" width="1024" height="1024" fetchpriority="high" decoding="async">
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/#features" data-nav>Features</a></li>
+        <li><a href="/#how-it-works" data-nav>How It Works</a></li>
+        <li><a href="/#for-teams" data-nav>For Teams</a></li>
+        <li><a href="/#pricing" data-nav>Pricing</a></li>
+        <li><a href="/#faq" data-nav>FAQ</a></li>
+        <li><a href="https://app.wrokapp.com" class="nav-cta" target="_blank" rel="noopener">Open web app</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="cmp-main">
+
+    <!-- ========== HERO ========== -->
+    <section class="cmp-hero">
+      <div class="container">
+        <nav class="cmp-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> &rsaquo; <a href="/shift-swaps-and-overnight-shifts">Guides</a> &rsaquo; <span>Shift Swaps and Overnight Shifts</span>
+        </nav>
+        <h1>Shift swaps and overnight shifts, done properly</h1>
+        <p class="cmp-lead">Two things reliably break a schedule after it is published: staff trading shifts among themselves, and night shifts that cross midnight. Handled badly, the first turns into group chat chaos and the second into rest-rule violations. This guide shows how Wrok handles both, with a swap chain that keeps the manager in control and overnight shifts treated as first-class citizens of the rota.</p>
+        <div class="cmp-hero-actions">
+          <a href="https://app.wrokapp.com" class="btn btn-hero-primary" target="_blank" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+            Open the web app
+          </a>
+          <a href="/wrok-vs-when-i-work-vs-deputy" class="btn btn-hero-secondary">
+            Compare scheduling tools
+            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SWAPS CLUSTER ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>How do shift swaps work in Wrok?</h2>
+        <p>The problem with informal swaps is not that they happen, it is that nobody authoritative knows they happened. Wrok replaces the group chat trade with a three-step approval chain that ends in an updated schedule.</p>
+
+        <h3>Step 1: A worker proposes the swap</h3>
+        <p>A worker who cannot make a shift proposes a swap directly with a coworker, in a couple of taps. Swap requests can also be sent inside a chat conversation, so the "could you take my Wednesday?" message and the actual request live in the same place, with full context of who is working when.</p>
+
+        <h3>Step 2: The coworker accepts</h3>
+        <p>The other worker sees exactly what is being traded, for example their Thursday morning for the proposer's Wednesday afternoon, and accepts or declines. Both workers must approve before anything moves. No one gets volunteered for a shift they never agreed to.</p>
+
+        <h3>Step 3: The manager confirms, and the schedule updates itself</h3>
+        <p>An agreed swap is still only a request. It goes to the manager, who reviews it with full context and gives the final confirmation. On approval the schedule updates automatically for everyone, and push notifications go out, so the change never has to travel through a message thread. The manager stays in control of coverage without doing the negotiating.</p>
+
+        <h3>Why the three-step chain matters</h3>
+        <ul class="cmp-list">
+          <li><strong>Workers keep their autonomy</strong>: they arrange the trade themselves, without asking the manager to broker it.</li>
+          <li><strong>Consent is explicit</strong>: both workers approve first, so swaps are agreements, not assignments.</li>
+          <li><strong>The manager keeps final say</strong>: coverage, roles, and hours are checked by a human before the rota changes.</li>
+          <li><strong>The schedule stays authoritative</strong>: after approval there is one true schedule, updated for everyone, not a rota plus a pile of verbal amendments.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== OVERNIGHT CLUSTER ========== -->
+    <section class="cmp-section alt">
+      <div class="container">
+        <h2>How does Wrok handle overnight shifts?</h2>
+        <p>Hotels, warehouses, bars, and clinics do not stop at midnight, and their scheduling software cannot either. In Wrok, overnight work is not a special case bolted on; it is an ordinary shift type with an inconvenient clock.</p>
+
+        <h3>Defining a shift that crosses midnight</h3>
+        <p>You create shift types with exact start and end times, custom names, and distinct colors. A Night shift running 22:00 to 06:00 is defined once, exactly like a Morning shift running 06:00 to 14:00. From then on the auto-scheduler treats it as one more shift to fill, subject to the same role requirements and staffing minimums as any other.</p>
+
+        <h3>How the schedule displays overnight shifts</h3>
+        <p>On the schedule, an overnight shift appears as a single entry with its full time range, for example Night, 22:00 to 06:00, color-coded by shift type so night work is recognizable at a glance in both the worker's personal week view and the manager's color-coded team grid. Workers get push notifications when their schedule changes, which matters most for the shifts people are asleep before.</p>
+
+        <h3>Rest rules: the constraint that guards night workers</h3>
+        <p>The danger of overnight rotas is the turnaround: someone finishes at 06:00 and is accidentally rostered to open at 10:00 the same day. Wrok's scheduler treats mandatory rest hours as a hard constraint, evaluated together with availability, approved vacations and sick days, contracted hours, and staffing minimums. It only returns weeks that satisfy every rule at once, and if no valid week exists it tells you which rule is blocking so you can resolve it deliberately. How that algorithm works is covered in the <a href="/automate-employee-scheduling">auto-scheduling guide</a>.</p>
+
+        <h3>Hours, attendance, and pay for night work</h3>
+        <p>Hours worked on overnight shifts are tracked like any others: attendance marking, hours per day, week, or month, GPS clock-in for verifying on-site check-in, and overtime warnings. At payroll time, PDF and Excel exports carry the recorded hours, so night work is documented rather than reconstructed.</p>
+      </div>
+    </section>
+
+    <!-- ========== TOGETHER ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>What happens when swaps meet night shifts?</h2>
+        <p>The two features compose. A night worker can propose trading their Friday night for a coworker's Saturday afternoon; both approve, the manager confirms, and the updated schedule reflects the change for everyone. Because the manager gives the final confirmation, a trade that would leave the night uncovered or violate a rest turnaround can simply be declined. That combination, worker-driven flexibility with rule-guarded approval, is what keeps a 24/7 rota both humane and covered. If you run this kind of operation in hospitality, the <a href="/best-scheduling-software-for-restaurants">restaurant scheduling guide</a> walks through a full week in practice.</p>
+        <p>Wrok is free forever for up to 6 workers and one workplace, with flat paid plans from &euro;14.99 per month, no per-user fees, and a 90-day free trial of paid features.</p>
+      </div>
+    </section>
+
+    <!-- ========== FAQ ========== -->
+    <section class="faq" id="faq">
+      <div class="section-bg-shapes dark-shapes">
+        <div class="shape sh-a"></div>
+        <div class="shape sh-d"></div>
+      </div>
+      <div class="container">
+        <div class="section-header dark fade-in">
+          <span class="section-label dark">FAQ</span>
+          <h2 class="section-title">Common questions</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>How do shift swaps work in Wrok?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>A swap in Wrok is a three-step chain. A worker proposes a swap directly with a coworker, in a couple of taps or as a swap request embedded in a chat conversation. The coworker accepts or declines. If both workers agree, the request goes to the manager for final confirmation. Once approved, the schedule updates automatically for everyone and the team is notified, so nobody shows up for a shift that was traded away.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Does the manager always have the final say on a swap?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes. Both workers must approve a swap first, but it only takes effect after the manager confirms it. That keeps staff free to organize trades among themselves while the manager retains control over coverage, roles, and hours. The manager reviews swap and time-off requests with full context of who is working when, and approves or declines from the app.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Can scheduling software handle shifts that cross midnight?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes. In Wrok, an overnight shift is an ordinary shift type: you define a Night shift with exact start and end times, such as 22:00 to 06:00, give it its own color, and the scheduler treats it like any other shift. It appears on the schedule with its full time range, color-coded so night work is recognizable at a glance, and hours worked are tracked like any other shift.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>How do rest rules work with night shifts?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Overnight work is where rest rules matter most, because a worker finishing at 06:00 must not be scheduled to open the same morning. Wrok's automatic scheduler treats mandatory rest hours as a hard constraint alongside availability, approved time off, and contracted hours: it only returns arrangements that satisfy every rule at once. That makes 24/7 rotas for hotels, warehouses, and clinics safe to generate with one tap.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CLOSING CTA ========== -->
+    <section class="cmp-cta-band">
+      <div class="container">
+        <h2>Put swaps and night shifts on autopilot</h2>
+        <p>Start free for up to 6 workers, no credit card required. Define your shifts, including the ones that cross midnight, and let your team trade shifts with approval built in. Flat pricing from &euro;14.99 per month when you grow, plus a 90-day free trial. Comparing tools? Read <a href="/wrok-vs-when-i-work-vs-deputy" style="color:#fff;text-decoration:underline;">Wrok vs When I Work vs Deputy</a>.</p>
+        <a href="https://app.wrokapp.com" class="btn-white" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+          Open the web app
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <a href="/" class="footer-brand"><img src="/wrok_logo.png" alt="Wrok" class="footer-logo" width="1024" height="1024" loading="lazy" decoding="async"></a>
+          <p class="footer-tagline">Automatic shift scheduling for modern teams. Build optimized schedules, communicate better, and keep your operations running smoothly.</p>
+        </div>
+        <div class="footer-links-col"><h4>Product</h4><ul><li><a href="/#features">Features</a></li><li><a href="/#how-it-works">How It Works</a></li><li><a href="/#for-teams">For Teams</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></li></ul></div>
+        <div class="footer-links-col"><h4>Resources</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="/wrok-vs-when-i-work-vs-deputy">Wrok vs When I Work vs Deputy</a></li><li><a href="mailto:support@wrokapp.com">Contact Support</a></li></ul></div>
+        <div class="footer-links-col"><h4>Legal</h4><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2026 Wrok. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script defer src="/script.js"></script>
+</body>
+</html>

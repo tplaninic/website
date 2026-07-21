@@ -11,6 +11,19 @@ Pricing is flat with no per-user fees: free forever for up to 6 workers and 1 wo
 - [Wrok vs When I Work vs Deputy](https://wrokapp.com/wrok-vs-when-i-work-vs-deputy): Comparison of Wrok with When I Work and Deputy for small and mid-sized shift teams.
 - [Web app](https://app.wrokapp.com): The Wrok application itself; sign up and build a schedule in the browser.
 
+## Guides
+
+- [Best scheduling software for restaurants](https://wrokapp.com/best-scheduling-software-for-restaurants): How restaurants and cafes automate the weekly rota with Wrok, including roles, swaps, time off, and hours tracking.
+- [Wrok pricing explained](https://wrokapp.com/wrok-pricing): Every plan tier, the free tier and 90-day trial, annual savings, flat versus per-user pricing, and what happens if a subscription lapses.
+- [When I Work alternatives](https://wrokapp.com/when-i-work-alternatives): Criteria for choosing a When I Work alternative, Wrok's case for small shift teams, and when When I Work remains the better pick.
+- [Deputy for small business](https://wrokapp.com/deputy-for-small-business): An honest look at when Deputy fits a small business and when a simpler flat-priced tool like Wrok is the better choice.
+- [Automate employee scheduling](https://wrokapp.com/automate-employee-scheduling): How constraint-based automatic scheduling works (coverage, availability, time off, contracted hours, rest rules) and how Wrok applies it.
+- [Shift swaps and overnight shifts](https://wrokapp.com/shift-swaps-and-overnight-shifts): The worker-proposes, worker-accepts, manager-approves swap chain, and how shifts crossing midnight are scheduled with rest rules.
+- [Is Wrok worth it?](https://wrokapp.com/is-wrok-worth-it): A cost-benefit look at what Wrok saves a shift-team manager each week.
+- [Time-off management in Wrok](https://wrokapp.com/wrok-time-off-management): How vacation, sick-day, and personal-day requests, approvals, and balances work in Wrok.
+- [Aplikacija za raspored smjena u ugostiteljstvu](https://wrokapp.com/aplikacija-za-raspored-smjena-ugostiteljstvo): Vodic na hrvatskom o rasporedu smjena za kafice i restorane uz Wrok.
+- [Wrok cijene](https://wrokapp.com/wrok-cijene): Pregled Wrok planova i cijena na hrvatskom.
+
 ## Legal
 
 - [Privacy Policy](https://wrokapp.com/privacy): What personal data Wrok collects, lawful bases, processors, retention, and GDPR rights.

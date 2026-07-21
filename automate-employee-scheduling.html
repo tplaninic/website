@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Automate Employee Scheduling (Constraint-Based, Explained)</title>
+  <meta name="description" content="How does automatic employee scheduling actually work? Learn how constraint-based scheduling turns availability, roles, staffing minimums, time off, and rest rules into a valid weekly rota, and how Wrok generates one in a single tap.">
+  <meta name="theme-color" content="#0D7C66">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://wrokapp.com/automate-employee-scheduling">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://wrokapp.com/automate-employee-scheduling">
+  <meta property="og:title" content="How to Automate Employee Scheduling (Constraint-Based, Explained)">
+  <meta property="og:description" content="What constraint-based auto-scheduling is, which rules it weighs, why fairness matters, and how Wrok builds a full valid week in seconds.">
+  <meta property="og:image" content="https://wrokapp.com/wrok_logo.png">
+  <meta property="og:site_name" content="Wrok">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Automate Employee Scheduling (Constraint-Based, Explained)">
+  <meta name="twitter:description" content="How constraint-based auto-scheduling works, and how Wrok generates a full valid week in one tap.">
+  <meta name="twitter:image" content="https://wrokapp.com/wrok_logo.png">
+
+  <!-- Structured Data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How does automatic employee scheduling work?", "acceptedAnswer": { "@type": "Answer", "text": "Automatic employee scheduling treats the rota as a constraint problem. The software takes your shift types, role requirements, minimum staffing levels, worker availability, approved vacations, sick days, contracted hours, and mandatory rest hours, then evaluates valid combinations against all of those rules at once. If an arrangement that satisfies every constraint exists, it finds one and balances the workload fairly. This is how Wrok's scheduler works: a real algorithm, not guesswork and not a language model." } },
+      { "@type": "Question", "name": "What happens when no valid schedule exists?", "acceptedAnswer": { "@type": "Answer", "text": "A good auto-scheduler should not silently produce a broken week. When the rules cannot all be satisfied at once, for example too many approved vacations against a high minimum staffing level, Wrok tells you which rule is blocking the week so you can resolve it, by adjusting staffing minimums, availability, or time off. It also offers smart recommendations when constraints conflict, so fixing the week is a decision, not detective work." } },
+      { "@type": "Question", "name": "Can I still edit an automatically generated schedule by hand?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, and you should be able to in any tool. In Wrok, the generated week is a starting point: you can fine-tune any assignment with a single tap, reassign or clear any cell in the color-coded team grid, or go fully manual and place shifts exactly where you want them. You can also copy a schedule to future weeks in one click, then publish so the team sees it instantly with push notifications." } },
+      { "@type": "Question", "name": "Is automated scheduling fair to workers?", "acceptedAnswer": { "@type": "Answer", "text": "It can be fairer than manual scheduling, because an algorithm has no favorites. Wrok distributes shifts evenly across the team for maximum fairness while respecting each person's availability, contracted hours, approved time off, and mandatory rest hours. That prevents the classic manual-rota failure where the same few people absorb every weekend and closing shift simply because the manager filled the grid from the top." } }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wrokapp.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://wrokapp.com/automate-employee-scheduling" },
+      { "@type": "ListItem", "position": 3, "name": "Automate Employee Scheduling", "item": "https://wrokapp.com/automate-employee-scheduling" }
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* Page-specific styles, built on the shared design tokens. */
+    .cmp-main { background: #ffffff; }
+    .cmp-hero {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 9rem 0 4rem;
+      position: relative;
+    }
+    .cmp-hero .container { position: relative; z-index: 2; }
+    .cmp-breadcrumb {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 1.25rem;
+    }
+    .cmp-breadcrumb a { color: #9ca3af; text-decoration: none; }
+    .cmp-breadcrumb a:hover { color: #fff; }
+    .cmp-breadcrumb span { color: #0fae90; }
+    .cmp-hero h1 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.12;
+      font-weight: 800;
+      margin: 0 0 1.25rem;
+      max-width: 22ch;
+    }
+    .cmp-hero p.cmp-lead {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      max-width: 62ch;
+      margin: 0 0 2rem;
+    }
+    .cmp-hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+    .cmp-section { padding: 4rem 0; }
+    .cmp-section.alt { background: #f7f9f9; }
+    .cmp-section h2 {
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0 0 1rem;
+    }
+    .cmp-section h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 1.75rem 0 0.75rem;
+    }
+    .cmp-section p { font-size: 1.05rem; line-height: 1.7; color: #374151; max-width: 72ch; }
+    .cmp-section ul.cmp-list { margin: 1rem 0 0; padding: 0; list-style: none; max-width: 72ch; }
+    .cmp-section ul.cmp-list li {
+      position: relative;
+      padding: 0.35rem 0 0.35rem 1.9rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+    .cmp-section ul.cmp-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0.7rem;
+      width: 1.1rem; height: 1.1rem;
+      background: #0D7C66;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+
+    .cmp-note {
+      margin-top: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: #fff8e1;
+      border: 1px solid #f0e0a8;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: #5c4b1a;
+      max-width: 72ch;
+    }
+
+    .cmp-cta-band {
+      background: #0D7C66;
+      color: #fff;
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .cmp-cta-band h2 { color: #fff; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; margin: 0 0 1rem; }
+    .cmp-cta-band p { color: rgba(255,255,255,0.9); max-width: 60ch; margin: 0 auto 2rem; font-size: 1.1rem; }
+    .cmp-cta-band .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #fff;
+      color: #0D7C66;
+      font-weight: 700;
+      padding: 0.95rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cmp-cta-band .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.2); }
+
+    @media (max-width: 640px) {
+      .cmp-hero { padding: 7.5rem 0 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">
+        <img src="/wrok_logo.png" alt="Wrok logo" class="nav-logo" width="1024" height="1024" fetchpriority="high" decoding="async">
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/#features" data-nav>Features</a></li>
+        <li><a href="/#how-it-works" data-nav>How It Works</a></li>
+        <li><a href="/#for-teams" data-nav>For Teams</a></li>
+        <li><a href="/#pricing" data-nav>Pricing</a></li>
+        <li><a href="/#faq" data-nav>FAQ</a></li>
+        <li><a href="https://app.wrokapp.com" class="nav-cta" target="_blank" rel="noopener">Open web app</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="cmp-main">
+
+    <!-- ========== HERO ========== -->
+    <section class="cmp-hero">
+      <div class="container">
+        <nav class="cmp-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> &rsaquo; <a href="/automate-employee-scheduling">Guides</a> &rsaquo; <span>Automate Employee Scheduling</span>
+        </nav>
+        <h1>How to automate employee scheduling</h1>
+        <p class="cmp-lead">Building a weekly rota by hand means holding a dozen rules in your head at once: who can work when, who is on vacation, how many people each shift needs, who already worked too much. Automating it means handing those rules to an algorithm that weighs them all simultaneously. This guide explains how constraint-based auto-scheduling works in general, and then how Wrok does it in practice.</p>
+        <div class="cmp-hero-actions">
+          <a href="https://app.wrokapp.com" class="btn btn-hero-primary" target="_blank" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+            Generate a schedule free
+          </a>
+          <a href="/wrok-vs-when-i-work-vs-deputy" class="btn btn-hero-secondary">
+            Compare scheduling tools
+            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WHAT IS IT ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>What is constraint-based scheduling?</h2>
+        <p>A weekly schedule is a combinatorial problem: workers times days times shifts. Most of the possible combinations are invalid, because they break a rule. Constraint-based scheduling makes those rules explicit, then searches for an arrangement that breaks none of them. The rules fall into a few families:</p>
+        <ul class="cmp-list">
+          <li><strong>Coverage rules</strong>: each shift needs a minimum number of people, often per role, for example at least two in the kitchen and one on the register.</li>
+          <li><strong>Availability rules</strong>: each worker has days and shifts they can and cannot work, plus recurring days off.</li>
+          <li><strong>Absence rules</strong>: approved vacations, sick days, and personal days remove a worker from those dates entirely.</li>
+          <li><strong>Workload rules</strong>: contracted hours cap how much each person works in a week.</li>
+          <li><strong>Rest rules</strong>: mandatory rest hours between shifts, so nobody closes at midnight and opens at six.</li>
+        </ul>
+        <p>A valid schedule satisfies every rule at once. A good scheduler goes one step further and picks a valid schedule that also distributes work evenly, so the outcome is not just legal but fair.</p>
+      </div>
+    </section>
+
+    <!-- ========== WHY NOT SPREADSHEETS ========== -->
+    <section class="cmp-section alt">
+      <div class="container">
+        <h2>Why can't a spreadsheet or an AI chatbot do this?</h2>
+        <p>A spreadsheet stores the grid but enforces nothing: every rule lives in the manager's head, and each edit can silently break coverage or rest rules three cells away. That is why manual rotas take an evening and still ship with mistakes.</p>
+        <p>Language models are the wrong tool for a different reason: they generate plausible-looking text, not verified solutions, and a schedule that is 95% correct is a schedule with a hole in Thursday's kitchen coverage. Wrok's scheduler is a real algorithm, not guesswork and not a language model. It evaluates valid combinations against all of your rules at once, and either returns an arrangement that satisfies every constraint or tells you explicitly that none exists and which rule is blocking the week.</p>
+      </div>
+    </section>
+
+    <!-- ========== HOW WROK DOES IT ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>How does Wrok automate scheduling in practice?</h2>
+
+        <h3>Step 1: Encode your rules once</h3>
+        <p>You define shift types (Morning, Afternoon, Night, or anything custom) with exact start and end times and colors. You create roles like Cashier, Floor Manager, or Kitchen and set minimum required staff per shift per role. You set each worker's availability, working days, and roles. This is the one-time setup, and it takes minutes, not a training course.</p>
+
+        <h3>Step 2: One tap to generate</h3>
+        <p>Hit Generate and the algorithm evaluates the valid combinations of workers and shifts against every rule you have set: availability, approved vacations and sick days, contracted hours, mandatory rest hours, and role staffing minimums. If an arrangement that satisfies every constraint exists, it finds one and balances the workload fairly across the team. Seconds of computation instead of an evening with a spreadsheet.</p>
+
+        <h3>Step 3: When constraints conflict, you find out immediately</h3>
+        <p>Sometimes no valid week exists, for example three approved vacations against a minimum of four staff per shift. Instead of shipping a broken rota, Wrok tells you which rule is blocking the week and gives smart recommendations, so you can lower a minimum, adjust availability, or rethink an approval, deliberately.</p>
+
+        <h3>Step 4: Adjust, publish, and stay automatic all week</h3>
+        <p>The generated week is a starting point. Fine-tune any assignment with a tap in the color-coded team grid, copy schedules to future weeks in one click, then publish: workers see their schedule instantly with push notifications. Mid-week changes stay automated too. Approved swaps and time off update the schedule for everyone, which is half the value of automation in the first place; see <a href="/shift-swaps-and-overnight-shifts">how swaps and overnight shifts work</a>.</p>
+      </div>
+    </section>
+
+    <!-- ========== WHO BENEFITS ========== -->
+    <section class="cmp-section alt">
+      <div class="container">
+        <h2>Who gets the most out of auto-scheduling?</h2>
+        <p>The more constraints you juggle, the more automation pays. Restaurants and cafes with rotating kitchen and floor staff, retail stores with morning and evening shifts, hotels and warehouses running around the clock, and clinics balancing coverage against rest rules all fit the profile; our <a href="/best-scheduling-software-for-restaurants">restaurant guide</a> walks through a concrete week. Teams of every size qualify on price: Wrok is free forever for up to 6 workers and one workplace, and flat paid plans start at &euro;14.99 per month with no per-user fees, with a 90-day free trial of paid features.</p>
+      </div>
+    </section>
+
+    <!-- ========== FAQ ========== -->
+    <section class="faq" id="faq">
+      <div class="section-bg-shapes dark-shapes">
+        <div class="shape sh-a"></div>
+        <div class="shape sh-d"></div>
+      </div>
+      <div class="container">
+        <div class="section-header dark fade-in">
+          <span class="section-label dark">FAQ</span>
+          <h2 class="section-title">Common questions</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>How does automatic employee scheduling work?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Automatic employee scheduling treats the rota as a constraint problem. The software takes your shift types, role requirements, minimum staffing levels, worker availability, approved vacations, sick days, contracted hours, and mandatory rest hours, then evaluates valid combinations against all of those rules at once. If an arrangement that satisfies every constraint exists, it finds one and balances the workload fairly. This is how Wrok's scheduler works: a real algorithm, not guesswork and not a language model.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>What happens when no valid schedule exists?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>A good auto-scheduler should not silently produce a broken week. When the rules cannot all be satisfied at once, for example too many approved vacations against a high minimum staffing level, Wrok tells you which rule is blocking the week so you can resolve it, by adjusting staffing minimums, availability, or time off. It also offers smart recommendations when constraints conflict, so fixing the week is a decision, not detective work.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Can I still edit an automatically generated schedule by hand?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes, and you should be able to in any tool. In Wrok, the generated week is a starting point: you can fine-tune any assignment with a single tap, reassign or clear any cell in the color-coded team grid, or go fully manual and place shifts exactly where you want them. You can also copy a schedule to future weeks in one click, then publish so the team sees it instantly with push notifications.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Is automated scheduling fair to workers?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>It can be fairer than manual scheduling, because an algorithm has no favorites. Wrok distributes shifts evenly across the team for maximum fairness while respecting each person's availability, contracted hours, approved time off, and mandatory rest hours. That prevents the classic manual-rota failure where the same few people absorb every weekend and closing shift simply because the manager filled the grid from the top.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CLOSING CTA ========== -->
+    <section class="cmp-cta-band">
+      <div class="container">
+        <h2>Generate your first automatic schedule today</h2>
+        <p>Start free for up to 6 workers, no credit card required. Encode your shifts, roles, and rules once, then build a full balanced week in one tap. Flat pricing from &euro;14.99 per month when you grow, plus a 90-day free trial. Comparing tools? Read <a href="/wrok-vs-when-i-work-vs-deputy" style="color:#fff;text-decoration:underline;">Wrok vs When I Work vs Deputy</a>.</p>
+        <a href="https://app.wrokapp.com" class="btn-white" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+          Open the web app
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <a href="/" class="footer-brand"><img src="/wrok_logo.png" alt="Wrok" class="footer-logo" width="1024" height="1024" loading="lazy" decoding="async"></a>
+          <p class="footer-tagline">Automatic shift scheduling for modern teams. Build optimized schedules, communicate better, and keep your operations running smoothly.</p>
+        </div>
+        <div class="footer-links-col"><h4>Product</h4><ul><li><a href="/#features">Features</a></li><li><a href="/#how-it-works">How It Works</a></li><li><a href="/#for-teams">For Teams</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></li></ul></div>
+        <div class="footer-links-col"><h4>Resources</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="/wrok-vs-when-i-work-vs-deputy">Wrok vs When I Work vs Deputy</a></li><li><a href="mailto:support@wrokapp.com">Contact Support</a></li></ul></div>
+        <div class="footer-links-col"><h4>Legal</h4><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2026 Wrok. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script defer src="/script.js"></script>
+</body>
+</html>
