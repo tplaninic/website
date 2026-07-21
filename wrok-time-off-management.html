@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Off Management in Wrok: Vacation and Sick Day Requests Explained</title>
+  <meta name="description" content="How time off management works in Wrok: workers request vacation, sick, or personal days from their phone, managers approve or deny with a note, the schedule adjusts automatically, and the auto-scheduler plans around approved absences. Free for up to 6 workers.">
+  <meta name="theme-color" content="#0D7C66">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://wrokapp.com/wrok-time-off-management">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://wrokapp.com/wrok-time-off-management">
+  <meta property="og:title" content="Time Off Management in Wrok: Vacation and Sick Day Requests Explained">
+  <meta property="og:description" content="The end-to-end flow: workers request time off, managers approve or deny, the schedule updates automatically, and the scheduler plans around approved absences.">
+  <meta property="og:image" content="https://wrokapp.com/wrok_logo.png">
+  <meta property="og:site_name" content="Wrok">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Time Off Management in Wrok: Vacation and Sick Day Requests Explained">
+  <meta name="twitter:description" content="Workers request time off, managers approve or deny, the schedule updates automatically, and the scheduler plans around approved absences.">
+  <meta name="twitter:image" content="https://wrokapp.com/wrok_logo.png">
+
+  <!-- Structured Data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How do workers request time off in Wrok?", "acceptedAnswer": { "@type": "Answer", "text": "Workers open the app, pick the type of absence (vacation, sick, or personal day), select the date range from a calendar, and submit. The manager sees the request instantly and can approve or deny it with an optional note. The worker tracks the approval status in real time and gets notified when the schedule changes." } },
+      { "@type": "Question", "name": "Does the schedule update when time off is approved?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. When a manager approves a vacation or sick day, the schedule adjusts automatically around the approved absence, and the team sees the change instantly with push notifications. When you generate the next schedule, Wrok's scheduling algorithm treats approved vacations and sick days as hard constraints, so an absent worker is never assigned a shift." } },
+      { "@type": "Question", "name": "Can Wrok track vacation and sick day balances?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Wrok keeps a record of every worker's sick days and vacation usage, tracks balances in real time, and shows remaining balance at a glance with visual progress bars. Managers get historical data per worker for HR reporting, which makes it easier to spot patterns before they become problems." } },
+      { "@type": "Question", "name": "Can I export time off and hours records for payroll?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Wrok tracks hours worked per day, week, or month, and keeps historical attendance and absence records. On the Starter plan and above, you can export schedules and reports as PDF or Excel files, formatted for printing, emailing to staff, or keeping records for payroll and compliance." } }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wrokapp.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Time Off Management", "item": "https://wrokapp.com/wrok-time-off-management" }
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* Page-specific styles, built on the shared design tokens. */
+    .cmp-main { background: #ffffff; }
+    .cmp-hero { background: #1a1a1a; color: #fff; padding: 9rem 0 4rem; position: relative; }
+    .cmp-hero .container { position: relative; z-index: 2; }
+    .cmp-breadcrumb { font-size: 0.85rem; color: #9ca3af; margin-bottom: 1.25rem; }
+    .cmp-breadcrumb a { color: #9ca3af; text-decoration: none; }
+    .cmp-breadcrumb a:hover { color: #fff; }
+    .cmp-breadcrumb span { color: #0fae90; }
+    .cmp-hero h1 { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.12; font-weight: 800; margin: 0 0 1.25rem; max-width: 22ch; }
+    .cmp-hero p.cmp-lead { font-size: 1.15rem; line-height: 1.6; color: #d1d5db; max-width: 62ch; margin: 0 0 2rem; }
+    .cmp-hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .cmp-section { padding: 4rem 0; }
+    .cmp-section.alt { background: #f7f9f9; }
+    .cmp-section h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; color: #1a1a1a; margin: 0 0 1rem; }
+    .cmp-section h3 { font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin: 1.75rem 0 0.75rem; }
+    .cmp-section p { font-size: 1.05rem; line-height: 1.7; color: #374151; max-width: 72ch; }
+    .cmp-section ul.cmp-list, .cmp-section ol.cmp-steps { margin: 1rem 0 0; padding: 0; list-style: none; max-width: 72ch; }
+    .cmp-section ul.cmp-list li { position: relative; padding: 0.35rem 0 0.35rem 1.9rem; font-size: 1.05rem; line-height: 1.6; color: #374151; }
+    .cmp-section ul.cmp-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0.7rem;
+      width: 1.1rem; height: 1.1rem;
+      background: #0D7C66;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .cmp-section ol.cmp-steps { counter-reset: step; }
+    .cmp-section ol.cmp-steps li { position: relative; padding: 0.5rem 0 0.5rem 2.6rem; font-size: 1.05rem; line-height: 1.6; color: #374151; counter-increment: step; }
+    .cmp-section ol.cmp-steps li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 0.55rem;
+      width: 1.7rem; height: 1.7rem;
+      background: #0D7C66; color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+    }
+    .cmp-note { margin-top: 1rem; padding: 0.9rem 1.1rem; background: #fff8e1; border: 1px solid #f0e0a8; border-radius: 10px; font-size: 0.92rem; color: #5c4b1a; max-width: 72ch; }
+    .cmp-cta-band { background: #0D7C66; color: #fff; padding: 4rem 0; text-align: center; }
+    .cmp-cta-band h2 { color: #fff; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; margin: 0 0 1rem; }
+    .cmp-cta-band p { color: rgba(255,255,255,0.9); max-width: 60ch; margin: 0 auto 2rem; font-size: 1.1rem; }
+    .cmp-cta-band .btn-white { display: inline-flex; align-items: center; gap: 0.6rem; background: #fff; color: #0D7C66; font-weight: 700; padding: 0.95rem 2rem; border-radius: 999px; text-decoration: none; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .cmp-cta-band .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.2); }
+    @media (max-width: 640px) { .cmp-hero { padding: 7.5rem 0 3rem; } }
+  </style>
+</head>
+<body>
+
+  <!-- Reusable SVG symbols -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-check" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+    </symbol>
+  </svg>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">
+        <img src="/wrok_logo.png" alt="Wrok logo" class="nav-logo" width="1024" height="1024" fetchpriority="high" decoding="async">
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/#features" data-nav>Features</a></li>
+        <li><a href="/#how-it-works" data-nav>How It Works</a></li>
+        <li><a href="/#for-teams" data-nav>For Teams</a></li>
+        <li><a href="/#pricing" data-nav>Pricing</a></li>
+        <li><a href="/#faq" data-nav>FAQ</a></li>
+        <li><a href="https://app.wrokapp.com" class="nav-cta" target="_blank" rel="noopener">Open web app</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="cmp-main">
+
+    <!-- ========== HERO ========== -->
+    <section class="cmp-hero">
+      <div class="container">
+        <nav class="cmp-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> &rsaquo; <span>Time Off Management</span>
+        </nav>
+        <h1>How does time off management work in Wrok?</h1>
+        <p class="cmp-lead">Vacation requests on paper slips, sick calls at 6 a.m., and a schedule that no longer matches reality: that is time off management in most small businesses. In Wrok the whole flow lives in the app, from the worker's request to the manager's decision to a schedule that plans around every approved absence automatically. Here is the process end to end.</p>
+        <div class="cmp-hero-actions">
+          <a href="https://app.wrokapp.com" class="btn btn-hero-primary" target="_blank" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+            Try it free
+          </a>
+          <a href="#flow" class="btn btn-hero-secondary">
+            See the flow
+            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== THE END-TO-END FLOW ========== -->
+    <section class="cmp-section" id="flow">
+      <div class="container">
+        <h2>What does the request-to-approval flow look like?</h2>
+        <p>Every time-off request in Wrok follows the same simple path, whether it is a two-week summer vacation or a single sick day:</p>
+        <ol class="cmp-steps">
+          <li><strong>The worker requests.</strong> In the app, the worker picks the type of absence (vacation, sick, or personal day), selects the dates from a calendar, and submits. It takes a few taps and works from any phone or browser.</li>
+          <li><strong>The manager decides.</strong> The request appears for the manager instantly, with full context of the schedule. The manager approves or denies it, with an optional note explaining the decision.</li>
+          <li><strong>The worker sees the status in real time.</strong> Requests show as pending, approved, or denied, so nobody has to ask "did you see my request?" in person.</li>
+          <li><strong>The schedule updates itself.</strong> Once an absence is approved, the schedule adjusts automatically around it and the team is notified of changes by push notification. No manual erasing, no forgotten corrections.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========== SCHEDULER RESPECTS ABSENCES ========== -->
+    <section class="cmp-section alt">
+      <div class="container">
+        <h2>How does the scheduler handle approved absences?</h2>
+        <p>This is the part that separates real time off management from a shared calendar. Wrok's scheduling engine treats approved vacations and sick days as hard constraints, exactly like availability, contracted hours, and mandatory rest hours. When you generate a week, the algorithm evaluates the valid combinations of workers and shifts against all of those rules at once, so a worker on approved leave is simply never assigned a shift.</p>
+        <p>That means approving a vacation in March already shapes the schedules you generate in July. You do not need to remember who is away; the generator does. And because minimum staffing per role is also a rule, the algorithm fills the gap the absence leaves with the remaining available workers, keeping every shift covered. If the absences make a valid week impossible, Wrok tells you which rule is blocking it instead of silently producing a broken schedule.</p>
+      </div>
+    </section>
+
+    <!-- ========== BALANCES AND VISIBILITY ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>Can workers and managers see balances and history?</h2>
+        <p>Yes, both sides get a live picture instead of a guess:</p>
+        <ul class="cmp-list">
+          <li><strong>Workers</strong> see their remaining vacation balance at a glance, the status of every request in real time, and their full request history in one list.</li>
+          <li><strong>Managers</strong> see sick days and vacation usage per worker, with visual progress bars for a quick overview of the whole team.</li>
+          <li><strong>Trends surface early.</strong> Because every sick day and vacation is recorded automatically, patterns show up in the data before they become staffing problems.</li>
+          <li><strong>History is kept.</strong> Historical absence data stays available for HR reporting, so end-of-year questions have answers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== RECORDS AND PAYROLL ========== -->
+    <section class="cmp-section alt">
+      <div class="container">
+        <h2>What about records for payroll and compliance?</h2>
+        <p>In many countries, including across the EU, employers are required to keep records of working time and absences. Wrok builds that record as a side effect of running the schedule: hours worked are tracked per day, week, and month, attendance is marked per shift, and every vacation and sick day is logged with its dates and approval.</p>
+        <p>When payroll needs the numbers, you export them. On the Starter plan and above, Wrok generates professional PDF and Excel files with one tap, ready for printing, emailing, or handing to your accountant. The Excel export in particular is designed for payroll workflows, so hours and absences leave the app in a format spreadsheets and payroll tools can consume directly.</p>
+        <p class="cmp-note"><strong>Note:</strong> Wrok records and exports the data; it does not interpret local labor law for you. What counts as paid leave or how sick days are compensated remains between you, your accountant, and your local regulations.</p>
+      </div>
+    </section>
+
+    <!-- ========== SWAPS AS THE ALTERNATIVE ========== -->
+    <section class="cmp-section">
+      <div class="container">
+        <h2>What if a worker just needs one shift covered?</h2>
+        <p>Not every absence is a vacation. When a worker needs a single evening off, the right tool is a shift swap rather than a time-off request. In Wrok, workers propose swaps directly with coworkers, both workers approve, and the manager gives final confirmation, after which the schedule updates automatically for everyone. Swap requests can even be sent inside the built-in chat, so the negotiation and the paperwork happen in the same conversation.</p>
+        <p>Together, the two flows cover the whole spectrum: swaps for one-off shift changes, time-off requests for real absences, and an auto-scheduler that respects the results of both. For how this compares to other tools, see <a href="/wrok-vs-when-i-work-vs-deputy">Wrok vs When I Work vs Deputy</a>, or start at the <a href="/">Wrok homepage</a> for the full feature overview.</p>
+      </div>
+    </section>
+
+    <!-- ========== FAQ ========== -->
+    <section class="faq" id="faq">
+      <div class="section-bg-shapes dark-shapes">
+        <div class="shape sh-a"></div>
+        <div class="shape sh-d"></div>
+      </div>
+      <div class="container">
+        <div class="section-header dark fade-in">
+          <span class="section-label dark">FAQ</span>
+          <h2 class="section-title">Common questions</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>How do workers request time off in Wrok?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Workers open the app, pick the type of absence (vacation, sick, or personal day), select the date range from a calendar, and submit. The manager sees the request instantly and can approve or deny it with an optional note. The worker tracks the approval status in real time and gets notified when the schedule changes.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Does the schedule update when time off is approved?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes. When a manager approves a vacation or sick day, the schedule adjusts automatically around the approved absence, and the team sees the change instantly with push notifications. When you generate the next schedule, Wrok's scheduling algorithm treats approved vacations and sick days as hard constraints, so an absent worker is never assigned a shift.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Can Wrok track vacation and sick day balances?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes. Wrok keeps a record of every worker's sick days and vacation usage, tracks balances in real time, and shows remaining balance at a glance with visual progress bars. Managers get historical data per worker for HR reporting, which makes it easier to spot patterns before they become problems.</p></div></div>
+          <div class="faq-item fade-in"><h3 class="faq-heading"><button class="faq-question"><span>Can I export time off and hours records for payroll?</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></h3><div class="faq-answer"><p>Yes. Wrok tracks hours worked per day, week, or month, and keeps historical attendance and absence records. On the Starter plan and above, you can export schedules and reports as PDF or Excel files, formatted for printing, emailing to staff, or keeping records for payroll and compliance.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CLOSING CTA ========== -->
+    <section class="cmp-cta-band">
+      <div class="container">
+        <h2>Put the paper slips away</h2>
+        <p>Start free for up to 6 workers, no credit card required. Your team requests time off from their phones, you approve with a tap, and the schedule takes care of itself. Flat pricing from €14.99 per month when you grow, plus a 90-day free trial.</p>
+        <a href="https://app.wrokapp.com" class="btn-white" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg>
+          Open the web app
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <a href="/" class="footer-brand"><img src="/wrok_logo.png" alt="Wrok" class="footer-logo" width="1024" height="1024" loading="lazy" decoding="async"></a>
+          <p class="footer-tagline">Automatic shift scheduling for modern teams. Build optimized schedules, communicate better, and keep your operations running smoothly.</p>
+        </div>
+        <div class="footer-links-col"><h4>Product</h4><ul><li><a href="/#features">Features</a></li><li><a href="/#how-it-works">How It Works</a></li><li><a href="/#for-teams">For Teams</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="https://app.wrokapp.com" target="_blank" rel="noopener">Open web app</a></li></ul></div>
+        <div class="footer-links-col"><h4>Resources</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="/wrok-vs-when-i-work-vs-deputy">Wrok vs When I Work vs Deputy</a></li><li><a href="mailto:support@wrokapp.com">Contact Support</a></li></ul></div>
+        <div class="footer-links-col"><h4>Legal</h4><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2026 Wrok. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script defer src="/script.js"></script>
+</body>
+</html>
