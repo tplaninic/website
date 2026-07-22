@@ -1196,6 +1196,15 @@ document.addEventListener('DOMContentLoaded', () => {
   var OPENING_HOLD_MS = 3000;
   var openingHoldTimer = 0;
   var openingHoldDone = false;
+  // One-time mid-story hold: pause on the last frame before the final scene
+  // (the customers filling the cafe) for 3 seconds, then let it play. The
+  // scene cut sits at ~5.94s of the 8.54s clip (p ~0.695); we freeze just
+  // before it at p 0.690 so the held frame is still the pre-customers cafe.
+  var MID_HOLD_MS = 3000;
+  var MID_HOLD_PROGRESS = 0.690;
+  var midHoldTimer = 0;
+  var midHoldDone = false;
+  var midHolding = false;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -1344,6 +1353,30 @@ document.addEventListener('DOMContentLoaded', () => {
     if (autoplayVideo && Number.isFinite(autoplayVideo.duration) && autoplayVideo.duration) {
       displayedProgress = clamp(autoplayVideo.currentTime / autoplayVideo.duration, 0, 1);
     }
+    // First crossing of the final-scene boundary: freeze everything (video
+    // paused, progress pinned, text static) for MID_HOLD_MS, then resume.
+    // Fires once per story run; reduced motion skips it like the opening hold.
+    if (!midHoldDone && !midHolding && displayedProgress >= MID_HOLD_PROGRESS && !reducedMotion.matches) {
+      midHolding = true;
+      displayedProgress = MID_HOLD_PROGRESS;
+      if (autoplayVideo) {
+        autoplayVideo.pause();
+        if (Number.isFinite(autoplayVideo.duration) && autoplayVideo.duration) {
+          // Rewind the couple of frames the rAF loop overshot so the held
+          // frame is the pre-customers cafe, not the first post-cut frame.
+          try { autoplayVideo.currentTime = MID_HOLD_PROGRESS * autoplayVideo.duration; } catch (error) { /* Seek can race on iOS. */ }
+        }
+      }
+      render();
+      animationFrame = 0;
+      midHoldTimer = window.setTimeout(function() {
+        midHoldTimer = 0;
+        midHolding = false;
+        midHoldDone = true;
+        startStory();
+      }, MID_HOLD_MS);
+      return;
+    }
     render();
     if (displayedProgress < 1) animationFrame = window.requestAnimationFrame(animateStory);
     else animationFrame = 0;
@@ -1351,6 +1384,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startStory() {
     if (!mediaReady || !storyVisible || animationFrame || displayedProgress >= 1) return;
+    // While the mid-story hold is counting down, only its own timeout may
+    // resume playback (scrolling away and back must not cut the hold short).
+    if (midHolding) return;
     // First start only: keep the opening frame on screen for 3 seconds after
     // the story becomes visible, then begin the clip. Leaving the viewport
     // cancels the hold (pauseStory), so re-entering restarts the full wait.
