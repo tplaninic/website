@@ -1188,9 +1188,12 @@ document.addEventListener('DOMContentLoaded', () => {
   var mediaReady = false;
   var storyVisible = false;
   var hasStarted = false;
-  // Hold the opening frame (poster + intro copy) for this long after the
-  // story scrolls into view before the clip starts, so the text is readable.
-  var OPENING_HOLD_MS = 5000;
+  // Hold the whole opening frame (video paused at frame 0 AND the intro copy
+  // at progress 0) for this long after the story scrolls into view. Progress
+  // is derived from the video's currentTime, so keeping the clip paused keeps
+  // the text frozen too; when the hold ends, play() starts and the text
+  // animates in lockstep with the clip from p = 0.
+  var OPENING_HOLD_MS = 3000;
   var openingHoldTimer = 0;
   var openingHoldDone = false;
 
@@ -1322,6 +1325,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Autoplay uses the browser's native streaming decoder instead of frame-by-frame seeking.
     var source = video.getAttribute('data-src-1080') || video.getAttribute('data-src-720');
     if (!source) return Promise.resolve();
+    // Playback is started exclusively by startStory() after the opening hold.
+    // The autoplay attribute must stay off, or the browser starts the clip on
+    // load() while the progress loop is still holding at 0 and desyncs the text.
+    video.autoplay = false;
+    video.removeAttribute('autoplay');
     video.src = source;
     video.preload = 'auto';
     video.load();
@@ -1343,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startStory() {
     if (!mediaReady || !storyVisible || animationFrame || displayedProgress >= 1) return;
-    // First start only: keep the opening frame on screen for 5 seconds after
+    // First start only: keep the opening frame on screen for 3 seconds after
     // the story becomes visible, then begin the clip. Leaving the viewport
     // cancels the hold (pauseStory), so re-entering restarts the full wait.
     // Reduced motion skips the hold; its render path is unchanged.
